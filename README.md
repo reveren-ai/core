@@ -104,7 +104,7 @@ The hosted dashboard (`app.reveren.ai`) is proprietary.
 
 Built and maintained by [Innocent Muisha](https://github.com/iminnocent98).
 
-reveren is a product of **reveren.ai Pty Ltd** (Australia), under the Luanda Pty Ltd holding company group.
+reveren is a product of **reveren.ai (Australia), under the Luanda Pty Ltd holding company group.
 
 ## Links
 
