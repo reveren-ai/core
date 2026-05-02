@@ -30,17 +30,19 @@ The published `@reveren-ai/core` package on npm is a reserved-scope placeholder.
 
 ## The shape of v0.1.0 (what's coming)
 
+The CLI binary is `rvr` (npm-style short command). The brand is reveren; `rvr` is what you type.
+
 ```bash
 # Initialise reveren in any repo
 npx @reveren-ai/core init
 
-# Run a named skill against the current context
-rvr run <skill>
+# Run a named playbook against the current context
+rvr run <playbook>
 
-# List active and available skills
+# List active and available playbooks
 rvr list
 
-# Pull the latest skill updates
+# Pull the latest playbook updates
 rvr sync
 
 # Run a multi-step pipeline (Pro+)
@@ -49,12 +51,12 @@ rvr pipeline run <name>
 
 After `rvr init`, your repo gets:
 
-- A `skills.config.ts` at the root
-- A `.skills/` directory with the active skill set
-- A `SKILLS.md` operating guide
-- A `"skills": "rvr run"` script in `package.json`
+- A `playbooks.config.ts` at the root
+- A `.playbooks/` directory with the active playbook set
+- A `PLAYBOOKS.md` operating guide
+- A `"playbooks": "rvr run"` script in `package.json`
 
-Every AI agent that touches the repo from then on reads from `.skills/`.
+Every AI agent that touches the repo from then on reads from `.playbooks/`.
 
 ## Why this exists
 
@@ -62,7 +64,7 @@ Every team using AI coding agents in 2026 has the same problem: the agent is bri
 
 The result is code that technically works but breaks team conventions, uses the wrong library version, skips your test pattern, or ignores an architectural rule the team agreed on six months ago. Teams spend as much time correcting AI output as they would writing it themselves.
 
-reveren fixes the input side. Once `.skills/` is in your repo, every agent — across every chat session, every IDE, every model — works from the same set of rules.
+reveren fixes the input side. Once `.playbooks/` is in your repo, every agent — across every chat session, every IDE, every model — works from the same set of rules.
 
 For the long-form argument, see [MANIFESTO.md](./MANIFESTO.md).
 
@@ -70,9 +72,9 @@ For the long-form argument, see [MANIFESTO.md](./MANIFESTO.md).
 
 | Tier | USD | Included | Overage |
 |---|---|---|---|
-| **Free** | $0 | Full base skill library, CLI, single repo, 100 cloud pipeline runs/mo | Hard cap |
-| **Pro** | $15/mo | + Custom skills, multi-step pipelines, unlimited repos, CI/CD, 1,000 runs/mo | $0.02/run |
-| **Team** | $35/seat/mo | + Hosted dashboard, private registry, team sync, analytics, GitHub App, SSO, 5,000 runs/seat/mo (pooled) | $0.015/run |
+| **Free** | $0 | Full base playbook library, CLI, single repo, 200 cloud pipeline runs/mo | Hard cap |
+| **Pro** | $19/mo | + Custom playbooks, multi-step pipelines, unlimited repos, CI/CD, MCP server (read), 2,000 runs/mo | $0.015/run |
+| **Team** | $39/seat/mo | + Hosted dashboard, private registry, team sync, analytics, GitHub App, SSO, MCP server (read+write), 6,000 runs/seat/mo (pooled) | $0.012/run |
 | **Enterprise** | Custom | + Self-host, dedicated infra, SOC2, custom SLAs, dedicated CSM | Custom |
 
 Local CLI runs are unlimited and free on every tier. Only **cloud-orchestrated** pipeline runs (those that hit the dashboard, registry, or CI integration) are metered.
@@ -90,13 +92,13 @@ Local CLI runs are unlimited and free on every tier. Only **cloud-orchestrated**
 | v0 | ✓ |
 | Any MCP-compatible agent | ✓ |
 
-The `.skills/` file format is published as an open spec — any agent vendor or tool can read or write it.
+The `.playbooks/` file format is published as an open spec — any agent vendor or tool can read or write it.
 
 ## License
 
 `@reveren-ai/core` v0.0.1 (this placeholder) is `UNLICENSED`.
 
-`@reveren-ai/core` v0.1.0+ (the real CLI) will ship under **Business Source License 1.1 (BUSL-1.1)** — source-available, free for non-commercial and internal-evaluation use, automatic conversion to Apache 2.0 after four years. The skill library content is MIT-licensed.
+`@reveren-ai/core` v0.1.0+ (the real CLI) will ship under **Business Source License 1.1** with a bespoke Additional Use Grant — source-available; permissive for any internal commercial use; restricts repackaging as a competing hosted service. The playbook library content is MIT-licensed (DCO required for contributions); the open `.playbooks/` file format spec is published under W3C SDL2 (text) + MIT (schemas).
 
 The hosted dashboard (`app.reveren.ai`) is proprietary.
 
