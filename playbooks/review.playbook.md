@@ -1,0 +1,181 @@
+# Playbook: Review
+
+> Cognitive mode: Paranoid staff engineer
+
+---
+
+## When to use
+
+After implementing a feature, before shipping. This is a structural audit,
+not a style nitpick pass.
+
+## 0. Permissions Pre-flight
+
+Before starting, confirm every non-destructive command this skill runs is in
+`.claude/settings.local.json` → `permissions.allow`. Missing entries will
+interrupt the run with approval prompts and fracture the audit trail.
+
+- Typical commands used here: `git diff`, `gh pr *`, `pnpm lint`, `pnpm test:run`,
+  `pnpm build`, `pnpm exec tsc --noEmit`, `curl`, `grep`, `pkill`, `timeout`.
+- If prompts keep firing, invoke the **`/fewer-permission-prompts`** skill to
+  batch-grant the common ones from a recent transcript.
+- Never auto-approve destructive commands (force-push, `rm -rf` outside `.next`,
+  DB drops, edits to shared infrastructure) — those should always prompt.
+
+## How to think
+
+You are the engineer who has been burned by production incidents.
+Tests pass. CI is green. You still don't trust it.
+
+Look for:
+
+### Performance
+
+- [ ] N+1 queries (check any data fetching loops)
+- [ ] Missing `loading.tsx` / `Suspense` boundaries
+- [ ] Unnecessary client components (should this be a Server Component?)
+- [ ] Large bundle imports that could be lazy-loaded
+- [ ] Missing `key` props in lists
+
+### Security & Trust
+
+- [ ] User input sanitized before rendering or storing?
+- [ ] API routes validate and sanitize inputs?
+- [ ] Auth checks on protected routes/endpoints?
+- [ ] Sensitive data exposed to the client?
+- [ ] CORS / CSP issues?
+- [ ] **Live server still boots cleanly?** See "Live smoke after review" below.
+
+## MANDATORY: Live smoke after review
+
+A code review that only reads the diff misses runtime regressions.
+Before producing the review report:
+
+1. `pkill -f "next dev"`; start `pnpm dev` fresh (`rm -rf .next` if the last run crashed).
+2. Wait for `http://localhost:3000/` → `200`.
+3. Probe every public route + any route the diff touched. Each must return `200` / expected redirect.
+4. `grep -cE "⨯|Error|Functions cannot be passed" /tmp/${project}-dev.log` must be `0`.
+5. For UI-touching reviews, load the changed routes in Playwright's bundled Chromium (no Puppeteer — `@playwright/test` is already installed) and assert no `pageerror` fires and no `Something went wrong` in the rendered body.
+6. Any failure is a review finding, not a footnote.
+
+See `.playbooks/ship.playbook.md` → "Live Server & Route Verification" for the canonical copy-paste commands.
+
+### Correctness
+
+- [ ] Race conditions (multiple rapid clicks, concurrent requests)
+- [ ] Stale closures in effects or callbacks
+- [ ] Missing error boundaries
+- [ ] Empty states handled (0 items, null data, loading)
+- [ ] Edge case inputs (empty string, very long string, special chars)
+
+### Dead CTAs (design-migration audit)
+
+When the diff ports a mockup or design comp into shipped code, every interactive
+element on every changed surface must resolve to a real action. This is **critical**
+severity — placeholder UI silently undoes prior wiring work and erodes reader trust.
+
+- [ ] Every `<Button>`, `<Link>`, `<a>`, `IconButton`, and clickable `Box` on a
+      migrated surface has either an `href`/`onClick` that routes to a real
+      destination, or it has been removed.
+- [ ] Sort, filter, save, bookmark, and "see all" controls actually mutate state
+      or navigate — not no-ops left in from the mockup.
+- [ ] Source/citation/chart/methodology buttons are backed by a data field
+      (e.g., `sourceUrl`, `chartTicker`) — if the field is empty, the control
+      is conditionally hidden, not rendered inert.
+- [ ] "Read full article" / "View details" CTAs route somewhere readable today
+      (issue page, article detail, archive) — never to `#`, `void`, or the
+      page they're already on.
+- [ ] Any control kept as "future work" is either gated behind a feature flag
+      or removed from the surface; no exceptions for "we'll wire it later."
+
+If you find a dead CTA, the suggested fix in your review is one of:
+**wire** (name the route/handler/data field), **remove** (drop from this
+surface), or **redirect** (relabel + retarget to a real capability).
+
+### Testing
+
+- [ ] Do the tests actually test the right thing?
+- [ ] Are failure cases tested, not just happy paths?
+- [ ] Would these tests catch a regression?
+- [ ] E2E coverage for critical user flows?
+
+### MUI / Styling
+
+- [ ] Responsive design — does it work on mobile?
+- [ ] Theme tokens used instead of hardcoded colors/spacing?
+- [ ] Accessibility: proper labels, roles, keyboard nav?
+
+### Component Structure
+
+- [ ] Component folder is PascalCase under `components/`?
+- [ ] Single-component folder uses `index.tsx`, `index.styled.tsx`, `index.test.tsx`?
+- [ ] Multi-component folder uses `ComponentName.tsx` + barrel `index.tsx`?
+- [ ] Every component file has a colocated `.test.tsx`?
+- [ ] Styled wrappers in `*.styled.tsx`, not inline `styled()` calls scattered in the component?
+
+## Output format
+
+```
+## Review: [Feature/Branch Name]
+
+### Critical Issues (must fix before merge)
+1. [Issue description + file:line + suggested fix]
+
+### Important Issues (should fix)
+1. [Issue description + file:line + suggested fix]
+
+### Minor Notes (nice to have)
+1. [Note]
+
+### What Looks Good
+[Specific praise for well-done aspects]
+
+### Test Coverage Assessment
+[Are the tests sufficient? What's missing?]
+```
+
+## Findings Tracking (required)
+
+Every review finding must be tracked — nothing falls through the cracks.
+
+| Severity      | Where to track                                                                 |
+| ------------- | ------------------------------------------------------------------------------ |
+| **Critical**  | TODOS.md → "In Progress" (block merge until fixed)                             |
+| **Important** | TODOS.md → "Next Up" (fix in the next cycle; include `[review finding]` label) |
+| **Minor**     | Relevant doc in `docs/` or `ARCHITECTURE.md` (logged as an operational note)   |
+
+### Rules
+
+- **Critical issues** are added to TODOS.md "In Progress" immediately and must be resolved before the ship skill runs.
+- **Important issues** are added to TODOS.md "Next Up" with a clear description and a `[review finding]` label so they're distinguishable from feature work.
+- **Minor notes** (design-choice documentation, operational caveats, "nice to have" observations) are appended to the relevant feature doc or architecture doc, not silently dropped.
+- The review output itself should state where each finding was tracked (e.g., "→ Added to TODOS.md", "→ Logged in DATABASE.md").
+
+## Quality Signals
+
+After this skill is used, observe these signals to determine if it performed well:
+
+| Signal                   | ✅ Good                                                                                | ❌ Poor                                                                          |
+| ------------------------ | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| **False positive rate**  | Flagged issues were real — developer agreed with ≥80% of findings                      | Many flagged items were non-issues or nitpicks, wasting developer time           |
+| **False negative rate**  | No bugs found post-merge that the review should have caught                            | A production/QA bug was found in code the review examined but didn't flag        |
+| **Fix accuracy**         | Suggested fixes were correct and directly applicable                                   | Fixes were wrong, incomplete, or required significant rework                     |
+| **Priority calibration** | Critical/Important/Minor classifications matched actual severity                       | Critical items turned out to be minor, or minor items caused real issues         |
+| **Coverage balance**     | Review covered performance, security, correctness, testing, and styling proportionally | Review over-indexed on one area (e.g., all styling nitpicks, no security checks) |
+
+> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+
+---
+
+## Automation
+
+- **As an agent**: Run `claude --agent=reviewer` for isolated, read-only review with tool restrictions
+- **In a worktree**: Use `claude -w` or the reviewer agent (which uses worktree isolation) to review without affecting the working tree
+- **On a loop**: Use `/loop 30m` to continuously monitor open PRs for review
+
+## Rules
+
+- Be specific. Cite file paths and line numbers.
+- Every critical issue must include a suggested fix
+- Don't just find bugs — find the bugs that CI misses
+- If everything looks good, say so. Don't manufacture issues.
