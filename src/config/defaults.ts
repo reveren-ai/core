@@ -1,17 +1,17 @@
 import {
-  BUNDLED_PLAYBOOKS,
-  PlaybooksConfigSchema,
-  type PlaybooksConfig
+  BUNDLED_PROTOCOLS,
+  ProtocolsConfigSchema,
+  type ProtocolsConfig
 } from './schema.js'
 
-export function defaultConfig(): PlaybooksConfig {
-  return PlaybooksConfigSchema.parse({
+export function defaultConfig(): ProtocolsConfig {
+  return ProtocolsConfigSchema.parse({
     stack: 'next',
     agent: 'claude',
     language: 'ts',
     packageManager: 'pnpm',
     testing: 'vitest',
-    activePlaybooks: [...BUNDLED_PLAYBOOKS],
+    activeProtocols: [...BUNDLED_PROTOCOLS],
     storybook: {
       mode: 'full',
       autoGenerateStories: true,
@@ -33,14 +33,14 @@ export function defaultConfig(): PlaybooksConfig {
  * depends on this exact shape, and the snapshot test in tests/unit/presets.test.ts
  * locks it in.
  */
-export function noCodePreset(): PlaybooksConfig {
-  return PlaybooksConfigSchema.parse({
+export function noCodePreset(): ProtocolsConfig {
+  return ProtocolsConfigSchema.parse({
     stack: 'next',
     agent: 'claude',
     language: 'ts',
     packageManager: 'pnpm',
     testing: 'vitest',
-    activePlaybooks: [...BUNDLED_PLAYBOOKS],
+    activeProtocols: [...BUNDLED_PROTOCOLS],
     storybook: {
       mode: 'hosted-gallery',
       autoGenerateStories: true,

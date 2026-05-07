@@ -1,29 +1,29 @@
 import { describe, it, expect } from 'vitest'
 import {
-  PlaybooksConfigSchema,
-  BUNDLED_PLAYBOOKS,
-  definePlaybooksConfig
+  ProtocolsConfigSchema,
+  BUNDLED_PROTOCOLS,
+  defineProtocolsConfig
 } from '../../src/config/schema.js'
 import { defaultConfig, noCodePreset } from '../../src/config/defaults.js'
 
-describe('PlaybooksConfigSchema', () => {
+describe('ProtocolsConfigSchema', () => {
   it('accepts the default config', () => {
-    expect(() => PlaybooksConfigSchema.parse(defaultConfig())).not.toThrow()
+    expect(() => ProtocolsConfigSchema.parse(defaultConfig())).not.toThrow()
   })
 
   it('accepts the no-code preset', () => {
-    expect(() => PlaybooksConfigSchema.parse(noCodePreset())).not.toThrow()
+    expect(() => ProtocolsConfigSchema.parse(noCodePreset())).not.toThrow()
   })
 
   it('rejects an unknown stack', () => {
     expect(() =>
-      PlaybooksConfigSchema.parse({ ...defaultConfig(), stack: 'angular' })
+      ProtocolsConfigSchema.parse({ ...defaultConfig(), stack: 'angular' })
     ).toThrow()
   })
 
   it('rejects an unknown storybook mode', () => {
     expect(() =>
-      PlaybooksConfigSchema.parse({
+      ProtocolsConfigSchema.parse({
         ...defaultConfig(),
         storybook: { mode: 'foo' }
       })
@@ -32,12 +32,12 @@ describe('PlaybooksConfigSchema', () => {
 
   it('rejects an unknown agent', () => {
     expect(() =>
-      PlaybooksConfigSchema.parse({ ...defaultConfig(), agent: 'gemini' })
+      ProtocolsConfigSchema.parse({ ...defaultConfig(), agent: 'gemini' })
     ).toThrow()
   })
 
   it('defaults storybook mode when omitted', () => {
-    const parsed = PlaybooksConfigSchema.parse({
+    const parsed = ProtocolsConfigSchema.parse({
       stack: 'next',
       agent: 'claude',
       language: 'ts',
@@ -49,19 +49,61 @@ describe('PlaybooksConfigSchema', () => {
   })
 })
 
-describe('BUNDLED_PLAYBOOKS', () => {
-  it('lists all 14 v0.1.0 playbooks', () => {
-    expect(BUNDLED_PLAYBOOKS).toHaveLength(14)
+describe('BUNDLED_PROTOCOLS', () => {
+  it('lists all 14 v0.1.0 protocols', () => {
+    expect(BUNDLED_PROTOCOLS).toHaveLength(14)
   })
 
-  it('includes the new storybook playbook', () => {
-    expect(BUNDLED_PLAYBOOKS).toContain('storybook')
+  it('includes the new storybook protocol', () => {
+    expect(BUNDLED_PROTOCOLS).toContain('storybook')
   })
 })
 
-describe('definePlaybooksConfig', () => {
+describe('defineProtocolsConfig', () => {
   it('returns the parsed config', () => {
-    const config = definePlaybooksConfig(defaultConfig())
+    const config = defineProtocolsConfig(defaultConfig())
     expect(config.stack).toBe('next')
+  })
+})
+
+describe('terminology config', () => {
+  it('defaults to "protocol"', () => {
+    const parsed = ProtocolsConfigSchema.parse(defaultConfig())
+    expect(parsed.terminology.singular).toBe('protocol')
+    expect(parsed.terminology.plural).toBe('protocols')
+    expect(parsed.terminology.directory).toBe('.protocols')
+    expect(parsed.terminology.extension).toBe('.protocol.md')
+  })
+
+  it('accepts custom terminology (e.g. "playbook")', () => {
+    const parsed = ProtocolsConfigSchema.parse({
+      ...defaultConfig(),
+      terminology: {
+        singular: 'playbook',
+        plural: 'playbooks',
+        directory: '.playbooks',
+        extension: '.playbook.md'
+      }
+    })
+    expect(parsed.terminology.singular).toBe('playbook')
+    expect(parsed.terminology.directory).toBe('.playbooks')
+  })
+
+  it('rejects an extension that does not start with a dot', () => {
+    expect(() =>
+      ProtocolsConfigSchema.parse({
+        ...defaultConfig(),
+        terminology: { extension: 'protocol.md' }
+      })
+    ).toThrow()
+  })
+
+  it('rejects a directory with path separators', () => {
+    expect(() =>
+      ProtocolsConfigSchema.parse({
+        ...defaultConfig(),
+        terminology: { directory: '.protocols/nested' }
+      })
+    ).toThrow()
   })
 })

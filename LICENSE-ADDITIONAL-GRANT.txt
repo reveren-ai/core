@@ -15,8 +15,8 @@ For the avoidance of doubt:
     self-managed CI/CD runner, or on cloud infrastructure operated by you
     or your hosting provider.
 
-(b) Use of the open-source Playbook Library distributed at
-    https://github.com/reveren-ai/playbooks under the MIT License is
+(b) Use of the open-source Protocol Library distributed at
+    https://github.com/reveren-ai/protocols under the MIT License is
     governed entirely by that MIT License and is not subject to this
     Additional Use Grant or the Business Source License.
 
@@ -24,12 +24,12 @@ For the avoidance of doubt:
     offering, on a hosted, managed, or embedded basis, a service whose
     primary functionality is substantially the same as the reveren.ai
     Pro, Team, or Enterprise tiers — namely the orchestrated, multi-step
-    pipeline runner, the private Playbook registry, the cloud-orchestration
+    pipeline runner, the private Protocol registry, the cloud-orchestration
     metering, the GitHub App integration, the audit log, or the team
     dashboard. Self-hosting the dashboard for your own internal use is
     permitted; offering the dashboard to third parties is not.
 
-(d) Implementing the open `.playbooks/` File Format Specification in your
+(d) Implementing the open `.protocols/` File Format Specification in your
     own software (regardless of license) is permitted and encouraged. The
     specification is licensed under the W3C Software and Document License 2
     (text) and the MIT License (schemas and examples), and is not subject
@@ -38,7 +38,7 @@ For the avoidance of doubt:
 CHANGE DATE
 
 The Change Date for each Licensed Work version is four (4) years after the
-date that version is first publicly released by reveren.ai Pty Ltd as
+date that version is first publicly released by Reveren Pty Ltd as
 indicated in that version's git tag and CHANGELOG.md entry.
 
 CHANGE LICENSE
@@ -49,5 +49,5 @@ available under the Apache License, Version 2.0.
 LICENSOR
 LICENSOR
 
-reveren.ai Pty Ltd (ACN: [to be assigned on incorporation])
-Australia
+Reveren Pty Ltd (ACN: [to be assigned on incorporation])
+Australia (trading as "reveren"; primary website: reveren.ai)

@@ -1,4 +1,4 @@
-# Playbook: Document
+# Protocol: Document
 
 > Cognitive mode: Technical writer + documentation maintainer
 > This is a custom skill unique to this project.
@@ -263,8 +263,8 @@ If the change affects any business-facing positioning — partners, revenue mode
 ### Step 9: Hand off to storybook skill (if applicable)
 
 If the diff added or modified any component file under `components/`, and
-`playbooks.config.ts` (or `MODELS.md` Stack section) has Storybook in `full` or
-`hosted-gallery` mode, run the **storybook skill** (`.playbooks/storybook.playbook.md`)
+`protocols.config.ts` (or `MODELS.md` Stack section) has Storybook in `full` or
+`hosted-gallery` mode, run the **storybook skill** (`.protocols/storybook.protocol.md`)
 before declaring this skill complete. The storybook skill is responsible for:
 
 - Confirming a colocated `*.stories.tsx` exists for every changed component
@@ -298,7 +298,7 @@ Add an entry under the `[Unreleased]` section:
 When reviewing a git diff to update docs, follow this checklist:
 
 1. **New files in `app/`** → Likely a new route/page → needs feature doc
-2. **New component folder in `components/`** → New UI component → document in the relevant feature doc. Check for `index.tsx` (single) or `ComponentName.tsx` (multi) pattern. **Also verify a colocated `*.stories.tsx` exists** (per `.playbooks/storybook.playbook.md`); if Storybook mode is `full` or `hosted-gallery` and the story is missing, hand off to the storybook skill before declaring this skill complete.
+2. **New component folder in `components/`** → New UI component → document in the relevant feature doc. Check for `index.tsx` (single) or `ComponentName.tsx` (multi) pattern. **Also verify a colocated `*.stories.tsx` exists** (per `.protocols/storybook.protocol.md`); if Storybook mode is `full` or `hosted-gallery` and the story is missing, hand off to the storybook skill before declaring this skill complete.
 3. **New `*.styled.tsx` files** → Styled wrappers added → mention in feature doc's Implementation section
 4. **New `*.test.tsx` files in component folders** → Colocated tests → list in feature doc's Testing section
 5. **Changes to `lib/`** → Utility changes → check if API or behavior changed in docs
@@ -325,7 +325,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Diff audit thoroughness** | Git diff checklist caught all files that needed doc updates                                 | A changed file was missed in the audit, leading to stale docs              |
 | **Pitch context alignment** | Partners, revenue model, and pitch copy match across code and docs after the change        | Partner list or revenue details diverged between code and MONETISATION.md  |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

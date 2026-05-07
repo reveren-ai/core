@@ -1,4 +1,4 @@
-# Playbook: QA
+# Protocol: QA
 
 > Cognitive mode: QA engineer
 
@@ -150,7 +150,7 @@ Before writing the QA report, every affected route must be proven to render live
 5. For every UI-touching route, load in Playwright and assert no `pageerror` fires and the body does not contain `Something went wrong` / `Application error`.
 6. A failure anywhere — a 5xx, a persistent console error, an error-boundary render — is a hard stop. Fix the root cause and reprobe; never write a pass report with a red signal underneath.
 
-See `.playbooks/ship.playbook.md` → "Live Server & Route Verification" for the canonical copy-paste procedure and exact commands.
+See `.protocols/ship.protocol.md` → "Live Server & Route Verification" for the canonical copy-paste procedure and exact commands.
 
 ## Automation
 
@@ -170,7 +170,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Health score accuracy**      | The health score reflected the actual user experience           | Score was high but the feature had real UX problems, or score was low but the feature worked fine |
 | **E2E recommendation quality** | Recommended Playwright tests would catch regressions if written | Recommended tests were too generic to be useful                                                   |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

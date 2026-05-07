@@ -1,4 +1,4 @@
-# Playbook: Audit Skills
+# Protocol: Audit Skills
 
 > Cognitive mode: Systems auditor / Internal consultant
 > Orchestrator skill that sweeps the entire skills + agents + workflow ecosystem,
@@ -34,7 +34,7 @@ Bias to **evidence**. A skill is not stale because it "feels" stale; it is stale
 
 ## Signal sources (read these, in this order)
 
-1. **`.playbooks/EVOLUTION.md`** — last amendment date per skill, rejection reasons, repeated triggers
+1. **`.protocols/EVOLUTION.md`** — last amendment date per skill, rejection reasons, repeated triggers
 2. **`docs/Learnings/LEARNINGS.md`** — captured principles that should have been cross-referenced into a skill (per capture-learnings Step 5) but weren't
 3. **`TODOS.md`** (and `TODOS-TERMINAL.md`, `TODOS-BUSINESS.md` if present) — count `[review finding]` / `[cyber finding]` / `[bug]` labels; repeated themes = missed coverage in review/cyber
 4. **`git log --oneline --since="30 days ago"`** — look for `docs(skills):`, `fix:` clusters on the same subsystem, and *especially* `fix:` commits that a skill should have prevented
@@ -42,7 +42,7 @@ Bias to **evidence**. A skill is not stale because it "feels" stale; it is stale
 6. **`.claude/agents/*.md`** — each agent's `skills:` frontmatter (if present) and its body must match the skill it references
 7. **`.claude/settings.json` + `.claude/hooks/*.sh`** — verify every hook path exists, every permission is still needed, every skill the Stop hook tests is still accurate
 8. **`scripts/pipeline.sh`, `scripts/background.sh`, `scripts/hardcore-auto.sh`** — pipeline step ordering must match the MODELS.md "Skills System" ordering
-9. **`templates/playbooks/`** — for every `[generic]` amendment in EVOLUTION.md, confirm `templates/skills/<skill>.md` received the same change
+9. **`templates/protocols/`** — for every `[generic]` amendment in EVOLUTION.md, confirm `templates/skills/<skill>.md` received the same change
 10. **`.claude/settings.json` + `.claude/settings.local.json` `permissions.allow`** — diff every command each skill / agent names in its workflow against the allow-list. Gaps cause interactive approval prompts mid-run and fracture the audit trail. Commands like `pkill`, `timeout`, `curl`, `gh`, and ecosystem auditors are the usual missing entries.
 
 If a signal source is missing, note it — that itself is a finding (e.g., LEARNINGS.md absent means capture-learnings is dead).
@@ -84,7 +84,7 @@ A repeated finding across cycles is the loudest signal — e.g., three "RSC Clie
 
 ### Step 5 — Orphan pass
 
-Anything in `.playbooks/`, `.claude/agents/`, or `scripts/` that:
+Anything in `.protocols/`, `.claude/agents/`, or `scripts/` that:
 - is not listed in MODELS.md, **and**
 - is not invoked by any pipeline/background script, **and**
 - was not read or edited in the last 60 days
@@ -99,7 +99,7 @@ Use the output format below. The final section is the **Amendment Queue** — a 
 
 - For each amendment queue item, mark whether it should be actioned now (user agrees in-session), deferred to the next improve cycle, or rejected with reasoning.
 - Accepted items that are in-session → run `improve` on them immediately.
-- Deferred items → append to `.playbooks/EVOLUTION.md` under a `## Pending Amendments — YYYY-MM-DD` section (not as accepted amendments — as a queue).
+- Deferred items → append to `.protocols/EVOLUTION.md` under a `## Pending Amendments — YYYY-MM-DD` section (not as accepted amendments — as a queue).
 
 ---
 

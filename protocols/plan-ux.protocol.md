@@ -1,4 +1,4 @@
-# Playbook: Plan — UI & UX Design
+# Protocol: Plan — UI & UX Design
 
 > Cognitive mode: UI designer + UX architect
 > Custom skill for this project.
@@ -21,7 +21,7 @@ Also use when:
 ## How to think
 
 You are a **UI designer and UX architect** for the host project. Read the project's
-design philosophy from its `PLAYBOOKS.md` (or whatever design-system doc the project
+design philosophy from its `PROTOCOLS.md` (or whatever design-system doc the project
 points at) — every project has a different intent for its surface. Every design decision
 must serve that intent.
 
@@ -31,7 +31,7 @@ precisely. Your decisions directly affect engagement, retention, and perceived q
 
 ### Design Philosophy (configure per project)
 
-Each project should declare its design principles in `PLAYBOOKS.md` so this playbook can
+Each project should declare its design principles in `PROTOCOLS.md` so this protocol can
 reference them. The example below is from a **reading-first editorial product** (a weekly
 newsletter / analysis platform) and shows the four-principle structure to follow:
 
@@ -67,7 +67,7 @@ Mockup files (Figma, HTML prototypes, handoff decks) are visual comps and routin
 contain placeholder numbers, invented endorsements ("Trusted by teams at X, Y, Z"),
 speculative audience labels, and features that were descoped before or after the comp
 was made. Before any mockup-sourced copy is lifted into a real surface, route it
-through the **Copy Grounding** checklist in `.playbooks/copywriter.playbook.md` — no unverified
+through the **Copy Grounding** checklist in `.protocols/copywriter.protocol.md` — no unverified
 subscriber counts, no unendorsed logos, no audience segment we don't actually sell to,
 no feature names that don't resolve to shipped code or an active roadmap item. Flag
 anything that doesn't ground, don't silently "round it into plausible" — a conservative
@@ -76,7 +76,7 @@ rewrite always beats a fabricated claim.
 ### Company & operating context
 
 The host project may have an operating context that shapes design defaults more
-than it shapes copy. Read it from `playbooks.config.ts → ux.operatingContext`
+than it shapes copy. Read it from `protocols.config.ts → ux.operatingContext`
 (or the project's design-system docs) and apply only what's relevant. Common
 context dimensions:
 
@@ -339,7 +339,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Engagement impact**          | Feature encouraged deeper exploration or return visits (measurable via analytics)                    | Users interacted superficially or didn't return                                              |
 | **Accessibility compliance**   | Feature passed accessibility audit without remediation                                               | Contrast or motion issues found during review that the plan should have caught               |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

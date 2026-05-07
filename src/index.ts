@@ -1,18 +1,21 @@
 export { VERSION } from './version.js'
 export {
-  PlaybooksConfigSchema,
+  ProtocolsConfigSchema,
   StackEnum,
   AgentEnum,
   StorybookModeEnum,
   DeployTargetEnum,
-  BUNDLED_PLAYBOOKS,
-  definePlaybooksConfig
+  BUNDLED_PROTOCOLS,
+  TerminologySchema,
+  DEFAULT_TERMINOLOGY,
+  defineProtocolsConfig
 } from './config/schema.js'
 export type {
-  PlaybooksConfig,
+  ProtocolsConfig,
   Stack,
   Agent,
   StorybookMode,
-  DeployTarget
+  DeployTarget,
+  Terminology
 } from './config/schema.js'
 export { defaultConfig, noCodePreset } from './config/defaults.js'

@@ -5,7 +5,7 @@ import { log } from '../util/log.js'
 export function registerInit(program: Command): void {
   program
     .command('init')
-    .description('Scaffold playbooks.config.ts and the .playbooks/ directory')
+    .description('Scaffold protocols.config.ts and the .protocols/ directory')
     .option('--preset <name>', 'Preset to apply (currently: "no-code")')
     .option('--cwd <path>', 'Target directory (default: process.cwd())')
     .option('--non-interactive', 'Disable prompts; emit JSON progress on stdout')

@@ -1,4 +1,4 @@
-# Playbook: Plan — Product Thinking
+# Protocol: Plan — Product Thinking
 
 > Cognitive mode: Founder / Product lead
 
@@ -61,7 +61,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Downstream usefulness**   | The plan-engineering skill received clear, actionable input from this output                                             | Engineering had to re-derive product intent because the product review was vague |
 | **Deferral accuracy**       | Deferred items were genuinely lower priority, not things we immediately needed                                           | We ended up building deferred items in the same cycle anyway                     |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

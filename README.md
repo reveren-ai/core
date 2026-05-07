@@ -36,13 +36,13 @@ The CLI binary is `rvr` (npm-style short command). The brand is reveren; `rvr` i
 # Initialise reveren in any repo
 npx @reveren-ai/core init
 
-# Run a named playbook against the current context
-rvr run <playbook>
+# Run a named protocol against the current context
+rvr run <protocol>
 
-# List active and available playbooks
+# List active and available protocols
 rvr list
 
-# Pull the latest playbook updates
+# Pull the latest protocol updates
 rvr sync
 
 # Run a multi-step pipeline (Pro+)
@@ -51,12 +51,12 @@ rvr pipeline run <name>
 
 After `rvr init`, your repo gets:
 
-- A `playbooks.config.ts` at the root
-- A `.playbooks/` directory with the active playbook set
-- A `PLAYBOOKS.md` operating guide
-- A `"playbooks": "rvr run"` script in `package.json`
+- A `protocols.config.ts` at the root
+- A `.protocols/` directory with the active protocol set
+- A `PROTOCOLS.md` operating guide
+- A `"protocols": "rvr run"` script in `package.json`
 
-Every AI agent that touches the repo from then on reads from `.playbooks/`.
+Every AI agent that touches the repo from then on reads from `.protocols/`.
 
 ## Why this exists
 
@@ -64,7 +64,7 @@ Every team using AI coding agents in 2026 has the same problem: the agent is bri
 
 The result is code that technically works but breaks team conventions, uses the wrong library version, skips your test pattern, or ignores an architectural rule the team agreed on six months ago. Teams spend as much time correcting AI output as they would writing it themselves.
 
-reveren fixes the input side. Once `.playbooks/` is in your repo, every agent — across every chat session, every IDE, every model — works from the same set of rules.
+reveren fixes the input side. Once `.protocols/` is in your repo, every agent — across every chat session, every IDE, every model — works from the same set of rules.
 
 For the long-form argument, see [MANIFESTO.md](./MANIFESTO.md).
 
@@ -72,8 +72,8 @@ For the long-form argument, see [MANIFESTO.md](./MANIFESTO.md).
 
 | Tier | USD | Included | Overage |
 |---|---|---|---|
-| **Free** | $0 | Full base playbook library, CLI, single repo, 200 cloud pipeline runs/mo | Hard cap |
-| **Pro** | $19/mo | + Custom playbooks, multi-step pipelines, unlimited repos, CI/CD, MCP server (read), 2,000 runs/mo | $0.015/run |
+| **Free** | $0 | Full base protocol library, CLI, single repo, 200 cloud pipeline runs/mo | Hard cap |
+| **Pro** | $19/mo | + Custom protocols, multi-step pipelines, unlimited repos, CI/CD, MCP server (read), 2,000 runs/mo | $0.015/run |
 | **Team** | $39/seat/mo | + Hosted dashboard, private registry, team sync, analytics, GitHub App, SSO, MCP server (read+write), 6,000 runs/seat/mo (pooled) | $0.012/run |
 | **Enterprise** | Custom | + Self-host, dedicated infra, SOC2, custom SLAs, dedicated CSM | Custom |
 
@@ -92,13 +92,31 @@ Local CLI runs are unlimited and free on every tier. Only **cloud-orchestrated**
 | v0 | ✓ |
 | Any MCP-compatible agent | ✓ |
 
-The `.playbooks/` file format is published as an open spec — any agent vendor or tool can read or write it.
+The `.protocols/` file format is published as an open spec — any agent vendor or tool can read or write it.
+
+## Naming is configurable
+
+reveren defaults to **protocol** as the noun (directory `.protocols/`, extension `.protocol.md`), but the term is just a label. If your team prefers `playbook`, `skill`, `rule`, or anything else, set `terminology` in `protocols.config.ts`:
+
+```ts
+export default defineProtocolsConfig({
+  // ...
+  terminology: {
+    singular: "playbook",
+    plural: "playbooks",
+    directory: ".playbooks",
+    extension: ".playbook.md"
+  }
+})
+```
+
+The CLI honours your choice when scaffolding files and in user-facing output; the wire format stays the same so cross-project tooling keeps working.
 
 ## License
 
 `@reveren-ai/core` v0.0.1 (this placeholder) is `UNLICENSED`.
 
-`@reveren-ai/core` v0.1.0+ (the real CLI) will ship under **Business Source License 1.1** with a bespoke Additional Use Grant — source-available; permissive for any internal commercial use; restricts repackaging as a competing hosted service. The playbook library content is MIT-licensed (DCO required for contributions); the open `.playbooks/` file format spec is published under W3C SDL2 (text) + MIT (schemas).
+`@reveren-ai/core` v0.1.0+ (the real CLI) will ship under **Business Source License 1.1** with a bespoke Additional Use Grant — source-available; permissive for any internal commercial use; restricts repackaging as a competing hosted service. The protocol library content is MIT-licensed (DCO required for contributions); the open `.protocols/` file format spec is published under W3C SDL2 (text) + MIT (schemas).
 
 The hosted dashboard (`app.reveren.ai`) is proprietary.
 
@@ -106,7 +124,7 @@ The hosted dashboard (`app.reveren.ai`) is proprietary.
 
 Built and maintained by [Innocent Muisha](https://github.com/iminnocent98).
 
-reveren is a product of **reveren.ai (Australia), under the Luanda Pty Ltd holding company group.
+reveren is a product of **Reveren Pty Ltd** (Australia, trading as **reveren**, primary website [reveren.ai](https://reveren.ai)), under the Luanda Pty Ltd holding company group.
 
 ## Links
 

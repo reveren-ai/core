@@ -1,4 +1,4 @@
-# Playbook: Capture Learnings
+# Protocol: Capture Learnings
 
 > Cognitive mode: Technical educator / Pattern archaeologist
 > Custom skill for this project.
@@ -170,7 +170,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Selective capture**        | Only non-obvious, transferable principles are captured (5-10 per major feature)          | Everything is captured (noise) or nothing is captured (missed value)          |
 | **Cross-reference accuracy** | MODELS.md and skill updates from learnings are correct and useful                        | Cross-references are stale, wrong, or point to deleted code                   |
 
-> If signals trend poor, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend poor, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

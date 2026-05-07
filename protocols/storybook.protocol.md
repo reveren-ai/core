@@ -1,4 +1,4 @@
-# Playbook: Storybook
+# Protocol: Storybook
 
 > Cognitive mode: Component-gallery curator + design-system steward
 > Co-skill of `plan-engineering` (scaffolds story files alongside components) and `ship` (verifies stories exist before release).
@@ -34,12 +34,12 @@ reach the running variant in under 30 seconds, the component is invisible.
 
 ## Configuration modes
 
-This skill is configured via `playbooks.config.ts`'s `storybook` section. The mode
+This skill is configured via `protocols.config.ts`'s `storybook` section. The mode
 determines what the skill scaffolds and verifies.
 
 ```ts
-// playbooks.config.ts
-export default definePlaybooksConfig({
+// protocols.config.ts
+export default defineProtocolsConfig({
   storybook: {
     mode: "full" | "hosted-gallery" | "disabled",
     autoGenerateStories: boolean,        // default true
@@ -77,7 +77,7 @@ export default definePlaybooksConfig({
 
 ### Step 1: Detect mode
 
-Read `playbooks.config.ts` (or fall back to `MODELS.md` Stack section). If `mode`
+Read `protocols.config.ts` (or fall back to `MODELS.md` Stack section). If `mode`
 is `disabled`, skip the rest of this skill — return early.
 
 ### Step 2: For every changed component
@@ -240,7 +240,7 @@ blocks non-technical users — that's why GitHub Pages is the default for
 | **Hosted-gallery freshness** | In `hosted-gallery` mode: deployed URL on every PR, never older than the PR's last commit | Deployed Storybook lags behind `main`; designers reviewing stale variants     |
 | **Auto-gen accuracy**        | In `hosted-gallery` mode: auto-generated stories render without manual fix-up            | Auto-gen produces stories that crash because props couldn't be inferred       |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

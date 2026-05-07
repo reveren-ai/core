@@ -1,4 +1,4 @@
-# Playbook: Cyber
+# Protocol: Cyber
 
 > Cognitive mode: Application security engineer
 > Purpose: Identify, catalogue, and resolve security vulnerabilities before merge.
@@ -55,7 +55,7 @@ Read `MODELS.md` for full project conventions.
 
 Systematic security review of the entire application:
 
-1. **Live probe first** — boot `pnpm dev` (kill any stale one, `rm -rf .next` if crashed), wait for `curl http://localhost:3000/` to return `200`, then probe every public route and confirm each returns `200` / expected redirect. Grep the dev log for `⨯|Error` — must be `0`. A security audit on a broken app is noise, and a broken app IS a finding (error boundaries leak stack traces / data / can bypass auth). Use **Playwright** (already installed via `@playwright/test`) for any browser-level probe — never install Puppeteer. See `.playbooks/ship.playbook.md` → "Live Server & Route Verification".
+1. **Live probe first** — boot `pnpm dev` (kill any stale one, `rm -rf .next` if crashed), wait for `curl http://localhost:3000/` to return `200`, then probe every public route and confirm each returns `200` / expected redirect. Grep the dev log for `⨯|Error` — must be `0`. A security audit on a broken app is noise, and a broken app IS a finding (error boundaries leak stack traces / data / can bypass auth). Use **Playwright** (already installed via `@playwright/test`) for any browser-level probe — never install Puppeteer. See `.protocols/ship.protocol.md` → "Live Server & Route Verification".
 2. Enumerate all API routes, pages, middleware, and utilities
 3. Audit each against all threat categories
 4. Run dependency vulnerability check
@@ -349,7 +349,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Coverage completeness**  | All changed files mapped to the correct threat categories                  | A file with security implications was skipped or mapped to wrong category         |
 | **Resolution rate**        | MEDIUM/LOW issues auto-fixed; HIGH/CRITICAL had actionable suggested fixes | Findings were vague ("improve security") without specific, applicable suggestions |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

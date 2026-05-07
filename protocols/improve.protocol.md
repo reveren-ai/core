@@ -1,4 +1,4 @@
-# Playbook: Improve
+# Protocol: Improve
 
 > Cognitive mode: Meta-learning systems engineer
 > Inspired by the Observe → Amend → Evaluate loop from better-skills.dev and cognee
@@ -132,8 +132,8 @@ In this case, classify as **generic** and note the project-specific example sepa
 
 Tag every amendment in the observation and in EVOLUTION.md:
 
-- `[generic]` — applies to any project. Update `templates/playbooks/` when accepted.
-- `[project-specific]` — only relevant here. Update `.playbooks/` only.
+- `[generic]` — applies to any project. Update `templates/protocols/` when accepted.
+- `[project-specific]` — only relevant here. Update `.protocols/` only.
 - `[generic+example]` — generic core with a project-specific example. Update both.
 
 ---
@@ -150,7 +150,7 @@ Based on accumulated observations, propose **targeted** changes to the skill fil
 2. **Preserve what works** — if a section is producing good results, don't touch it
 3. **Be specific** — "improve the checklist" is not an amendment. "Add a check for missing Suspense boundaries around async components" is.
 4. **One concern per amendment** — don't bundle unrelated fixes
-5. **Version the change** — every amendment gets logged in `.playbooks/EVOLUTION.md`
+5. **Version the change** — every amendment gets logged in `.protocols/EVOLUTION.md`
 
 ### What can be amended
 
@@ -182,7 +182,7 @@ Based on accumulated observations, propose **targeted** changes to the skill fil
 
 [Exact changes to make — cite specific sections]
 - If [generic]: also update templates/skills/[skill].md
-- If [generic+example]: update templates/skills/ with generic core, keep example in .playbooks/ and/or MODELS.md
+- If [generic+example]: update templates/skills/ with generic core, keep example in .protocols/ and/or MODELS.md
 
 ### Expected improvement
 
@@ -222,25 +222,25 @@ changes that individually look fine but collectively degrade is the #1 risk.**
 
 If **accepted**:
 
-1. Apply the change to the project skill file (`.playbooks/[playbook].playbook.md`)
+1. Apply the change to the project skill file (`.protocols/[protocol].protocol.md`)
 2. **Templates sync (mandatory for `[generic]` and `[generic+example]`):**
    - If `templates/skills/[skill].md` exists → apply the generic core to it.
    - If it does not exist → create it now with the generic core (strip project-specific file paths, commands, and examples; keep only what transfers to any stack).
-   - If the classification is `[generic+example]` → the project-specific example stays in `.playbooks/` and/or `MODELS.md`; only the generic rule/checklist item moves to `templates/`.
+   - If the classification is `[generic+example]` → the project-specific example stays in `.protocols/` and/or `MODELS.md`; only the generic rule/checklist item moves to `templates/`.
    - Verify: after sync, `ls templates/skills/` should contain every skill tagged `[generic]` or `[generic+example]` in EVOLUTION.md. If the verification fails, the amendment is not complete — fix the sync before moving on.
-3. Log the amendment in `.playbooks/EVOLUTION.md` with the classification tag, and state explicitly whether `templates/playbooks/` was touched (e.g., `Templates: synced` / `Templates: n/a (project-specific)` / `Templates: created`).
-4. Commit with `docs(skills): amend [skill-name] — [brief description]`. Include both the `.playbooks/` and `templates/playbooks/` changes in the same commit so the log ties them together.
+3. Log the amendment in `.protocols/EVOLUTION.md` with the classification tag, and state explicitly whether `templates/protocols/` was touched (e.g., `Templates: synced` / `Templates: n/a (project-specific)` / `Templates: created`).
+4. Commit with `docs(skills): amend [skill-name] — [brief description]`. Include both the `.protocols/` and `templates/protocols/` changes in the same commit so the log ties them together.
 
 If **rejected**:
 
-1. Log the rejection in `.playbooks/EVOLUTION.md` with the reason and classification
+1. Log the rejection in `.protocols/EVOLUTION.md` with the reason and classification
 2. The observation is preserved — it may inform a future amendment
 
 ---
 
 ## Periodic Health Check
 
-The health-check orchestration lives in its own skill: **`audit-skills`** (`.playbooks/audit-skills.playbook.md`).
+The health-check orchestration lives in its own skill: **`audit-skills`** (`.protocols/audit-skills.protocol.md`).
 That skill sweeps the ecosystem, ranks findings, and hands this skill a queue. Run `audit-skills`
 every ~10 feature cycles (or when prompted); run `improve` on each queue item. Do not re-implement
 the ecosystem sweep inline here — if the audit logic needs to change, change `audit-skills`.
@@ -251,7 +251,7 @@ the ecosystem sweep inline here — if the audit logic needs to change, change `
 
 - **Never amend a skill without an observation to justify it.** Hypothetical improvements are how skills drift.
 - **Human-in-the-loop by default.** The developer must approve every skill amendment. Auto-amendments are not allowed.
-- **Log everything in `.playbooks/EVOLUTION.md`.** Accepted amendments, rejected amendments, health checks — all logged.
+- **Log everything in `.protocols/EVOLUTION.md`.** Accepted amendments, rejected amendments, health checks — all logged.
 - **Small, targeted changes beat big rewrites.** If you feel the urge to rewrite a skill from scratch, you've waited too long to run the improve loop.
 - **Quality signals are the soul of the loop.** Without them, observe produces nothing useful and amend produces random changes.
 - **Skills that improve skills can also degrade.** The improve skill itself is subject to the loop. Check its own quality signals.

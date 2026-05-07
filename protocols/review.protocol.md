@@ -1,4 +1,4 @@
-# Playbook: Review
+# Protocol: Review
 
 > Cognitive mode: Paranoid staff engineer
 
@@ -58,7 +58,7 @@ Before producing the review report:
 5. For UI-touching reviews, load the changed routes in Playwright's bundled Chromium (no Puppeteer — `@playwright/test` is already installed) and assert no `pageerror` fires and no `Something went wrong` in the rendered body.
 6. Any failure is a review finding, not a footnote.
 
-See `.playbooks/ship.playbook.md` → "Live Server & Route Verification" for the canonical copy-paste commands.
+See `.protocols/ship.protocol.md` → "Live Server & Route Verification" for the canonical copy-paste commands.
 
 ### Correctness
 
@@ -163,7 +163,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Priority calibration** | Critical/Important/Minor classifications matched actual severity                       | Critical items turned out to be minor, or minor items caused real issues         |
 | **Coverage balance**     | Review covered performance, security, correctness, testing, and styling proportionally | Review over-indexed on one area (e.g., all styling nitpicks, no security checks) |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

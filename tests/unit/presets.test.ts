@@ -26,7 +26,7 @@ describe('noCodePreset', () => {
     expect(noCodePreset()).toMatchInlineSnapshot(`
       {
         "$schemaVersion": 1,
-        "activePlaybooks": [
+        "activeProtocols": [
           "plan-product",
           "plan-engineering",
           "plan-ux",
@@ -56,6 +56,12 @@ describe('noCodePreset', () => {
           "deployTarget": "github-pages",
           "mode": "hosted-gallery",
         },
+        "terminology": {
+          "directory": ".protocols",
+          "extension": ".protocol.md",
+          "plural": "protocols",
+          "singular": "protocol",
+        },
         "testing": "vitest",
       }
     `)
@@ -68,8 +74,8 @@ describe('defaultConfig', () => {
     expect(config.storybook.mode).toBe('full')
   })
 
-  it('lists all 14 bundled playbooks as active', () => {
+  it('lists all 14 bundled protocols as active', () => {
     const config = defaultConfig()
-    expect(config.activePlaybooks).toHaveLength(14)
+    expect(config.activeProtocols).toHaveLength(14)
   })
 })

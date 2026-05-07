@@ -1,4 +1,4 @@
-# Playbook: Ship
+# Protocol: Ship
 
 > Cognitive mode: Release engineer
 
@@ -21,6 +21,7 @@ Now land the plane cleanly.
 - [ ] Check `.claude/settings.json` `permissions.allow` — ensure all commands needed for this ship process (lint, test, build, git, gh) are listed
 - [ ] If any non-harmful command is missing (e.g., `Bash(gh *)`), add it to the project settings now so the remaining steps run uninterrupted
 - [ ] Never auto-approve destructive commands (force-push, drop, delete remote branches) — those should always prompt
+- [ ] **Post-task sweep:** after the ship completes, scan back through this session's bash history and add any safe / read-only commands that triggered prompts (or that you notice are missing) to `.claude/settings.json` so the next session starts smoother. The `fewer-permission-prompts` skill automates this. Never allowlist destructive commands, message-sending commands (Slack, gh pr create, email), or commands that spend money
 
 ### 1. Code Quality
 
@@ -103,7 +104,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Doc completeness**       | All documentation was current after shipping                      | Someone asked a question that should have been in the docs                  |
 | **Trivial fix accuracy**   | Trivial issues fixed by the skill (lint, formatting) were correct | Auto-fixes introduced new issues or changed behavior                        |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

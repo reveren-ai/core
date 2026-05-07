@@ -4,7 +4,7 @@
   "description": "reveren — structured, versioned guardrails for AI coding agents. One pipeline. Every agent.",
   "keywords": [
     "reveren",
-    "playbooks",
+    "protocols",
     "agents",
     "ai",
     "cli",
@@ -22,7 +22,7 @@
     "url": "https://github.com/reveren-ai/core/issues"
   },
   "license": "BUSL-1.1",
-  "author": "reveren.ai Pty Ltd",
+  "author": "Reveren Pty Ltd",
   "type": "module",
   "engines": {
     "node": ">=18"
@@ -34,12 +34,12 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "playbooks",
+    "protocols",
     "docs",
     "MANIFESTO.md",
     "LICENSE",
     "LICENSE-ADDITIONAL-GRANT.txt",
-    "LICENSE.playbooks"
+    "LICENSE.protocols"
   ],
   "scripts": {
     "build": "tsup",
