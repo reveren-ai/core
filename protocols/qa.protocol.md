@@ -11,14 +11,14 @@ Can be diff-aware (automatic on feature branches) or full-app.
 
 ## 0. Permissions Pre-flight
 
-Before starting, confirm every non-destructive command this skill runs is in
+Before starting, confirm every non-destructive command this protocol runs is in
 `.claude/settings.local.json` → `permissions.allow`. Missing entries will
 interrupt the run with approval prompts mid-smoke.
 
 - Typical commands used here: `pnpm dev`, `pnpm test:e2e`, `pkill -f "next dev"`,
   `rm -rf .next`, `curl`, `grep`, `timeout`, `node` (for the Playwright
   one-liner).
-- If prompts fire, run the **`/fewer-permission-prompts`** skill to grant the
+- If prompts fire, run the **`/fewer-permission-prompts`** protocol to grant the
   common ones in bulk.
 - Never auto-approve destructive commands (force-push, DB drops, edits to
   shared infrastructure) — those should always prompt.
@@ -160,7 +160,7 @@ See `.protocols/ship.protocol.md` → "Live Server & Route Verification" for the
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                         | ✅ Good                                                         | ❌ Poor                                                                                           |
 | ------------------------------ | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
@@ -170,7 +170,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Health score accuracy**      | The health score reflected the actual user experience           | Score was high but the feature had real UX problems, or score was low but the feature worked fine |
 | **E2E recommendation quality** | Recommended Playwright tests would catch regressions if written | Recommended tests were too generic to be useful                                                   |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

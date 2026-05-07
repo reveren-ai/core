@@ -78,7 +78,7 @@ Every engineering plan must include, in its acceptance criteria, a live-server s
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                       | ✅ Good                                                              | ❌ Poor                                                                                |
 | ---------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
@@ -88,7 +88,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Architecture fit**         | The proposed architecture worked without mid-build redesign          | A structural change was needed mid-implementation because the plan missed a constraint |
 | **Implementation velocity**  | Implementation was "mechanical" — no ambiguity about what to build   | Developer had to stop and re-think architecture during implementation                  |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

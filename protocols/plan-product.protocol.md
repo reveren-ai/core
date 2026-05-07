@@ -6,7 +6,7 @@
 
 ## When to use
 
-Before any significant feature work begins. Use this skill to challenge whether
+Before any significant feature work begins. Use this protocol to challenge whether
 the request as stated is actually the right thing to build.
 
 ## How to think
@@ -51,17 +51,17 @@ Do NOT take the request literally. Instead ask:
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                      | ✅ Good                                                                                                                  | ❌ Poor                                                                          |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
 | **Scope change**            | The product review meaningfully changed what was built (cut scope, reframed the problem, added a critical missing piece) | The review rubber-stamped the original request with no real challenge            |
 | **Open questions resolved** | Open questions were answered before engineering began, preventing rework                                                 | Engineering started with unresolved ambiguity that caused mid-build pivots       |
 | **Roadmap alignment**       | The recommendation fit the product roadmap in PROJECT.md                                                                 | The feature was built in isolation, conflicting with or duplicating planned work |
-| **Downstream usefulness**   | The plan-engineering skill received clear, actionable input from this output                                             | Engineering had to re-derive product intent because the product review was vague |
+| **Downstream usefulness**   | The plan-engineering protocol received clear, actionable input from this output                                          | Engineering had to re-derive product intent because the product review was vague |
 | **Deferral accuracy**       | Deferred items were genuinely lower priority, not things we immediately needed                                           | We ended up building deferred items in the same cycle anyway                     |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

@@ -1,7 +1,7 @@
 # Protocol: Storybook
 
 > Cognitive mode: Component-gallery curator + design-system steward
-> Co-skill of `plan-engineering` (scaffolds story files alongside components) and `ship` (verifies stories exist before release).
+> Co-protocol of `plan-engineering` (scaffolds story files alongside components) and `ship` (verifies stories exist before release).
 
 ---
 
@@ -9,17 +9,17 @@
 
 - Whenever a new component folder is created under `components/`
 - Whenever a component's public API (props, variants, slots) changes
-- As a `ship` skill gate — block the release if a touched component lacks an up-to-date `.stories.tsx`
-- During the `document` skill, to confirm component stories exist for every component referenced in the feature doc
+- As a `ship` protocol gate — block the release if a touched component lacks an up-to-date `.stories.tsx`
+- During the `document` protocol, to confirm component stories exist for every component referenced in the feature doc
 
 ## 0. Permissions Pre-flight
 
-Before starting, confirm every non-destructive command this skill runs is in
+Before starting, confirm every non-destructive command this protocol runs is in
 `.claude/settings.local.json` → `permissions.allow`. Missing entries will
 interrupt the run with approval prompts.
 
 - Typical commands used here: `pnpm storybook`, `pnpm build-storybook`, `pnpm storybook:test`, `git diff`, `git status`.
-- If prompts fire, run the **`/fewer-permission-prompts`** skill to bulk-grant.
+- If prompts fire, run the **`/fewer-permission-prompts`** protocol to bulk-grant.
 
 ## How to think
 
@@ -34,8 +34,8 @@ reach the running variant in under 30 seconds, the component is invisible.
 
 ## Configuration modes
 
-This skill is configured via `protocols.config.ts`'s `storybook` section. The mode
-determines what the skill scaffolds and verifies.
+This protocol is configured via `protocols.config.ts`'s `storybook` section. The mode
+determines what the protocol scaffolds and verifies.
 
 ```ts
 // protocols.config.ts
@@ -52,7 +52,7 @@ export default defineProtocolsConfig({
 
 - `.storybook/` config committed; `pnpm storybook` runs locally on port 6006
 - Engineer hand-writes (or AI-generates) `*.stories.tsx` files
-- `ship` skill runs `pnpm build-storybook` as a smoke check
+- `ship` protocol runs `pnpm build-storybook` as a smoke check
 - No hosted deploy required
 
 ### Mode: `hosted-gallery` (default for non-technical / no-code users)
@@ -70,7 +70,7 @@ export default defineProtocolsConfig({
 ### Mode: `disabled`
 
 - No `.storybook/` directory; no stories generated; no CI workflow
-- The `document` skill falls back to markdown-only component docs
+- The `document` protocol falls back to markdown-only component docs
 - For solo hackers who have explicitly opted out
 
 ## Workflow
@@ -78,7 +78,7 @@ export default defineProtocolsConfig({
 ### Step 1: Detect mode
 
 Read `protocols.config.ts` (or fall back to `MODELS.md` Stack section). If `mode`
-is `disabled`, skip the rest of this skill — return early.
+is `disabled`, skip the rest of this protocol — return early.
 
 ### Step 2: For every changed component
 
@@ -107,7 +107,7 @@ base branch). For each component file added or modified:
 ### Step 3: Build smoke
 
 Run `pnpm build-storybook` and confirm it exits `0`. If it fails, fix the broken
-story before declaring the skill complete. A failing Storybook build means a
+story before declaring the protocol complete. A failing Storybook build means a
 broken component contract, not a Storybook problem.
 
 ### Step 4: Verification
@@ -116,7 +116,7 @@ broken component contract, not a Storybook problem.
   in this change, confirm each variant renders
 - **Hosted-gallery mode:** push to a PR branch, wait for the GH Pages /
   Chromatic check to pass, open the deployed URL, click through new stories
-- **Either mode:** the `ship` skill will block release if any component touched
+- **Either mode:** the `ship` protocol will block release if any component touched
   in the diff lacks a story
 
 ## Story Template (CSF 3.0 / MUI v7)
@@ -166,7 +166,7 @@ prop value, so designers can scan all variants at a glance.
 ## Auto-generation contract (hosted-gallery mode only)
 
 When `autoGenerateStories: true` and a component file is created without a
-matching story, the skill (or the CLI hook in reveren) writes a story
+matching story, the protocol (or the CLI hook in reveren) writes a story
 automatically using:
 
 1. **Prop discovery:** parse the component's exported props type via
@@ -240,7 +240,7 @@ blocks non-technical users — that's why GitHub Pages is the default for
 | **Hosted-gallery freshness** | In `hosted-gallery` mode: deployed URL on every PR, never older than the PR's last commit | Deployed Storybook lags behind `main`; designers reviewing stale variants     |
 | **Auto-gen accuracy**        | In `hosted-gallery` mode: auto-generated stories render without manual fix-up            | Auto-gen produces stories that crash because props couldn't be inferred       |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 
@@ -252,6 +252,6 @@ blocks non-technical users — that's why GitHub Pages is the default for
 - Stories must be **deterministic** — never call `Date.now()`, `Math.random()`, or hit network without a Mock Service Worker handler
 - For MUI v7 components, wrap the global Storybook `decorators` with the project's `ThemeProvider` and `CssVarsProvider` (configured once in `.storybook/preview.tsx`) so stories render with real theming, not Storybook defaults
 - Stories must not import from `app/` — components must be self-sufficient. If a component depends on app context (auth, router, params), the story stubs that context via decorators
-- The `ship` skill blocks release if any touched component lacks an up-to-date story — this is non-negotiable in `full` and `hosted-gallery` modes
-- In `hosted-gallery` mode, never edit an auto-generated story file in this skill — only generate it. User edits remove the `@reveren-auto-generated` header and take ownership
+- The `ship` protocol blocks release if any touched component lacks an up-to-date story — this is non-negotiable in `full` and `hosted-gallery` modes
+- In `hosted-gallery` mode, never edit an auto-generated story file in this protocol — only generate it. User edits remove the `@reveren-auto-generated` header and take ownership
 - Never delete a story file when removing a component — move the story to `archive/` so historical variants stay browseable

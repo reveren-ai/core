@@ -7,20 +7,20 @@
 
 ## When to use
 
-After Review + QA, before Documentation and Ship. The review skill has a surface-level
-"Security & Trust" checklist — this skill goes deeper. It is a dedicated security audit
+After Review + QA, before Documentation and Ship. The review protocol has a surface-level
+"Security & Trust" checklist — this protocol goes deeper. It is a dedicated security audit
 that maps findings to OWASP categories, checks dependencies, and auto-fixes what it can.
 
 ## 0. Permissions Pre-flight
 
-Before starting, confirm every non-destructive command this skill runs is in
+Before starting, confirm every non-destructive command this protocol runs is in
 `.claude/settings.local.json` → `permissions.allow`. Missing entries will
 interrupt the audit with approval prompts mid-scan.
 
 - Typical commands used here: `pnpm audit`, `pnpm lint`, `pnpm test:run`,
   `pnpm build`, `pnpm update`, `git diff`, `grep`, `curl`, `pkill`, `timeout`,
   `node`.
-- If prompts fire, run the **`/fewer-permission-prompts`** skill to batch-grant
+- If prompts fire, run the **`/fewer-permission-prompts`** protocol to batch-grant
   the common ones.
 - Never auto-approve destructive commands (force-push, `rm -rf` outside
   `.next`, DB drops, infra edits, `pnpm audit fix --force`) — those should
@@ -148,7 +148,7 @@ Focused check on third-party packages:
 
 ## Resolution Protocol
 
-The cyber skill is unique in that it both identifies **and** resolves issues where safe to do so.
+The cyber protocol is unique in that it both identifies **and** resolves issues where safe to do so.
 The workflow is: **prioritise → resolve → track**. Every finding gets one of three outcomes: fixed now, fixed in-session with the operator, or added to the backlog with enough context to act on later.
 
 ### Step 1: Prioritise
@@ -338,7 +338,7 @@ Every finding must be tracked — nothing falls through the cracks.
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                     | ✅ Good                                                                    | ❌ Poor                                                                           |
 | -------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
@@ -349,7 +349,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Coverage completeness**  | All changed files mapped to the correct threat categories                  | A file with security implications was skipped or mapped to wrong category         |
 | **Resolution rate**        | MEDIUM/LOW issues auto-fixed; HIGH/CRITICAL had actionable suggested fixes | Findings were vague ("improve security") without specific, applicable suggestions |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

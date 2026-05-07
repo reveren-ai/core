@@ -7,20 +7,20 @@
 
 ## When to use
 
-- After any skill produces a suboptimal result
-- When a pattern of skill failure is noticed (false positives, missed issues, stale conventions)
+- After any protocol produces a suboptimal result
+- When a pattern of protocol failure is noticed (false positives, missed issues, stale conventions)
 - Periodically (e.g., after every 5–10 feature cycles) as a hygiene check
 - When the project's stack, conventions, or structure changes significantly
-- When asked to "improve skills", "update skills", or "the [X] skill missed something"
+- When asked to "improve protocols", "update protocols", or "the [X] protocol missed something"
 
 ## How to think
 
 You are a meta-learning engineer. Your job is not to build features — it's to make
-the system that builds features better. Static skills silently degrade. Skills that
+the system that builds features better. Static protocols silently degrade. Protocols that
 were written for yesterday's codebase produce worse results on today's codebase
 without throwing a single error.
 
-The failure mode is **not** obvious breakage. It's **quiet degradation** — a skill
+The failure mode is **not** obvious breakage. It's **quiet degradation** — a protocol
 that still runs, still produces output, but the output is less useful, less accurate,
 or less relevant than it should be.
 
@@ -39,12 +39,12 @@ Your weapon against this is the **Observe → Classify → Amend → Evaluate** 
 │   │ Capture  │   │ Generic  │   │ Propose  │   │ Test change  │  │
 │   │ signals  │   │ or       │   │ targeted │   │ Human review │  │
 │   │ after    │   │ project- │   │ edits to │   │ Accept or    │  │
-│   │ skill    │   │ specific │   │ the      │   │ reject       │  │
-│   │ runs     │   │ ?        │   │ skill    │   │              │  │
+│   │ protocol │   │ specific │   │ the      │   │ reject       │  │
+│   │ runs     │   │ ?        │   │ protocol │   │              │  │
 │   └──────────┘   └──────────┘   └──────────┘   └──────┬───────┘  │
 │        ▴                                               │          │
 │        └───────────────────────────────────────────────┘          │
-│                    (loop on next skill use)                       │
+│                    (loop on next protocol use)                    │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -52,7 +52,7 @@ Your weapon against this is the **Observe → Classify → Amend → Evaluate** 
 
 ## Step 1: Observe
 
-After a skill is used, capture structured observations. **This is the most critical
+After a protocol is used, capture structured observations. **This is the most critical
 step** — garbage observations produce garbage amendments.
 
 ### What to observe
@@ -63,24 +63,24 @@ step** — garbage observations produce garbage amendments.
 | **Accuracy**          | Were the findings correct? Any false positives or false negatives?      |
 | **Coverage**          | Did the checklist cover all relevant areas? Anything missing?           |
 | **Relevance**         | Are examples, file paths, and patterns still current?                   |
-| **Efficiency**        | Were any steps redundant? Did the skill waste time on low-value checks? |
-| **Convention drift**  | Does the skill match current project conventions in MODELS.md?          |
+| **Efficiency**        | Were any steps redundant? Did the protocol waste time on low-value checks? |
+| **Convention drift**  | Does the protocol match current project conventions in MODELS.md?          |
 | **Output quality**    | Was the report format useful? Did it need restructuring?                |
-| **Downstream impact** | Did the next skill in the pipeline get good input from this one?        |
+| **Downstream impact** | Did the next protocol in the pipeline get good input from this one?        |
 
-### Per-skill quality signals
+### Per-protocol quality signals
 
-Each skill has specific quality signals defined in its own file (see "Quality Signals"
-section in each skill). Use those as your observation framework.
+Each protocol has specific quality signals defined in its own file (see "Quality Signals"
+section in each protocol). Use those as your observation framework.
 
 ### Observation format
 
 ```markdown
-## Observation: [skill-name] — YYYY-MM-DD
+## Observation: [protocol-name] — YYYY-MM-DD
 
 ### Context
 
-[What feature/task was the skill used for?]
+[What feature/task was the protocol used for?]
 
 ### Signals
 
@@ -95,19 +95,19 @@ section in each skill). Use those as your observation framework.
 
 ### Specific Issues
 
-1. [Concrete issue: what the skill got wrong or missed]
+1. [Concrete issue: what the protocol got wrong or missed]
 2. [Another issue]
 
 ### What Worked Well
 
-1. [What the skill got right — don't lose this in the amendment]
+1. [What the protocol got right — don't lose this in the amendment]
 ```
 
 ---
 
 ## Step 2: Classify
 
-Before proposing an amendment, determine whether the improvement is **generic** (would benefit any project using the skills kit) or **project-specific** (only relevant to this project's stack, conventions, or domain).
+Before proposing an amendment, determine whether the improvement is **generic** (would benefit any project using the protocols kit) or **project-specific** (only relevant to this project's stack, conventions, or domain).
 
 ### Classification criteria
 
@@ -126,7 +126,7 @@ Some amendments have both a generic core and a project-specific example:
 - **Generic core**: "When planning tests for library config objects, verify what the function returns vs. what it resolves at runtime."
 - **Project-specific example**: "For MUI v7, `createTheme()` returns the creation object, not the resolved theme."
 
-In this case, classify as **generic** and note the project-specific example separately. The generic rule goes to the template skill. The specific example stays in the project's skill and/or MODELS.md.
+In this case, classify as **generic** and note the project-specific example separately. The generic rule goes to the template protocol. The specific example stays in the project's protocol and/or MODELS.md.
 
 ### Classification output
 
@@ -142,7 +142,7 @@ Tag every amendment in the observation and in EVOLUTION.md:
 
 > Previously Step 2 — renumbered after Classify was added.
 
-Based on accumulated observations, propose **targeted** changes to the skill file.
+Based on accumulated observations, propose **targeted** changes to the protocol file.
 
 ### Amendment principles
 
@@ -159,12 +159,12 @@ Based on accumulated observations, propose **targeted** changes to the skill fil
 - **"How to think" guidance**: Refine based on what actually matters in practice
 - **Output format**: Restructure if the current format isn't useful downstream
 - **Quality signals**: Add new signals discovered during use, remove unhelpful ones
-- **Edge cases**: Add scenarios the skill didn't anticipate
+- **Edge cases**: Add scenarios the protocol didn't anticipate
 
 ### Amendment format
 
 ```markdown
-## Proposed Amendment: [skill-name] [generic|project-specific|generic+example]
+## Proposed Amendment: [protocol-name] [generic|project-specific|generic+example]
 
 ### Triggered by
 
@@ -176,13 +176,13 @@ Based on accumulated observations, propose **targeted** changes to the skill fil
 
 ### Current behavior
 
-[What the skill does now that's suboptimal]
+[What the protocol does now that's suboptimal]
 
 ### Proposed change
 
 [Exact changes to make — cite specific sections]
-- If [generic]: also update templates/skills/[skill].md
-- If [generic+example]: update templates/skills/ with generic core, keep example in .protocols/ and/or MODELS.md
+- If [generic]: also update templates/protocols/[protocol].protocol.md
+- If [generic+example]: update templates/protocols/ with generic core, keep example in .protocols/ and/or MODELS.md
 
 ### Expected improvement
 
@@ -190,14 +190,14 @@ Based on accumulated observations, propose **targeted** changes to the skill fil
 
 ### Risk
 
-[What could get worse — skills can regress too]
+[What could get worse — protocols can regress too]
 ```
 
 ---
 
 ## Step 4: Evaluate
 
-Before accepting an amendment, evaluate it. **Skill drift from accumulated small
+Before accepting an amendment, evaluate it. **Protocol drift from accumulated small
 changes that individually look fine but collectively degrade is the #1 risk.**
 
 ### Evaluation checklist
@@ -205,7 +205,7 @@ changes that individually look fine but collectively degrade is the #1 risk.**
 - [ ] **Human review**: Developer reviews the proposed amendment and approves
 - [ ] **Convention check**: Amendment is consistent with current `MODELS.md` conventions
 - [ ] **No regression**: Change doesn't break existing workflow or remove checks that catch real issues
-- [ ] **Cross-skill consistency**: If the change affects the pipeline, other skills still chain correctly
+- [ ] **Cross-protocol consistency**: If the change affects the pipeline, other protocols still chain correctly
 - [ ] **Evidence-based**: The amendment is backed by concrete observations, not hypothetical improvements
 - [ ] **Scope-appropriate**: The change addresses what was observed, not a kitchen-sink rewrite
 - [ ] **Classification correct**: Generic amendments truly apply to any project; project-specific ones reference this project's stack/conventions
@@ -215,21 +215,21 @@ changes that individually look fine but collectively degrade is the #1 risk.**
 | Mode                       | When to use                       | How it works                                                   |
 | -------------------------- | --------------------------------- | -------------------------------------------------------------- |
 | **Human review**           | Always (default)                  | Developer reads the diff and accepts/rejects                   |
-| **Before/after**           | For significant changes           | Run the skill on the same input before and after the amendment |
-| **Skill-specific signals** | For skills with measurable output | Compare quality signals before and after                       |
+| **Before/after**           | For significant changes           | Run the protocol on the same input before and after the amendment |
+| **Protocol-specific signals** | For protocols with measurable output | Compare quality signals before and after                       |
 
 ### After evaluation
 
 If **accepted**:
 
-1. Apply the change to the project skill file (`.protocols/[protocol].protocol.md`)
+1. Apply the change to the project protocol file (`.protocols/[protocol].protocol.md`)
 2. **Templates sync (mandatory for `[generic]` and `[generic+example]`):**
-   - If `templates/skills/[skill].md` exists → apply the generic core to it.
+   - If `templates/protocols/[protocol].protocol.md` exists → apply the generic core to it.
    - If it does not exist → create it now with the generic core (strip project-specific file paths, commands, and examples; keep only what transfers to any stack).
    - If the classification is `[generic+example]` → the project-specific example stays in `.protocols/` and/or `MODELS.md`; only the generic rule/checklist item moves to `templates/`.
-   - Verify: after sync, `ls templates/skills/` should contain every skill tagged `[generic]` or `[generic+example]` in EVOLUTION.md. If the verification fails, the amendment is not complete — fix the sync before moving on.
+   - Verify: after sync, `ls templates/protocols/` should contain every protocol tagged `[generic]` or `[generic+example]` in EVOLUTION.md. If the verification fails, the amendment is not complete — fix the sync before moving on.
 3. Log the amendment in `.protocols/EVOLUTION.md` with the classification tag, and state explicitly whether `templates/protocols/` was touched (e.g., `Templates: synced` / `Templates: n/a (project-specific)` / `Templates: created`).
-4. Commit with `docs(skills): amend [skill-name] — [brief description]`. Include both the `.protocols/` and `templates/protocols/` changes in the same commit so the log ties them together.
+4. Commit with `docs(protocols): amend [protocol-name] — [brief description]`. Include both the `.protocols/` and `templates/protocols/` changes in the same commit so the log ties them together.
 
 If **rejected**:
 
@@ -240,8 +240,8 @@ If **rejected**:
 
 ## Periodic Health Check
 
-The health-check orchestration lives in its own skill: **`audit-skills`** (`.protocols/audit-skills.protocol.md`).
-That skill sweeps the ecosystem, ranks findings, and hands this skill a queue. Run `audit-skills`
+The health-check orchestration lives in its own protocol: **`audit-skills`** (`.protocols/audit-skills.protocol.md`).
+That protocol sweeps the ecosystem, ranks findings, and hands this protocol a queue. Run `audit-skills`
 every ~10 feature cycles (or when prompted); run `improve` on each queue item. Do not re-implement
 the ecosystem sweep inline here — if the audit logic needs to change, change `audit-skills`.
 
@@ -249,10 +249,10 @@ the ecosystem sweep inline here — if the audit logic needs to change, change `
 
 ## Rules
 
-- **Never amend a skill without an observation to justify it.** Hypothetical improvements are how skills drift.
-- **Human-in-the-loop by default.** The developer must approve every skill amendment. Auto-amendments are not allowed.
+- **Never amend a protocol without an observation to justify it.** Hypothetical improvements are how protocols drift.
+- **Human-in-the-loop by default.** The developer must approve every protocol amendment. Auto-amendments are not allowed.
 - **Log everything in `.protocols/EVOLUTION.md`.** Accepted amendments, rejected amendments, health checks — all logged.
-- **Small, targeted changes beat big rewrites.** If you feel the urge to rewrite a skill from scratch, you've waited too long to run the improve loop.
+- **Small, targeted changes beat big rewrites.** If you feel the urge to rewrite a protocol from scratch, you've waited too long to run the improve loop.
 - **Quality signals are the soul of the loop.** Without them, observe produces nothing useful and amend produces random changes.
-- **Skills that improve skills can also degrade.** The improve skill itself is subject to the loop. Check its own quality signals.
-- **Git is your version control.** Every skill amendment is a commit. Rollback is `git revert`. No separate versioning system needed.
+- **Protocols that improve protocols can also degrade.** The improve protocol itself is subject to the loop. Check its own quality signals.
+- **Git is your version control.** Every protocol amendment is a commit. Rollback is `git revert`. No separate versioning system needed.

@@ -95,7 +95,7 @@ copy review that touches a mockup-sourced surface:
    for example, were descoped 2026-04-25; any copy that still references
    courses, learners, or students is stale.
 6. **Regulatory / compliance claims** — yield figures, "guaranteed",
-   "licensed", "regulated by". These go through the **legal** skill,
+   "licensed", "regulated by". These go through the **legal** protocol,
    not copywriter. Flag and stop.
 
 **Output when grounding finds an issue:** do not silently rewrite. Record

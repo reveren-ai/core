@@ -1,14 +1,14 @@
 # Protocol: Plan — UI & UX Design
 
 > Cognitive mode: UI designer + UX architect
-> Custom skill for this project.
+> Custom protocol for this project.
 
 ---
 
 ## When to use
 
 After product direction is locked (via plan-product) and before engineering begins
-(via plan-engineering). Use this skill to design how the feature **looks, feels, and
+(via plan-engineering). Use this protocol to design how the feature **looks, feels, and
 flows** — so engineering can implement the experience mechanically, not guess at it.
 
 Also use when:
@@ -301,9 +301,9 @@ Every UI/UX decision must pass:
 
 ---
 
-## Bouncing off other skills
+## Bouncing off other protocols
 
-This skill is designed to chain with plan-product and plan-engineering:
+This protocol is designed to chain with plan-product and plan-engineering:
 
 ```
 plan-product (what to build, why)
@@ -326,7 +326,7 @@ plan-engineering (how to build it technically)
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                         | ✅ Good                                                                                              | ❌ Poor                                                                                      |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
@@ -339,7 +339,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Engagement impact**          | Feature encouraged deeper exploration or return visits (measurable via analytics)                    | Users interacted superficially or didn't return                                              |
 | **Accessibility compliance**   | Feature passed accessibility audit without remediation                                               | Contrast or motion issues found during review that the plan should have caught               |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.protocols/improve.protocol.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 
