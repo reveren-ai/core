@@ -1,4 +1,4 @@
-# Playbook: Review
+# Protocol: Review
 
 > Cognitive mode: Paranoid staff engineer
 
@@ -11,13 +11,13 @@ not a style nitpick pass.
 
 ## 0. Permissions Pre-flight
 
-Before starting, confirm every non-destructive command this skill runs is in
+Before starting, confirm every non-destructive command this protocol runs is in
 `.claude/settings.local.json` → `permissions.allow`. Missing entries will
 interrupt the run with approval prompts and fracture the audit trail.
 
 - Typical commands used here: `git diff`, `gh pr *`, `pnpm lint`, `pnpm test:run`,
   `pnpm build`, `pnpm exec tsc --noEmit`, `curl`, `grep`, `pkill`, `timeout`.
-- If prompts keep firing, invoke the **`/fewer-permission-prompts`** skill to
+- If prompts keep firing, invoke the **`/fewer-permission-prompts`** protocol to
   batch-grant the common ones from a recent transcript.
 - Never auto-approve destructive commands (force-push, `rm -rf` outside `.next`,
   DB drops, edits to shared infrastructure) — those should always prompt.
@@ -58,7 +58,7 @@ Before producing the review report:
 5. For UI-touching reviews, load the changed routes in Playwright's bundled Chromium (no Puppeteer — `@playwright/test` is already installed) and assert no `pageerror` fires and no `Something went wrong` in the rendered body.
 6. Any failure is a review finding, not a footnote.
 
-See `.playbooks/ship.playbook.md` → "Live Server & Route Verification" for the canonical copy-paste commands.
+See `.protocols/ship.protocol.md` → "Live Server & Route Verification" for the canonical copy-paste commands.
 
 ### Correctness
 
@@ -146,14 +146,14 @@ Every review finding must be tracked — nothing falls through the cracks.
 
 ### Rules
 
-- **Critical issues** are added to TODOS.md "In Progress" immediately and must be resolved before the ship skill runs.
+- **Critical issues** are added to TODOS.md "In Progress" immediately and must be resolved before the ship protocol runs.
 - **Important issues** are added to TODOS.md "Next Up" with a clear description and a `[review finding]` label so they're distinguishable from feature work.
 - **Minor notes** (design-choice documentation, operational caveats, "nice to have" observations) are appended to the relevant feature doc or architecture doc, not silently dropped.
 - The review output itself should state where each finding was tracked (e.g., "→ Added to TODOS.md", "→ Logged in DATABASE.md").
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                   | ✅ Good                                                                                | ❌ Poor                                                                          |
 | ------------------------ | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
@@ -163,7 +163,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Priority calibration** | Critical/Important/Minor classifications matched actual severity                       | Critical items turned out to be minor, or minor items caused real issues         |
 | **Coverage balance**     | Review covered performance, security, correctness, testing, and styling proportionally | Review over-indexed on one area (e.g., all styling nitpicks, no security checks) |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

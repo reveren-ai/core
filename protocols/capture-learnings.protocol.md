@@ -1,13 +1,13 @@
-# Playbook: Capture Learnings
+# Protocol: Capture Learnings
 
 > Cognitive mode: Technical educator / Pattern archaeologist
-> Custom skill for this project.
+> Custom protocol for this project.
 
 ---
 
 ## When to use
 
-This skill is **on-demand, trigger-based** — not every feature produces a learning, and forcing it to run on every ship yields empty entries. Invoke it when a concrete trigger fires:
+This protocol is **on-demand, trigger-based** — not every feature produces a learning, and forcing it to run on every ship yields empty entries. Invoke it when a concrete trigger fires:
 
 **Strong triggers (almost always capture):**
 - A debugging session lasted >30 minutes and ended in a "aha — this library behaves differently than the docs suggest" moment
@@ -25,7 +25,7 @@ This skill is **on-demand, trigger-based** — not every feature produces a lear
 - Bug fixes where the bug was an obvious typo / stale cache / missing await
 - Anything that would just restate the official docs
 
-After capturing, **Step 5 (Cross-reference) is mandatory, not optional** — a learning that doesn't flow back into the relevant skill, `MODELS.md`, or the feature doc will be forgotten. If the cross-reference would be trivial or unnecessary, the "learning" probably isn't worth capturing.
+After capturing, **Step 5 (Cross-reference) is mandatory, not optional** — a learning that doesn't flow back into the relevant protocol, `MODELS.md`, or the feature doc will be forgotten. If the cross-reference would be trivial or unnecessary, the "learning" probably isn't worth capturing.
 
 ## How to think
 
@@ -33,7 +33,7 @@ You are a senior engineer writing notes for your future self six months from now
 The code shows _what_ was done. Your job is to capture _why_ — the reasoning,
 trade-offs, constraints, and principles that the code alone doesn't convey.
 
-You are NOT writing documentation (that's the document skill). You are building a
+You are NOT writing documentation (that's the document protocol). You are building a
 **knowledge base of development principles** — reusable mental models that transfer
 across features.
 
@@ -137,7 +137,7 @@ If the learning is significant enough to affect future planning or review:
 
 - Add a note to `MODELS.md` → "Project-Specific API Surface Notes" if it's a
   library gotcha
-- Update the relevant skill if it would improve future pipeline runs (e.g., a
+- Update the relevant protocol if it would improve future pipeline runs (e.g., a
   testing gotcha → update plan-engineering rules)
 - Reference the learning in the feature's documentation
 
@@ -160,7 +160,7 @@ If the learning is significant enough to affect future planning or review:
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                       | Good                                                                                     | Poor                                                                          |
 | ---------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -168,9 +168,9 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Principle clarity**        | A new team member could read a learning and immediately apply the principle               | Learnings are vague, context-dependent, or require reading the original code  |
 | **Duplication prevention**   | Team avoids repeating the same mistake or rediscovering the same pattern                 | Same insight is rediscovered independently in a later feature                 |
 | **Selective capture**        | Only non-obvious, transferable principles are captured (5-10 per major feature)          | Everything is captured (noise) or nothing is captured (missed value)          |
-| **Cross-reference accuracy** | MODELS.md and skill updates from learnings are correct and useful                        | Cross-references are stale, wrong, or point to deleted code                   |
+| **Cross-reference accuracy** | MODELS.md and protocol updates from learnings are correct and useful                     | Cross-references are stale, wrong, or point to deleted code                   |
 
-> If signals trend poor, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend poor, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

@@ -56,15 +56,15 @@ reveren is that for AI agents.
 
 ## What this looks like in practice
 
-A `.playbooks/` directory at the root of your repository, containing markdown instruction files. Each playbook is a cognitive mode the agent can be loaded into: *plan-product*, *plan-engineering*, *review*, *cyber*, *qa*, *ship*, and so on. Each playbook has its own checklist, its own quality signals, its own contract with the next playbook in the chain.
+A `.protocols/` directory at the root of your repository, containing markdown instruction files. Each protocol is a cognitive mode the agent can be loaded into: *plan-product*, *plan-engineering*, *review*, *cyber*, *qa*, *ship*, and so on. Each protocol has its own checklist, its own quality signals, its own contract with the next protocol in the chain.
 
-A `playbooks.config.ts` that tells the runtime which playbooks are active for this repo, which agents to use them with, and which parts of your architecture documentation to inject as additional context.
+A `protocols.config.ts` that tells the runtime which protocols are active for this repo, which agents to use them with, and which parts of your architecture documentation to inject as additional context.
 
-A pipeline orchestrator that chains playbooks into multi-step workflows: design → implement → test → review → ship, with explicit gates between each step and an audit trail of what happened.
+A pipeline orchestrator that chains protocols into multi-step workflows: design → implement → test → review → ship, with explicit gates between each step and an audit trail of what happened.
 
-A private registry that lets your team encode "the way we work with AI" as versioned, internal-only playbooks nobody else can see — your architecture decisions, your naming conventions, your compliance requirements, your hard-won institutional memory, all in one place that travels with the codebase.
+A private registry that lets your team encode "the way we work with AI" as versioned, internal-only protocols nobody else can see — your architecture decisions, your naming conventions, your compliance requirements, your hard-won institutional memory, all in one place that travels with the codebase.
 
-A CI gate that runs the same playbooks against every pull request, catching the AI-generated mistakes that humans would catch in review but agents would not catch in chat.
+A CI gate that runs the same protocols against every pull request, catching the AI-generated mistakes that humans would catch in review but agents would not catch in chat.
 
 The result is an AI agent that stops being an intern with amnesia and starts behaving like the team's most consistent engineer.
 
@@ -80,7 +80,7 @@ This is infrastructure work. It is unglamorous. It is exactly the kind of layer 
 
 reveren is what we built to solve this for ourselves.
 
-Specifically: it is the system [mrktable.com](https://mrktable.com) — a financial-media and analysis platform — was built with. Thirteen playbooks. Six specialist agents. Automated pipeline orchestration. Three lifecycle hooks. An auditable evolution log of every amendment since March 2026. Six hundred and ten unit tests, fifteen end-to-end tests, twenty-five database models, regulated-product compliance surface, full CI/CD — all maintained by one founder.
+Specifically: it is the system [mrktable.com](https://mrktable.com) — a financial-media and analysis platform — was built with. Thirteen protocols. Six specialist agents. Automated pipeline orchestration. Three lifecycle hooks. An auditable evolution log of every amendment since March 2026. Six hundred and ten unit tests, fifteen end-to-end tests, twenty-five database models, regulated-product compliance surface, full CI/CD — all maintained by one founder.
 
 Without reveren, that codebase does not exist. With it, the artefact surface looks like the output of a small engineering team.
 

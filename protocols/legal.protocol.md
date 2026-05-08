@@ -1,18 +1,18 @@
-# Playbook: Legal Review
+# Protocol: Legal Review
 
 > Cognitive mode: Compliance-aware reviewer
-> **NOT a substitute for professional legal advice.** This playbook flags potential issues for human review by a qualified domain-specialist lawyer. Regulated environments (financial services, healthcare, regulated AI uses, consumer privacy) are too nuanced for AI-only review.
+> **NOT a substitute for professional legal advice.** This protocol flags potential issues for human review by a qualified domain-specialist lawyer. Regulated environments (financial services, healthcare, regulated AI uses, consumer privacy) are too nuanced for AI-only review.
 
 ---
 
 ## When to use
 
-This playbook is **on-demand** — it is not wired into the default pipeline. Invoke it explicitly for changes that touch any of the surfaces configured in `playbooks.config.ts → compliance.triggerPaths`, and add it as a pipeline step (before `ship`) for releases that ship user-visible regulatory copy.
+This protocol is **on-demand** — it is not wired into the default pipeline. Invoke it explicitly for changes that touch any of the surfaces configured in `protocols.config.ts → compliance.triggerPaths`, and add it as a pipeline step (before `ship`) for releases that ship user-visible regulatory copy.
 
-**Configure your trigger surfaces** in `playbooks.config.ts`:
+**Configure your trigger surfaces** in `protocols.config.ts`:
 
 ```ts
-export default definePlaybooksConfig({
+export default defineProtocolsConfig({
   // ...
   compliance: {
     domain: "finance",          // or "healthcare", "ai-product", "consumer", "generic"
@@ -30,7 +30,7 @@ export default definePlaybooksConfig({
 })
 ```
 
-If the diff touches none of the configured surfaces, do not run the playbook — it has real opportunity cost, and running it on every change produces noise that erodes signal when it matters.
+If the diff touches none of the configured surfaces, do not run the protocol — it has real opportunity cost, and running it on every change produces noise that erodes signal when it matters.
 
 ## How to think
 
@@ -38,7 +38,7 @@ You are a compliance-conscious reviewer who knows enough to flag risks but not e
 
 ## Review Checklist
 
-The checklist sections below are organised by domain. Run only the sections matching `compliance.domain` from `playbooks.config.ts`; skip the rest.
+The checklist sections below are organised by domain. Run only the sections matching `compliance.domain` from `protocols.config.ts`; skip the rest.
 
 ### Domain: `finance` — Financial Services Compliance
 
@@ -131,7 +131,7 @@ After reviewing, produce a structured report:
 
 ## Reference Documents
 
-Configure paths to your project's regulatory documents in `playbooks.config.ts → compliance.referenceDocs`. Common entries:
+Configure paths to your project's regulatory documents in `protocols.config.ts → compliance.referenceDocs`. Common entries:
 
 - Terms of Service page route
 - Privacy Policy page route
@@ -144,5 +144,5 @@ Configure paths to your project's regulatory documents in `playbooks.config.ts �
 - Every finding has a specific location (file:line or section reference)
 - HIGH findings never ship without resolution
 - ESCALATE findings are routed to a human lawyer, not resolved by AI
-- The playbook never declares content "legally compliant" — only "no issues found by this review"
+- The protocol never declares content "legally compliant" — only "no issues found by this review"
 - False negatives (missing a real issue) are worse than false positives (flagging a non-issue)

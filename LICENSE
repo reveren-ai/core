@@ -1,0 +1,29 @@
+Business Source License 1.1
+
+Licensor:             Reveren Pty Ltd (Australia, trading as "reveren")
+Licensed Work:        @reveren-ai/core, version 0.1.0 and later
+                      Copyright (c) 2026 Reveren Pty Ltd
+Additional Use Grant: See LICENSE-ADDITIONAL-GRANT.txt distributed
+                      with the Licensed Work.
+Change Date:          2030-05-02
+Change License:       Apache License, Version 2.0
+
+For information about alternative licensing arrangements for the Licensed
+Work, please contact: licensing@reveren.ai
+
+The Licensed Work is provided under the terms of the Business Source
+License 1.1, the canonical text of which is available at:
+
+  https://mariadb.com/bsl11
+
+Notice
+
+The Business Source License (this document, or the "License") is not an
+Open Source license. However, the Licensed Work will eventually be made
+available under an Open Source License, as stated in this License.
+
+License text covered by the Mozilla Public License 2.0; the BSL 1.1
+template is reproduced verbatim from https://mariadb.com/bsl11 and is
+incorporated here by reference. The Licensor's modifications to that
+template are limited to the four field values above (Licensor, Licensed
+Work, Additional Use Grant, Change Date) and the contact email.

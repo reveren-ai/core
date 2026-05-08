@@ -1,4 +1,4 @@
-# Playbook: Plan — Engineering
+# Protocol: Plan — Engineering
 
 > Cognitive mode: Tech lead / Engineering manager
 
@@ -40,14 +40,14 @@ Stop ideating. Start engineering.
 
 ### Acceptance: live smoke is non-negotiable
 
-Every engineering plan must include, in its acceptance criteria, a live-server smoke step: boot `pnpm dev`, hit every route touched by this feature **plus every public route that could have been affected by shared components or layouts**, verify each returns `200` (or expected redirect), and confirm the dev log has zero `⨯|Error` lines. Plans that stop at "`pnpm build` succeeds" have shipped known-broken pages before. Use **Playwright** (already in devDeps) for any browser-level automation — not Puppeteer. Canonical commands live in `.playbooks/ship.playbook.md` → "Live Server & Route Verification".
+Every engineering plan must include, in its acceptance criteria, a live-server smoke step: boot `pnpm dev`, hit every route touched by this feature **plus every public route that could have been affected by shared components or layouts**, verify each returns `200` (or expected redirect), and confirm the dev log has zero `⨯|Error` lines. Plans that stop at "`pnpm build` succeeds" have shipped known-broken pages before. Use **Playwright** (already in devDeps) for any browser-level automation — not Puppeteer. Canonical commands live in `.protocols/ship.protocol.md` → "Live Server & Route Verification".
 - `components/[Name]/index.tsx` — [purpose] (single component)
 - `components/[Name]/index.styled.tsx` — [purpose] (styled wrappers)
 - `components/[Name]/index.test.tsx` — [purpose] (colocated test)
 - `components/[Group]/ComponentA.tsx` — [purpose] (multi-component folder)
 - `components/[Group]/ComponentA.styled.tsx` — styled wrappers
 - `components/[Group]/ComponentA.test.tsx` — colocated test
-- `components/[Group]/ComponentA.stories.tsx` — colocated Storybook story (see `.playbooks/storybook.playbook.md`; required when Storybook mode is `full` or `hosted-gallery`, skipped when `disabled`)
+- `components/[Group]/ComponentA.stories.tsx` — colocated Storybook story (see `.protocols/storybook.protocol.md`; required when Storybook mode is `full` or `hosted-gallery`, skipped when `disabled`)
 - `components/[Group]/index.tsx` — barrel re-exports
 - `lib/[util].ts` — [purpose]
 - `e2e/[flow].spec.ts` — [purpose]
@@ -78,7 +78,7 @@ Every engineering plan must include, in its acceptance criteria, a live-server s
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                       | ✅ Good                                                              | ❌ Poor                                                                                |
 | ---------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
@@ -88,7 +88,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Architecture fit**         | The proposed architecture worked without mid-build redesign          | A structural change was needed mid-implementation because the plan missed a constraint |
 | **Implementation velocity**  | Implementation was "mechanical" — no ambiguity about what to build   | Developer had to stop and re-think architecture during implementation                  |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 
@@ -98,7 +98,7 @@ After this skill is used, observe these signals to determine if it performed wel
 - Use our stack: Next.js App Router, MUI v7, Vitest, Playwright
 - Prefer Server Components unless client interactivity is required
 - Every feature must include test files in the plan
-- **Every new component must include a colocated `*.stories.tsx`** in the file plan, unless `playbooks.config.ts` sets Storybook mode to `disabled`. Story scaffolding is owned by `.playbooks/storybook.playbook.md`; the engineering plan only needs to enumerate the file. In `hosted-gallery` mode the story is auto-generated from prop types — still list it so reviewers see the artefact will exist.
+- **Every new component must include a colocated `*.stories.tsx`** in the file plan, unless `protocols.config.ts` sets Storybook mode to `disabled`. Story scaffolding is owned by `.protocols/storybook.protocol.md`; the engineering plan only needs to enumerate the file. In `hosted-gallery` mode the story is auto-generated from prop types — still list it so reviewers see the artefact will exist.
 - Output must be precise enough that implementation is mechanical
 - **Design migrations: no dead CTAs.** When porting a design (Figma, HTML mockup, prototype) into shipped code, every visible CTA, link, button, sort/filter control, save/bookmark icon, "see all" footer, or interactive feature must be either (a) wired to a real route or backing data source, or (b) **removed from the surface entirely** — not left as a placeholder. A button that does nothing is worse than a missing button: it actively undoes prior wiring work, breaks reader trust, and silently re-introduces tech debt the codebase had already retired. Engineering plans for a design-migration task must enumerate, for every interactive element in the comp: (i) the destination route or handler, (ii) the data field that backs it (adding to the seed/schema if missing — see `lib/home-data.ts` and Prisma seeds), or (iii) an explicit "remove from this migration" decision with the reason. Adapt the mockup to the codebase's actual capabilities, not the other way around. If a feature isn't ready, hide it; don't ship a placeholder.
 - **Know the API surface you're testing**: When planning tests for library config objects (e.g., MUI `createTheme()`), verify what the function _actually returns_ vs what it resolves at runtime. For MUI v7, `createTheme()` returns the **creation object** (colorSchemes, cssVariables config), not the fully resolved theme. Plan test assertions against the real shape, not assumed resolved properties.

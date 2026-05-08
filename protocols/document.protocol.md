@@ -1,7 +1,7 @@
-# Playbook: Document
+# Protocol: Document
 
 > Cognitive mode: Technical writer + documentation maintainer
-> This is a custom skill unique to this project.
+> This is a custom protocol unique to this project.
 
 ---
 
@@ -9,17 +9,17 @@
 
 - After implementing or modifying any feature
 - When asked to "document this" or "update docs"
-- As part of the ship skill checklist
+- As part of the ship protocol checklist
 
 ## 0. Permissions Pre-flight
 
-Before starting, confirm every non-destructive command this skill runs is in
+Before starting, confirm every non-destructive command this protocol runs is in
 `.claude/settings.local.json` → `permissions.allow`. Missing entries will
 interrupt the run with approval prompts.
 
 - Typical commands used here: `git diff`, `git log`, `git status`, file
   read/write for `docs/`, `MODELS.md`, `README.md`, `CHANGELOG.md`, `TODOS.md`.
-- If prompts fire, run the **`/fewer-permission-prompts`** skill to bulk-grant.
+- If prompts fire, run the **`/fewer-permission-prompts`** protocol to bulk-grant.
 - Never auto-approve destructive commands — doc updates should never need
   them; if one shows up, stop and investigate.
 
@@ -138,7 +138,7 @@ Then update `ARCHITECTURE.md` with the new information.
 
 If the change involved UI/UX decisions (new components, layout changes, interaction patterns, responsive behaviour), document the UX rationale:
 
-**For features with a UX plan** (from plan-ux skill):
+**For features with a UX plan** (from plan-ux protocol):
 
 Add a `## UX Decisions` section to the feature doc in `docs/[FeatureGroup]/` with:
 
@@ -260,18 +260,18 @@ If the change affects any business-facing positioning — partners, revenue mode
 
 **Cross-check:** Ensure the partner list in `components/Partners/index.tsx` matches what's described in `docs/overview/MONETISATION.md` (especially §5 broker share and §7 advisory referrals). If a partner's role changes, both must be updated together.
 
-### Step 9: Hand off to storybook skill (if applicable)
+### Step 9: Hand off to storybook protocol (if applicable)
 
 If the diff added or modified any component file under `components/`, and
-`playbooks.config.ts` (or `MODELS.md` Stack section) has Storybook in `full` or
-`hosted-gallery` mode, run the **storybook skill** (`.playbooks/storybook.playbook.md`)
-before declaring this skill complete. The storybook skill is responsible for:
+`protocols.config.ts` (or `MODELS.md` Stack section) has Storybook in `full` or
+`hosted-gallery` mode, run the **storybook protocol** (`.protocols/storybook.protocol.md`)
+before declaring this protocol complete. The storybook protocol is responsible for:
 
 - Confirming a colocated `*.stories.tsx` exists for every changed component
 - Refreshing stories whose component prop API changed
 - Running `pnpm build-storybook` as a smoke check
 
-Do **not** write stories from inside the document skill — delegate. Document
+Do **not** write stories from inside the document protocol — delegate. Document
 owns markdown deliverables; storybook owns the component gallery. Mixing the
 two has caused stale stories and out-of-sync feature docs in past iterations.
 
@@ -298,7 +298,7 @@ Add an entry under the `[Unreleased]` section:
 When reviewing a git diff to update docs, follow this checklist:
 
 1. **New files in `app/`** → Likely a new route/page → needs feature doc
-2. **New component folder in `components/`** → New UI component → document in the relevant feature doc. Check for `index.tsx` (single) or `ComponentName.tsx` (multi) pattern. **Also verify a colocated `*.stories.tsx` exists** (per `.playbooks/storybook.playbook.md`); if Storybook mode is `full` or `hosted-gallery` and the story is missing, hand off to the storybook skill before declaring this skill complete.
+2. **New component folder in `components/`** → New UI component → document in the relevant feature doc. Check for `index.tsx` (single) or `ComponentName.tsx` (multi) pattern. **Also verify a colocated `*.stories.tsx` exists** (per `.protocols/storybook.protocol.md`); if Storybook mode is `full` or `hosted-gallery` and the story is missing, hand off to the storybook protocol before declaring this protocol complete.
 3. **New `*.styled.tsx` files** → Styled wrappers added → mention in feature doc's Implementation section
 4. **New `*.test.tsx` files in component folders** → Colocated tests → list in feature doc's Testing section
 5. **Changes to `lib/`** → Utility changes → check if API or behavior changed in docs
@@ -314,7 +314,7 @@ When reviewing a git diff to update docs, follow this checklist:
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                      | ✅ Good                                                                                     | ❌ Poor                                                                    |
 | --------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
@@ -325,7 +325,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Diff audit thoroughness** | Git diff checklist caught all files that needed doc updates                                 | A changed file was missed in the audit, leading to stale docs              |
 | **Pitch context alignment** | Partners, revenue model, and pitch copy match across code and docs after the change        | Partner list or revenue details diverged between code and MONETISATION.md  |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

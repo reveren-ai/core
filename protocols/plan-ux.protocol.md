@@ -1,14 +1,14 @@
-# Playbook: Plan — UI & UX Design
+# Protocol: Plan — UI & UX Design
 
 > Cognitive mode: UI designer + UX architect
-> Custom skill for this project.
+> Custom protocol for this project.
 
 ---
 
 ## When to use
 
 After product direction is locked (via plan-product) and before engineering begins
-(via plan-engineering). Use this skill to design how the feature **looks, feels, and
+(via plan-engineering). Use this protocol to design how the feature **looks, feels, and
 flows** — so engineering can implement the experience mechanically, not guess at it.
 
 Also use when:
@@ -21,7 +21,7 @@ Also use when:
 ## How to think
 
 You are a **UI designer and UX architect** for the host project. Read the project's
-design philosophy from its `PLAYBOOKS.md` (or whatever design-system doc the project
+design philosophy from its `PROTOCOLS.md` (or whatever design-system doc the project
 points at) — every project has a different intent for its surface. Every design decision
 must serve that intent.
 
@@ -31,7 +31,7 @@ precisely. Your decisions directly affect engagement, retention, and perceived q
 
 ### Design Philosophy (configure per project)
 
-Each project should declare its design principles in `PLAYBOOKS.md` so this playbook can
+Each project should declare its design principles in `PROTOCOLS.md` so this protocol can
 reference them. The example below is from a **reading-first editorial product** (a weekly
 newsletter / analysis platform) and shows the four-principle structure to follow:
 
@@ -67,7 +67,7 @@ Mockup files (Figma, HTML prototypes, handoff decks) are visual comps and routin
 contain placeholder numbers, invented endorsements ("Trusted by teams at X, Y, Z"),
 speculative audience labels, and features that were descoped before or after the comp
 was made. Before any mockup-sourced copy is lifted into a real surface, route it
-through the **Copy Grounding** checklist in `.playbooks/copywriter.playbook.md` — no unverified
+through the **Copy Grounding** checklist in `.protocols/copywriter.protocol.md` — no unverified
 subscriber counts, no unendorsed logos, no audience segment we don't actually sell to,
 no feature names that don't resolve to shipped code or an active roadmap item. Flag
 anything that doesn't ground, don't silently "round it into plausible" — a conservative
@@ -75,46 +75,27 @@ rewrite always beats a fabricated claim.
 
 ### Company & operating context
 
-mrktable is based in **Perth, Australia** (AWST, UTC+8). That context shapes
-design decisions far more than it shapes copy — don't inject Australian
-phrasing into editorial output; the audience is global and the editorial
-voice stays international. What Perth / Australian base DOES shape:
+The host project may have an operating context that shapes design defaults more
+than it shapes copy. Read it from `protocols.config.ts → ux.operatingContext`
+(or the project's design-system docs) and apply only what's relevant. Common
+context dimensions:
 
-- **Regulatory disclosures.** ASIC / AFSL classifications, Australian
-  Privacy Principles (APP 1–13), and FCA-adjacent rules (for any UK
-  readers of deal-flow / pro content) need surfaces: `/privacy`,
-  `/terms`, `/advertise/policy`, and any per-tier disclaimer copy
-  (the Pro "deal-flow commentary" block is a concrete example). Every
-  design plan that touches premium content, ads, or subscription flow
-  must include these surfaces in the information architecture, not as
+- **Regulatory disclosures.** Jurisdictional rules (ASIC / FCA / SEC / GDPR /
+  HIPAA / etc.) drive which legal surfaces (`/privacy`, `/terms`, etc.) and
+  per-tier disclaimer copy must exist in the information architecture, not as
   an afterthought.
-- **Timezone + market hours.** The TopStrip's "Markets live / closed"
-  indicator, the "Sunday · N Month 2026" issue dateline, and any
-  cron-driven send window should assume the editor's workday is AWST.
-  The newsletter ships on Monday morning AU time; the handoff's
-  "Sunday · 19 April 2026" masthead is the Sydney-Sunday view because
-  that's when the content is locked. Design plans that touch dates
-  should spell out which zone the string renders in.
-- **Pricing & currency.** Prices are shown in USD because the
-  subscriber base is majority US; Australian GST applies separately
-  via Stripe Tax. Do not introduce AUD toggles speculatively — route
-  that through plan-product first.
-- **Partner brand presence.** Execution / advisory partners (Xynon,
-  Morrisons Securities, Liquidity, NextFin) are Australian-regulated
-  institutions. The Partners strip design and any per-partner deep
-  link needs to treat their brand assets as compliance-sensitive (use
-  official logos, link to their own regulator disclosures where
-  required).
-- **Editorial perspective.** mrktable covers global AI × markets; the
-  AU base does not narrow the topic set. What it does narrow is
-  **defaults** — timestamps default to AWST unless the story is
-  geographically specific; currency defaults to USD; the "about"
-  byline and Perth address live on the legal pages, not on every
-  surface.
+- **Timezone + business hours.** "Markets live / closed", availability
+  indicators, send/cron windows. Be explicit about which zone any rendered
+  string represents.
+- **Pricing & currency.** Default-currency assumptions and tax handling
+  (Stripe Tax, GST/VAT separation) belong in the plan even when invisible to
+  most users.
+- **Editorial / brand perspective.** Whether the project's voice is local,
+  regional, or global — and which design defaults flow from that.
 
-If a design decision is only locally relevant (e.g. an ad policy that
-bans gambling for AU compliance reasons), flag it explicitly in the
-**Design Rationale** section so engineering doesn't generalise it.
+If a design decision is only locally relevant (e.g. a regulator-specific copy
+restriction), flag it explicitly in the **Design Rationale** section so
+engineering doesn't generalise it.
 
 ---
 
@@ -123,8 +104,9 @@ bans gambling for AU compliance reasons), flag it explicitly in the
 ### Step 1: Understand the user's task
 
 Map the feature to a concrete user scenario. Not "the user views articles" but
-"a subscriber opens mrktable on Monday morning, scans for the 2-3 most relevant AI
-developments this week, reads one in depth, and bookmarks another for later."
+something concrete and time-anchored — e.g., "a subscriber opens the product on Monday
+morning, scans for the 2–3 most relevant items this week, reads one in depth, and
+bookmarks another for later."
 
 Ask:
 
@@ -228,7 +210,7 @@ Reference the Laws of UX already established in `docs/Theme/THEME.md` and apply:
 
 ### Step 7: Define responsive behaviour
 
-mrktable must work across three breakpoints. For each, specify layout shifts:
+The host project must work across three breakpoints. For each, specify layout shifts:
 
 | Breakpoint | Width    | Typical device         |
 | ---------- | -------- | ---------------------- |
@@ -319,9 +301,9 @@ Every UI/UX decision must pass:
 
 ---
 
-## Bouncing off other skills
+## Bouncing off other protocols
 
-This skill is designed to chain with plan-product and plan-engineering:
+This protocol is designed to chain with plan-product and plan-engineering:
 
 ```
 plan-product (what to build, why)
@@ -344,7 +326,7 @@ plan-engineering (how to build it technically)
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                         | ✅ Good                                                                                              | ❌ Poor                                                                                      |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
@@ -357,7 +339,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Engagement impact**          | Feature encouraged deeper exploration or return visits (measurable via analytics)                    | Users interacted superficially or didn't return                                              |
 | **Accessibility compliance**   | Feature passed accessibility audit without remediation                                               | Contrast or motion issues found during review that the plan should have caught               |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 

@@ -1,4 +1,4 @@
-# Playbook: QA
+# Protocol: QA
 
 > Cognitive mode: QA engineer
 
@@ -11,14 +11,14 @@ Can be diff-aware (automatic on feature branches) or full-app.
 
 ## 0. Permissions Pre-flight
 
-Before starting, confirm every non-destructive command this skill runs is in
+Before starting, confirm every non-destructive command this protocol runs is in
 `.claude/settings.local.json` → `permissions.allow`. Missing entries will
 interrupt the run with approval prompts mid-smoke.
 
 - Typical commands used here: `pnpm dev`, `pnpm test:e2e`, `pkill -f "next dev"`,
   `rm -rf .next`, `curl`, `grep`, `timeout`, `node` (for the Playwright
   one-liner).
-- If prompts fire, run the **`/fewer-permission-prompts`** skill to grant the
+- If prompts fire, run the **`/fewer-permission-prompts`** protocol to grant the
   common ones in bulk.
 - Never auto-approve destructive commands (force-push, DB drops, edits to
   shared infrastructure) — those should always prompt.
@@ -114,6 +114,31 @@ Compare against a previous QA report:
 - **Dev server**: `pnpm dev` on `http://localhost:3000` (see the MANDATORY live-route probe below).
 - Test config: `playwright.config.ts`
 
+## MANDATORY: Unit-test coverage thresholds
+
+Unit tests are not optional, and "tests exist" is not the bar — **coverage** is.
+
+- **Floor (hard fail):** 80% across `lines`, `branches`, `functions`, and `statements`. CI rejects anything below.
+- **Target:** 100%. If a branch is genuinely untestable (true dead code, defensive `never` paths, third-party glue), justify it in code with `/* v8 ignore next -- <reason> */` on a per-line basis. Never lower the threshold to make a run pass.
+- **Enforcement:** thresholds live in the consuming project's `vitest.config.ts` under `test.coverage.thresholds`. The CI pipeline runs `pnpm test:coverage` — a sub-threshold result is a hard stop, on the same footing as a failing test.
+- **What counts:** application source — `components/**`, `lib/**`, `hooks/**`, route handlers, server actions, pure utilities. Standard exclusions: generated client code, Storybook stories, type-only files, build output, e2e specs, `node_modules/`.
+
+### Coverage workflow
+
+1. `pnpm test:coverage` — produces `text` summary + `html` report under `coverage/`.
+2. Open `coverage/index.html` and rank files by lowest line/branch coverage.
+3. For every file under 80%: add tests until the threshold is met. Prefer behavioural tests (RTL queries, user interactions) over snapshotting implementation.
+4. For files between 80% and 100%: add tests for the uncovered branches if the cost is reasonable; otherwise document why the branch is unreachable.
+5. Re-run `pnpm test:coverage` and confirm the per-file threshold table shows green for every file.
+
+### What "good coverage" looks like
+
+- ✅ Each public component prop variant has at least one assertion against rendered output.
+- ✅ Each conditional branch (loading / empty / error / loaded) is exercised by a separate test.
+- ✅ Each user interaction (click, submit, keyboard) is asserted against the resulting DOM or callback.
+- ❌ Tests that only call `render()` and assert "container is in the document" — that doesn't move branch coverage.
+- ❌ Tests that mock so much they re-implement the component under test.
+
 ## MANDATORY: Live server + every-route probe
 
 Before writing the QA report, every affected route must be proven to render live with no errors. This is not optional:
@@ -125,7 +150,7 @@ Before writing the QA report, every affected route must be proven to render live
 5. For every UI-touching route, load in Playwright and assert no `pageerror` fires and the body does not contain `Something went wrong` / `Application error`.
 6. A failure anywhere — a 5xx, a persistent console error, an error-boundary render — is a hard stop. Fix the root cause and reprobe; never write a pass report with a red signal underneath.
 
-See `.playbooks/ship.playbook.md` → "Live Server & Route Verification" for the canonical copy-paste procedure and exact commands.
+See `.protocols/ship.protocol.md` → "Live Server & Route Verification" for the canonical copy-paste procedure and exact commands.
 
 ## Automation
 
@@ -135,7 +160,7 @@ See `.playbooks/ship.playbook.md` → "Live Server & Route Verification" for the
 
 ## Quality Signals
 
-After this skill is used, observe these signals to determine if it performed well:
+After this protocol is used, observe these signals to determine if it performed well:
 
 | Signal                         | ✅ Good                                                         | ❌ Poor                                                                                           |
 | ------------------------------ | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
@@ -145,7 +170,7 @@ After this skill is used, observe these signals to determine if it performed wel
 | **Health score accuracy**      | The health score reflected the actual user experience           | Score was high but the feature had real UX problems, or score was low but the feature worked fine |
 | **E2E recommendation quality** | Recommended Playwright tests would catch regressions if written | Recommended tests were too generic to be useful                                                   |
 
-> If signals trend ⚠️ or ❌, use the **improve skill** (`.playbooks/improve.playbook.md`) to amend.
+> If signals trend ⚠️ or ❌, use the **improve protocol** (`.protocols/improve.protocol.md`) to amend.
 
 ---
 
