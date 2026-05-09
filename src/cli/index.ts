@@ -2,6 +2,7 @@ import { Command } from 'commander'
 import { VERSION } from '../version.js'
 import { CliError } from '../util/errors.js'
 import { log } from '../util/log.js'
+import { registerCheck } from './check.js'
 import { registerInit } from './init.js'
 import { registerRun } from './run.js'
 import { registerList } from './list.js'
@@ -16,9 +17,10 @@ program
   )
   .version(VERSION, '-v, --version', 'Print the rvr version')
 
+registerCheck(program)
 registerInit(program)
-registerRun(program)
 registerList(program)
+registerRun(program)
 registerSync(program)
 
 program.exitOverride((err) => {
