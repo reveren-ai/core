@@ -1,16 +1,75 @@
 import { Command } from 'commander'
+import { findUp } from 'find-up'
+import { createJiti } from 'jiti'
+import { existsSync } from 'node:fs'
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
+import {
+  ProtocolsConfigSchema,
+  type ProtocolsConfig
+} from '../config/schema.js'
+import { defaultConfig } from '../config/defaults.js'
 import { log } from '../util/log.js'
+import { bundledProtocolsDir } from '../util/package-root.js'
+
+interface RunOptions {
+  cwd?: string
+}
 
 export function registerRun(program: Command): void {
   program
     .command('run <protocol>')
     .description('Print a protocol to stdout for the current agent to ingest')
     .option('--cwd <path>', 'Target directory (default: process.cwd())')
-    .action((_protocol: string) => {
-      log.warn('rvr run: not yet implemented in v0.1.0-alpha.')
-      log.hint(
-        'Ships in v0.1.0 final. For now, copy the protocol content from protocols/<name>.protocol.md directly.'
-      )
-      process.exitCode = 1
+    .action(async (protocol: string, options: RunOptions) => {
+      const cwd = options.cwd ? path.resolve(options.cwd) : process.cwd()
+      await runProtocol(protocol, cwd)
     })
+}
+
+interface ResolvedConfig {
+  config: ProtocolsConfig
+  /** Directory the config (or fallback) is anchored to. */
+  rootDir: string
+}
+
+async function loadConfig(cwd: string): Promise<ResolvedConfig> {
+  const found = await findUp('protocols.config.ts', { cwd })
+  if (!found) {
+    return { config: defaultConfig(), rootDir: cwd }
+  }
+  const jiti = createJiti(cwd, { interopDefault: true })
+  const mod = (await jiti.import(found, { default: true })) as unknown
+  const parsed = ProtocolsConfigSchema.parse(mod)
+  return { config: parsed, rootDir: path.dirname(found) }
+}
+
+export async function runProtocol(name: string, cwd: string): Promise<void> {
+  const { config, rootDir } = await loadConfig(cwd)
+  const dir = config.terminology.directory
+  const ext = config.terminology.extension
+
+  const localPath = path.join(rootDir, dir, `${name}${ext}`)
+  if (existsSync(localPath)) {
+    const body = await readFile(localPath, 'utf8')
+    process.stdout.write(body)
+    if (!body.endsWith('\n')) process.stdout.write('\n')
+    process.exitCode = 0
+    return
+  }
+
+  // Fall back to the bundled snapshot. Bundled files always use `.protocol.md`.
+  const bundledPath = path.join(bundledProtocolsDir(), `${name}.protocol.md`)
+  if (existsSync(bundledPath)) {
+    const body = await readFile(bundledPath, 'utf8')
+    process.stdout.write(body)
+    if (!body.endsWith('\n')) process.stdout.write('\n')
+    process.exitCode = 0
+    return
+  }
+
+  log.error(
+    `Protocol "${name}" not found in ${dir} or in the bundled library. Run \`rvr list\` to see available protocols.`
+  )
+  process.exitCode = 1
 }
