@@ -78,11 +78,18 @@ export type Terminology = z.infer<typeof TerminologySchema>
 
 export const ProtocolsConfigSchema = z.object({
   $schemaVersion: z.literal(1).default(1),
-  stack: StackEnum,
-  agent: AgentEnum,
-  language: LanguageEnum,
-  packageManager: PackageManagerEnum,
-  testing: TestingEnum,
+  // Defaults below mean a project can ship a partial config (e.g. only
+  // `{ storybook: {...} }`) and have it validate. This is intentional: real
+  // projects (like mrktable) adopted the protocols pattern before the full
+  // schema existed and only declare the fields they actually consume. The
+  // CLI fills in sensible defaults for everything else. The full shape is
+  // still emitted by `noCodePreset()` for the web UI / Lovable / Bolt / v0
+  // path — that contract is unchanged.
+  stack: StackEnum.default('next'),
+  agent: AgentEnum.default('claude'),
+  language: LanguageEnum.default('ts'),
+  packageManager: PackageManagerEnum.default('pnpm'),
+  testing: TestingEnum.default('vitest'),
   terminology: TerminologySchema,
   activeProtocols: z.array(z.string()).default([...BUNDLED_PROTOCOLS]),
   storybook: z
