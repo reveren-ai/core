@@ -47,7 +47,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run -c vitest.integration.config.ts",
+    "pretest:integration": "tsup",
+    "prepare": "husky"
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
@@ -58,8 +61,11 @@
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.0",
+    "@commitlint/config-conventional": "^21.0.0",
     "@types/node": "^20.16.0",
     "@vitest/coverage-v8": "^2.1.0",
+    "husky": "^9.1.7",
     "tsup": "^8.3.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
