@@ -39,9 +39,20 @@ async function loadConfig(cwd: string): Promise<ResolvedConfig> {
     return { config: defaultConfig(), rootDir: cwd }
   }
   const jiti = createJiti(cwd, { interopDefault: true })
-  const mod = (await jiti.import(found, { default: true })) as unknown
-  const parsed = ProtocolsConfigSchema.parse(mod)
-  return { config: parsed, rootDir: path.dirname(found) }
+  try {
+    const mod = (await jiti.import(found, { default: true })) as unknown
+    const parsed = ProtocolsConfigSchema.parse(mod)
+    return { config: parsed, rootDir: path.dirname(found) }
+  } catch (err) {
+    // Common case: `pnpm install` hasn't run yet so an import inside the
+    // config file resolves to nothing. Fall back to defaults so the rest
+    // of the CLI stays usable, but keep the rootDir anchored where the
+    // config was found so the local .protocols/ lookup still works.
+    const message = err instanceof Error ? err.message : String(err)
+    log.warn(`Could not load ${path.relative(cwd, found)}: ${message}`)
+    log.hint('Falling back to defaults. Run your package manager to install deps, then retry.')
+    return { config: defaultConfig(), rootDir: path.dirname(found) }
+  }
 }
 
 export async function runProtocol(name: string, cwd: string): Promise<void> {

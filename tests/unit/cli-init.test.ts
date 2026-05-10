@@ -77,7 +77,8 @@ describe('rvr init', () => {
     const cfgPath = path.join(dir, 'protocols.config.ts')
     expect(existsSync(cfgPath)).toBe(true)
     const cfgBody = await readFile(cfgPath, 'utf8')
-    expect(cfgBody).toContain('defineProtocolsConfig')
+    expect(cfgBody).toContain("@type {import('@reveren-ai/core').ProtocolsConfig}")
+    expect(cfgBody).toContain('export default')
     expect(cfgBody).toContain('"stack": "next"')
 
     // .protocols/ directory populated with the bundled set
@@ -151,7 +152,8 @@ describe('rvr init', () => {
     await runInit({ cwd: dir, nonInteractive: true, force: true })
 
     const body = await readFile(path.join(dir, 'protocols.config.ts'), 'utf8')
-    expect(body).toContain('defineProtocolsConfig')
+    expect(body).toContain("@type {import('@reveren-ai/core').ProtocolsConfig}")
+    expect(body).toContain('export default')
     expect(body).not.toContain('// existing')
   })
 
@@ -183,10 +185,12 @@ describe('rvr init', () => {
     expect(logSpy).toBeDefined()
   })
 
-  it('renderConfigFile produces a parseable TS body', () => {
+  it('renderConfigFile produces a parseable TS body without a runtime import', () => {
     const body = renderConfigFile(noCodePreset())
-    expect(body).toContain("import { defineProtocolsConfig } from '@reveren-ai/core'")
-    expect(body).toContain('defineProtocolsConfig(')
+    // No runtime import — keeps the config loadable before pnpm install runs.
+    expect(body).not.toContain("import { defineProtocolsConfig }")
+    expect(body).toContain("@type {import('@reveren-ai/core').ProtocolsConfig}")
+    expect(body).toContain('export default')
     expect(body).toContain('"stack": "next"')
   })
 

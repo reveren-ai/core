@@ -365,9 +365,11 @@ export function renderConfigFile(config: ProtocolsConfig): string {
     }
   }
   const body = JSON.stringify(out, null, 2)
-  return `import { defineProtocolsConfig } from '@reveren-ai/core'
-
-export default defineProtocolsConfig(${body})
+  // No runtime import — keeps the config loadable before `pnpm install` runs.
+  // The JSDoc annotation gives the user IDE-side type checking once they
+  // install @reveren-ai/core; the runtime is plain JSON-shaped data.
+  return `/** @type {import('@reveren-ai/core').ProtocolsConfig} */
+export default ${body}
 `
 }
 

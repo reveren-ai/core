@@ -70,13 +70,25 @@ async function loadConfig(cwd: string): Promise<ResolvedConfig> {
   }
 
   const jiti = createJiti(cwd, { interopDefault: true })
-  // Configs export `defineProtocolsConfig({...})` as the default export.
-  const mod = (await jiti.import(found, { default: true })) as unknown
-  const parsed = ProtocolsConfigSchema.parse(mod)
-  return {
-    config: parsed,
-    rootDir: path.dirname(found),
-    usedDefaults: false
+  try {
+    const mod = (await jiti.import(found, { default: true })) as unknown
+    const parsed = ProtocolsConfigSchema.parse(mod)
+    return {
+      config: parsed,
+      rootDir: path.dirname(found),
+      usedDefaults: false
+    }
+  } catch (err) {
+    // Pre-install case: imports inside the config can fail before deps land.
+    // Fall back to defaults so `rvr check` still gives a useful gap report.
+    const message = err instanceof Error ? err.message : String(err)
+    log.warn(`Could not load ${path.relative(cwd, found)}: ${message}`)
+    log.hint('Falling back to defaults for this check.')
+    return {
+      config: defaultConfig(),
+      rootDir: path.dirname(found),
+      usedDefaults: true
+    }
   }
 }
 
