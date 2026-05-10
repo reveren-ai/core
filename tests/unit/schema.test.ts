@@ -47,6 +47,35 @@ describe('ProtocolsConfigSchema', () => {
     expect(parsed.storybook.mode).toBe('full')
     expect(parsed.storybook.deployTarget).toBe('github-pages')
   })
+
+  it('accepts an empty config (every field defaulted)', () => {
+    // A real project (mrktable) adopted the protocols pattern before the full
+    // schema existed. The CLI must accept partial / pre-existing configs and
+    // fill defaults rather than rejecting them outright.
+    const parsed = ProtocolsConfigSchema.parse({})
+    expect(parsed.stack).toBe('next')
+    expect(parsed.agent).toBe('claude')
+    expect(parsed.language).toBe('ts')
+    expect(parsed.packageManager).toBe('pnpm')
+    expect(parsed.testing).toBe('vitest')
+    expect(parsed.terminology.directory).toBe('.protocols')
+  })
+
+  it('accepts a mrktable-style minimal config (storybook only)', () => {
+    const parsed = ProtocolsConfigSchema.parse({
+      storybook: {
+        mode: 'full',
+        autoGenerateStories: false,
+        deployTarget: 'none'
+      }
+    })
+    expect(parsed.storybook.mode).toBe('full')
+    expect(parsed.storybook.autoGenerateStories).toBe(false)
+    expect(parsed.storybook.deployTarget).toBe('none')
+    // Defaults still applied for the rest:
+    expect(parsed.stack).toBe('next')
+    expect(parsed.testing).toBe('vitest')
+  })
 })
 
 describe('BUNDLED_PROTOCOLS', () => {
