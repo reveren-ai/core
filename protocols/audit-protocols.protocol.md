@@ -15,7 +15,7 @@
 - When adding a new agent, hook, or script — check whether the protocols that reference them are still accurate
 - Before extracting the protocols to a portable npm package
 
-This protocol is **upstream** of `improve`. `improve` amends one protocol based on one observation; `audit-skills` scans everything and hands `improve` a ranked list of what to look at next.
+This protocol is **upstream** of `improve`. `improve` amends one protocol based on one observation; `audit-protocols` scans everything and hands `improve` a ranked list of what to look at next.
 
 ## How to think
 
@@ -169,11 +169,11 @@ After this protocol is used, observe these signals to determine if it performed 
 
 - **Evidence or it didn't happen.** No finding without a concrete source.
 - **Small queues beat big queues.** 3–5 high-confidence amendments > 20 speculative ones.
-- **Never amend in this protocol.** `audit-skills` produces the queue; `improve` applies the changes. Keep the responsibilities separate so the audit trail stays clean.
+- **Never amend in this protocol.** `audit-protocols` produces the queue; `improve` applies the changes. Keep the responsibilities separate so the audit trail stays clean.
 - **Wins matter.** Silent successes (protocols that are pulling their weight) are the thing keeping the system stable — call them out so no one "simplifies" them away.
 - **Prefer amendment over creation.** A new protocol is the last resort. Most "we need a new protocol" signals are actually coverage gaps in an existing one.
 - **Classify every proposed amendment** with `[generic]` / `[project-specific]` / `[generic+example]` so the amendment queue hands `improve` something it can immediately run.
-- **Respect the human-in-the-loop rule** — audit-skills proposes; the human approves before `improve` applies.
+- **Respect the human-in-the-loop rule** — audit-protocols proposes; the human approves before `improve` applies.
 
 ---
 
@@ -182,7 +182,7 @@ After this protocol is used, observe these signals to determine if it performed 
 | Protocol | Purpose | Input | Output |
 |----------|---------|-------|--------|
 | **capture-learnings** | Capture the _why_ behind a one-off decision | Git diff + debugging session | An entry in `docs/Learnings/LEARNINGS.md` |
-| **audit-skills** (this) | Sweep the ecosystem, rank what needs attention | EVOLUTION.md, LEARNINGS.md, TODOS.md, git log, MODELS.md | A prioritised amendment queue |
+| **audit-protocols** (this) | Sweep the ecosystem, rank what needs attention | EVOLUTION.md, LEARNINGS.md, TODOS.md, git log, MODELS.md | A prioritised amendment queue |
 | **improve** | Apply one targeted amendment to one protocol | A single queue item + evidence | An accepted amendment logged in EVOLUTION.md |
 
 If the audit queue is empty and no coverage gaps surface, the system is healthy — do not manufacture work.
