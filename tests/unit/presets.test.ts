@@ -35,12 +35,11 @@ describe('noCodePreset', () => {
           "ship",
           "document",
           "cyber",
-          "copywriter",
-          "legal",
+          "pre-production",
           "improve",
-          "audit-skills",
+          "audit-protocols",
           "capture-learnings",
-          "storybook",
+          "learn-from-users",
         ],
         "agent": "claude",
         "compliance": {
@@ -74,8 +73,8 @@ describe('defaultConfig', () => {
     expect(config.storybook.mode).toBe('full')
   })
 
-  it('lists all 14 bundled protocols as active', () => {
+  it('lists all 13 bundled protocols as active', () => {
     const config = defaultConfig()
-    expect(config.activeProtocols).toHaveLength(14)
+    expect(config.activeProtocols).toHaveLength(13)
   })
 })

@@ -240,10 +240,10 @@ If **rejected**:
 
 ## Periodic Health Check
 
-The health-check orchestration lives in its own protocol: **`audit-skills`** (`.protocols/audit-skills.protocol.md`).
-That protocol sweeps the ecosystem, ranks findings, and hands this protocol a queue. Run `audit-skills`
+The health-check orchestration lives in its own protocol: **`audit-protocols`** (`.protocols/audit-protocols.protocol.md`).
+That protocol sweeps the ecosystem, ranks findings, and hands this protocol a queue. Run `audit-protocols`
 every ~10 feature cycles (or when prompted); run `improve` on each queue item. Do not re-implement
-the ecosystem sweep inline here — if the audit logic needs to change, change `audit-skills`.
+the ecosystem sweep inline here — if the audit logic needs to change, change `audit-protocols`.
 
 ---
 

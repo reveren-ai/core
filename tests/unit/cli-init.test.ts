@@ -83,7 +83,7 @@ describe('rvr init', () => {
 
     // .protocols/ directory populated with the bundled set
     const dirContents = await readdir(path.join(dir, '.protocols'))
-    expect(dirContents.length).toBe(14)
+    expect(dirContents.length).toBe(13)
     for (const entry of dirContents) {
       expect(entry.endsWith('.protocol.md')).toBe(true)
     }

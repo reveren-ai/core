@@ -35,7 +35,7 @@ Your job is to leave the project with:
   right env vars"
 - Pre-launch / pre-feature-flag affordances that turn on and off via
   env-var, never via code change at the wrong moment
-- A canonical playbook (`docs/PRE_PRODUCTION.md`) so the next person
+- A canonical runbook (`docs/PRE_PRODUCTION.md`) so the next person
   bringing up a project doesn't re-derive the order of operations from
   shell history
 - An observability layer where every conversion-grade interaction has
@@ -53,8 +53,8 @@ order, all costing more time to unwind than to do correctly the first time.
 
 Before starting, read:
 
-- `docs/PRE_PRODUCTION.md` — the canonical step-by-step playbook for
-  this stack. This protocol is the "when + why"; the playbook is the
+- `docs/PRE_PRODUCTION.md` — the canonical step-by-step runbook for
+  this stack. This protocol is the "when + why"; the runbook is the
   "what + how".
 - `docs/NEON.md` — Neon migration cadence + branch model
 - Any existing `PRE_GO_LIVE_CHECKLIST.md` for the project — the launch
@@ -80,11 +80,11 @@ Before touching any infrastructure, lock these decisions in writing
 | Database | Neon Postgres 17 | Need MySQL/MongoDB/etc.; need realtime (Supabase is canonical there); existing investment elsewhere |
 | Auth | Auth.js v5 (when we get there) | Need enterprise SSO (consider Clerk); need Neon-native (Stack Auth) |
 | Analytics | PostHog | Strict no-third-party (use Plausible self-hosted); already on Mixpanel/Amplitude |
-| DNS | Vercel-managed (Option B in playbook) | Email is heavily configured at registrar and you don't want to migrate records |
+| DNS | Vercel-managed (Option B in runbook) | Email is heavily configured at registrar and you don't want to migrate records |
 | Pre-launch gate | env-var coming-soon (LAUNCH_MODE) | Launching publicly day one (skip the gate entirely) |
 | Long-lived branches | `main` + `uat` + `develop` | Solo project pre-PMF — `main` only is fine |
 
-Write the choices down. The playbook assumes the defaults; if you
+Write the choices down. The runbook assumes the defaults; if you
 deviate, the rest of this protocol still applies but specific commands
 in §10 will need adapting.
 
@@ -92,7 +92,7 @@ in §10 will need adapting.
 
 Follow `docs/PRE_PRODUCTION.md` §1–§9 in sequence. Don't parallelise
 the steps that depend on DNS propagation. Each step has a
-verification block at the bottom of the playbook — run those
+verification block at the bottom of the runbook — run those
 before declaring the step done.
 
 The dependency chain is:
@@ -134,7 +134,7 @@ Update or create:
 | File | What goes in |
 |---|---|
 | `PRE_GO_LIVE_CHECKLIST.md` | Tick the items this protocol just shipped. Note any decisions deferred (e.g. "PostHog provisioned but per-env keys not yet split") |
-| `docs/PRE_PRODUCTION.md` | If this project's setup deviated from the canonical playbook, add a "Project-specific notes" section at the bottom |
+| `docs/PRE_PRODUCTION.md` | If this project's setup deviated from the canonical runbook, add a "Project-specific notes" section at the bottom |
 | `docs/NEON.md` | Project-specific notes go in a "This project's specifics" section (region, plan tier, retention overrides) |
 | `TODOS.md` (project-scoped) | Add the post-pre-prod follow-ups: defensive domains, OG cards, lawyer review of legal pages, analytics splits |
 
@@ -147,7 +147,7 @@ Pre-prod is done when:
    section is ticked
 3. The launch gate (`LAUNCH_MODE=coming-soon`) is verified working AND
    verified reversible (you've turned it on, off, and back on at least once)
-4. The team can find the playbook from the project root in <60 seconds
+4. The team can find the runbook from the project root in <60 seconds
 
 ---
 
@@ -209,7 +209,7 @@ run ship.protocol.md and the deploy will land somewhere real."
 | Signal | ✅ Good | ❌ Poor |
 |---|---|---|
 | Time from `git push` to "rendered on the right URL" | Under 90s for any branch | Manual steps required between push and deploy |
-| Env-var sync | `.env.local` (DEV) and Vercel env vars (PROD/UAT/DEV scopes) match the playbook table exactly | Missing keys, wrong scope assignment, secrets in committed files |
+| Env-var sync | `.env.local` (DEV) and Vercel env vars (PROD/UAT/DEV scopes) match the runbook table exactly | Missing keys, wrong scope assignment, secrets in committed files |
 | Robots posture | Production indexable; uat/dev/PR previews `noindex/nofollow` | Production accidentally `noindex`; previews accidentally `index` |
 | Coming-soon gate | One env var flip → site swaps; no code change required at launch | Launch requires editing files + redeploying |
 | DB migrations | `prisma migrate deploy` runs in Vercel build for every push; no manual migration commands needed | Migrations applied via local CLI hits to prod |
@@ -218,14 +218,14 @@ run ship.protocol.md and the deploy will land somewhere real."
 | Smoke verification | All §10 smokes return expected output on live URLs | "It worked locally" — no live verification |
 
 > If signals trend ⚠️ or ❌, use the **improve protocol**
-> (`improve.protocol.md`) to amend this protocol or the playbook docs.
+> (`improve.protocol.md`) to amend this protocol or the runbook docs.
 
 ---
 
 ## Rules
 
 - **Always read `docs/PRE_PRODUCTION.md` first.** This protocol assumes
-  you have the playbook open. Don't try to derive the order of
+  you have the runbook open. Don't try to derive the order of
   operations from shell history.
 - **Never paste production credentials in chat / issue trackers /
   screen-share.** If it happens, immediately rotate per `NEON.md`

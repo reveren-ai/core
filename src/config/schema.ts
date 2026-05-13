@@ -40,12 +40,11 @@ export const BUNDLED_PROTOCOLS = [
   'ship',
   'document',
   'cyber',
-  'copywriter',
-  'legal',
+  'pre-production',
   'improve',
-  'audit-skills',
+  'audit-protocols',
   'capture-learnings',
-  'storybook'
+  'learn-from-users'
 ] as const
 
 // Default terminology — projects can override (e.g. "playbook", "skill", "rule").

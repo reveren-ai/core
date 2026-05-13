@@ -79,12 +79,16 @@ describe('ProtocolsConfigSchema', () => {
 })
 
 describe('BUNDLED_PROTOCOLS', () => {
-  it('lists all 14 v0.1.0 protocols', () => {
-    expect(BUNDLED_PROTOCOLS).toHaveLength(14)
+  it('lists the canonical 13 protocols', () => {
+    expect(BUNDLED_PROTOCOLS).toHaveLength(13)
   })
 
-  it('includes the new storybook protocol', () => {
-    expect(BUNDLED_PROTOCOLS).toContain('storybook')
+  it('includes the learn-from-users protocol', () => {
+    expect(BUNDLED_PROTOCOLS).toContain('learn-from-users')
+  })
+
+  it('includes the pre-production protocol', () => {
+    expect(BUNDLED_PROTOCOLS).toContain('pre-production')
   })
 })
 
