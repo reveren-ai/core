@@ -260,20 +260,15 @@ If the change affects any business-facing positioning — partners, revenue mode
 
 **Cross-check:** Ensure the partner list in `components/Partners/index.tsx` matches what's described in `docs/overview/MONETISATION.md` (especially §5 broker share and §7 advisory referrals). If a partner's role changes, both must be updated together.
 
-### Step 9: Hand off to storybook protocol (if applicable)
+### Step 9: Verify Storybook stories (if applicable)
 
-If the diff added or modified any component file under `components/`, and
-`protocols.config.ts` (or `MODELS.md` Stack section) has Storybook in `full` or
-`hosted-gallery` mode, run the **storybook protocol** (`.protocols/storybook.protocol.md`)
-before declaring this protocol complete. The storybook protocol is responsible for:
-
-- Confirming a colocated `*.stories.tsx` exists for every changed component
-- Refreshing stories whose component prop API changed
-- Running `pnpm build-storybook` as a smoke check
-
-Do **not** write stories from inside the document protocol — delegate. Document
-owns markdown deliverables; storybook owns the component gallery. Mixing the
-two has caused stale stories and out-of-sync feature docs in past iterations.
+If the diff added or modified any component file, and `protocols.config.ts`
+has Storybook in `full` or `hosted-gallery` mode, confirm a colocated
+`*.stories.tsx` exists for every changed component, refresh stories whose
+prop API changed, and run the Storybook build (e.g. `pnpm build-storybook`)
+as a smoke check before declaring this protocol complete. The stories
+convention is documented in your project conventions file (`CLAUDE.md` /
+`AGENTS.md` / `MODELS.md`).
 
 ### Step 10: Update CHANGELOG.md
 
@@ -298,7 +293,7 @@ Add an entry under the `[Unreleased]` section:
 When reviewing a git diff to update docs, follow this checklist:
 
 1. **New files in `app/`** → Likely a new route/page → needs feature doc
-2. **New component folder in `components/`** → New UI component → document in the relevant feature doc. Check for `index.tsx` (single) or `ComponentName.tsx` (multi) pattern. **Also verify a colocated `*.stories.tsx` exists** (per `.protocols/storybook.protocol.md`); if Storybook mode is `full` or `hosted-gallery` and the story is missing, hand off to the storybook protocol before declaring this protocol complete.
+2. **New component folder in `components/`** → New UI component → document in the relevant feature doc. Check for `index.tsx` (single) or `ComponentName.tsx` (multi) pattern. **Also verify a colocated `*.stories.tsx` exists** (per the Storybook stories convention in your project conventions file); if Storybook mode is `full` or `hosted-gallery` and the story is missing, add or refresh it before declaring this protocol complete.
 3. **New `*.styled.tsx` files** → Styled wrappers added → mention in feature doc's Implementation section
 4. **New `*.test.tsx` files in component folders** → Colocated tests → list in feature doc's Testing section
 5. **Changes to `lib/`** → Utility changes → check if API or behavior changed in docs

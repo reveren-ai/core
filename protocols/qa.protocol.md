@@ -182,3 +182,4 @@ After this protocol is used, observe these signals to determine if it performed 
 - Screenshot failures when possible
 - Every QA issue should map to either a fix or a new test
 - Console errors are always worth reporting
+- **Animated tabbed / filtered / paginated lists need a visibility assertion, not a count.** When QAing any surface that recycles a motion container across tab / filter / page swaps, DOM-count checks pass silently while children sit at opacity 0 (see the re-key rule in `plan-engineering.protocol.md`). For every such surface verify, with the section scrolled into view, that each card's computed opacity is `> 0.9` both on cold load AND after a programmatic tab click. Playwright recipe: `await element.scrollIntoViewIfNeeded(); expect(await element.evaluate(el => parseFloat(getComputedStyle(el).opacity))).toBeGreaterThan(0.9);`. The smoke run must hit at least two non-default tabs to exercise the re-mount path.
