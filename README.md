@@ -52,8 +52,7 @@ rvr pipeline run <name>
 After `rvr init`, your repo gets:
 
 - A `protocols.config.ts` at the root
-- A `.protocols/` directory with the active protocol set
-- A `PROTOCOLS.md` operating guide
+- A `.protocols/` directory with the active protocol set, a `README.md` operating guide, and the MIT `LICENSE` covering the protocol files
 - A `"protocols": "rvr run"` script in `package.json`
 
 Every AI agent that touches the repo from then on reads from `.protocols/`.

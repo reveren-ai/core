@@ -81,12 +81,13 @@ describe('rvr init', () => {
     expect(cfgBody).toContain('export default')
     expect(cfgBody).toContain('"stack": "next"')
 
-    // .protocols/ directory populated with the bundled set
+    // .protocols/ directory populated with the bundled set + README + LICENSE
     const dirContents = await readdir(path.join(dir, '.protocols'))
-    expect(dirContents.length).toBe(13)
-    for (const entry of dirContents) {
-      expect(entry.endsWith('.protocol.md')).toBe(true)
-    }
+    const protocolEntries = dirContents.filter((e) => e.endsWith('.protocol.md'))
+    expect(protocolEntries.length).toBe(13)
+    expect(dirContents).toContain('README.md')
+    expect(dirContents).toContain('LICENSE')
+    expect(dirContents.length).toBe(15)
 
     // package.json updated with vitest devDep + protocols script
     const pkg = JSON.parse(

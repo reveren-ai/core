@@ -69,8 +69,12 @@ describe('rvr CLI — integration (built dist/cli.js against tmp project)', () =
 
     expect(existsSync(path.join(dir, 'protocols.config.ts'))).toBe(true)
     const proto = readdirSync(path.join(dir, '.protocols'))
-    expect(proto.length).toBe(14)
-    for (const f of proto) expect(f.endsWith('.protocol.md')).toBe(true)
+    // 13 canonical protocols + README.md + LICENSE
+    expect(proto.length).toBe(15)
+    const protocolEntries = proto.filter((f) => f.endsWith('.protocol.md'))
+    expect(protocolEntries.length).toBe(13)
+    expect(proto).toContain('README.md')
+    expect(proto).toContain('LICENSE')
 
     const pkg = JSON.parse(readFileSync(path.join(dir, 'package.json'), 'utf8')) as {
       devDependencies?: Record<string, string>

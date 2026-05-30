@@ -385,9 +385,18 @@ async function copyBundledProtocols(args: CopyArgs): Promise<string[]> {
   const entries = await readdir(src)
   const copied: string[] = []
   for (const entry of entries) {
-    if (!entry.endsWith('.protocol.md')) continue
-    const baseName = entry.slice(0, -'.protocol.md'.length)
-    const destName = `${baseName}${config.terminology.extension}`
+    let destName: string
+    if (entry.endsWith('.protocol.md')) {
+      const baseName = entry.slice(0, -'.protocol.md'.length)
+      destName = `${baseName}${config.terminology.extension}`
+    } else if (entry === 'README.md' || entry === 'LICENSE') {
+      // Ship the bundled README + LICENSE verbatim so downstream projects
+      // always have the reveren workflow doc + protocol license alongside
+      // the format specs.
+      destName = entry
+    } else {
+      continue
+    }
     const destPath = path.join(targetDir, destName)
     if (existsSync(destPath) && !force) continue
     await copyFile(path.join(src, entry), destPath)
