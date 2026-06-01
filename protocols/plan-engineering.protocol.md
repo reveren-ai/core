@@ -41,6 +41,17 @@ Stop ideating. Start engineering.
 ### Acceptance: live smoke is non-negotiable
 
 Every engineering plan must include, in its acceptance criteria, a live-server smoke step: boot `pnpm dev`, hit every route touched by this feature **plus every public route that could have been affected by shared components or layouts**, verify each returns `200` (or expected redirect), and confirm the dev log has zero `⨯|Error` lines. Plans that stop at "`pnpm build` succeeds" have shipped known-broken pages before. Use **Playwright** (already in devDeps) for any browser-level automation — not Puppeteer. Canonical commands live in `.protocols/ship.protocol.md` → "Live Server & Route Verification".
+
+### Acceptance: dark mode + mobile breakpoints are non-negotiable
+
+Any plan that touches a UI surface MUST include, in its acceptance criteria, a colour-scheme + breakpoint validation pass before declaring the work done:
+
+1. **Both colour schemes.** If the host project ships dark mode, toggle the system colour scheme (or use the in-app theme toggle) and confirm every section the plan touches renders correctly in BOTH light and dark. The most common regression: using a theme token for the background of a section that is intended to stay dark in both schemes — the token flips to light under `.dark`, the hardcoded light foreground stays light, and the section becomes invisible. **Invariant-dark plates** (hero band, terminal-window mock, dark CTA, featured pricing card) MUST use literal hex constants at file top — `const DARK_BG = '#1c1412'`, `const DARK_FG = '#f2ece6'` — not theme tokens. **Theme-following sections** use the project's theme tokens which flip correctly via the theme machinery.
+2. **Three breakpoints.** View the affected route at ~375px (mobile), ~768px (tablet), and ~1280px (desktop). Confirm: no horizontal overflow, no broken grids, no truncated copy that breaks meaning, touch targets ≥ 44×44px on mobile, and tap-state visuals work on any marquee / animated surfaces.
+3. **Code-smell check.** Any element where `backgroundColor` comes from a theme token and `color` is a hardcoded literal (or vice versa) is wrong and must be reconciled — either both from tokens or both from literals. CI doesn't catch this; the engineer must.
+4. **If you can't visually validate**, say so explicitly in the completion report — don't imply validation happened. Sandbox sessions, headless CI, etc. count as "can't" — the user takes the visual verification step in those cases.
+
+This gate is non-negotiable. Visual-regression screenshot diffs (Playwright, Chromatic, percy) are the right long-term safeguard; the rationale comments at the top of invariant-dark components + this plan gate are the load-bearing controls in the meantime.
 - `components/[Name]/index.tsx` — [purpose] (single component)
 - `components/[Name]/index.styled.tsx` — [purpose] (styled wrappers)
 - `components/[Name]/index.test.tsx` — [purpose] (colocated test)

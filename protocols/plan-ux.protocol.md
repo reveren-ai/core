@@ -225,17 +225,40 @@ Specify for each breakpoint:
 - Touch target sizing (minimum 44x44px on mobile)
 - Typography scale adjustments (if any)
 
-### Step 8: Accessibility audit
+### Step 8: Colour-scheme planning (binding)
+
+If the host project ships a dark-mode theme (most do — MUI `cssVariables`, Tailwind `dark:` variant, CSS-vars + `.dark` class on `<html>`, etc.), every section in the plan MUST be labelled explicitly:
+
+| Section type | Background source | Foreground source | Behaviour |
+|---|---|---|---|
+| **Theme-following** (default) | Theme token (`brand.surface1`, `surface.default`, `bg-white dark:bg-zinc-900`) | Theme token | Both flip via theme machinery — section auto-renders in both schemes |
+| **Invariant-dark** (hero plates, terminal-window mocks, dark CTA bands, featured pricing cards) | **Literal value** declared at file top (`const DARK_BG = '#1c1412'`) | **Literal value** (`const DARK_FG = '#f2ece6'`) | Stays dark in both schemes — editorial-drama intent |
+
+The single most common dark-mode regression: using a theme token for the background of a section that is intended to stay dark in both schemes. The token flips to light under `.dark`, the hardcoded white foreground stays white, and the section becomes invisible. The plan MUST flag each section explicitly so the engineer downstream knows which to pick.
+
+**Code-smell signal:** any element where `backgroundColor` comes from a theme token and `color` is a hardcoded literal (or vice versa) is wrong — both should come from the same source. Surface this at plan time, not at QA time.
+
+### Step 9: Accessibility audit
 
 Every UI/UX decision must pass:
 
 - [ ] **Keyboard navigable** — all interactive elements reachable via Tab, operable via Enter/Space
 - [ ] **Screen reader coherent** — heading hierarchy (h1→h2→h3), ARIA labels for non-text elements
 - [ ] **Colour independent** — no information conveyed by colour alone (sentiment uses dot + label)
-- [ ] **Contrast compliant** — WCAG AA minimum (4.5:1 text, 3:1 large text/UI elements)
+- [ ] **Contrast compliant** — WCAG AA minimum (4.5:1 text, 3:1 large text/UI elements) **in both light and dark schemes**
 - [ ] **Motion respectful** — `prefers-reduced-motion` honoured for all animations
 - [ ] **Focus visible** — clear focus indicators for keyboard users
-- [ ] **Dark surface contrast** — when using dark backgrounds, verify text contrast explicitly
+- [ ] **Dark surface contrast** — invariant-dark plates use literal foreground colours, never tokens that would flip
+
+### Acceptance: dark mode + mobile breakpoints are non-negotiable
+
+Every UI plan must include, in its acceptance criteria, a **visual validation pass** before the feature is declared complete:
+
+1. Toggle the colour scheme (system preference or in-app toggle) and confirm every section renders correctly in BOTH light and dark.
+2. View the affected route at the three breakpoints (~375px mobile, ~768px tablet, ~1280px desktop) and confirm: no horizontal overflow, no broken grids, no truncated copy that breaks meaning, touch targets ≥ 44×44px on mobile.
+3. If the validation cannot be performed (sandbox without browser, CI environment), **say so explicitly** in the report rather than implying validation happened.
+
+UI work that ships without this gate has consistently regressed across projects. Visual-regression screenshot diffs (Playwright, Chromatic, percy, etc.) are the right long-term safeguard; the plan-level gate is the current bridge.
 
 ---
 
