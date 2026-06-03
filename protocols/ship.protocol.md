@@ -23,6 +23,39 @@ Now land the plane cleanly.
 - [ ] Never auto-approve destructive commands (force-push, drop, delete remote branches) — those should always prompt
 - [ ] **Post-task sweep:** after the ship completes, scan back through this session's bash history and add any safe / read-only commands that triggered prompts (or that you notice are missing) to `.claude/settings.json` so the next session starts smoother. The `fewer-permission-prompts` protocol automates this. Never allowlist destructive commands, message-sending commands (Slack, gh pr create, email), or commands that spend money
 
+### 0a. Pre-push parity (MANDATORY — every project on this stack)
+
+The local `pre-push` script runs the same checks GitHub Actions runs.
+Both should be green BEFORE `git push` so a CI failure is the
+exception, not the norm.
+
+- [ ] `pnpm pre-push` exits clean. (Husky hook auto-runs this on
+      `git push`; the manual invocation is a check that the gate is
+      working + a way to debug failures interactively.)
+- [ ] **The pre-push script** must run, at minimum: `typecheck`, `lint`,
+      `test:run`. Build is skipped because it's slow and rarely fails
+      after typecheck passes; CI runs build separately.
+- [ ] **Postinstall must generate any required artefacts** (Prisma
+      client, code-gen output, etc.) so a fresh `pnpm install` produces
+      a buildable tree. Without this, CI's `pnpm install
+      --frozen-lockfile` then `pnpm typecheck` fails with "cannot find
+      module" errors against generated paths. See the postinstall
+      script in `package.json` for what each project generates.
+- [ ] **`--no-verify`** bypasses the hook. Use sparingly — only when the
+      gate is blocking on something unrelated to the code being pushed
+      (e.g. a CI-environment-only env var your local doesn't have, or
+      a flaky test you've already triaged). If you find yourself using
+      it more than once a week, the hook's bar is too high; fix that.
+
+If a CI failure does land:
+- [ ] **Read the actual error**, don't immediately retry or skip checks.
+- [ ] If it's something the local hook would have caught, the hook is
+      mis-configured — fix it so the next push of the same shape
+      passes locally.
+- [ ] If it's something CI sees but local doesn't (env, timing, OS
+      differences), document the gap in `.github/workflows/ci.yml` or
+      a `docs/CI.md` so the team knows.
+
 ### 1. Code Quality
 
 - [ ] Run `pnpm lint` — fix all errors
