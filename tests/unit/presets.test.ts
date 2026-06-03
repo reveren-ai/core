@@ -40,6 +40,7 @@ describe('noCodePreset', () => {
           "audit-protocols",
           "capture-learnings",
           "learn-from-users",
+          "seo",
         ],
         "agent": "claude",
         "compliance": {
@@ -73,8 +74,8 @@ describe('defaultConfig', () => {
     expect(config.storybook.mode).toBe('full')
   })
 
-  it('lists all 13 bundled protocols as active', () => {
+  it('lists all 14 bundled protocols as active', () => {
     const config = defaultConfig()
-    expect(config.activeProtocols).toHaveLength(13)
+    expect(config.activeProtocols).toHaveLength(14)
   })
 })

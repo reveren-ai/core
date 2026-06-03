@@ -79,8 +79,8 @@ describe('ProtocolsConfigSchema', () => {
 })
 
 describe('BUNDLED_PROTOCOLS', () => {
-  it('lists the canonical 13 protocols', () => {
-    expect(BUNDLED_PROTOCOLS).toHaveLength(13)
+  it('lists the canonical 14 protocols', () => {
+    expect(BUNDLED_PROTOCOLS).toHaveLength(14)
   })
 
   it('includes the learn-from-users protocol', () => {
@@ -89,6 +89,10 @@ describe('BUNDLED_PROTOCOLS', () => {
 
   it('includes the pre-production protocol', () => {
     expect(BUNDLED_PROTOCOLS).toContain('pre-production')
+  })
+
+  it('includes the seo protocol', () => {
+    expect(BUNDLED_PROTOCOLS).toContain('seo')
   })
 })
 

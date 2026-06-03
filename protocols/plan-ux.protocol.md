@@ -97,6 +97,42 @@ If a design decision is only locally relevant (e.g. a regulator-specific copy
 restriction), flag it explicitly in the **Design Rationale** section so
 engineering doesn't generalise it.
 
+### Liability-aware copy in regulated relationships
+
+When the host project surfaces third-party firms (financial-services
+introducers, advisory contacts, regulated representatives, legal /
+medical / insurance referrers, channel resellers), the noun chosen for
+that relationship carries legal weight. Two rules apply:
+
+- **Avoid the noun "partner" in user-facing copy** unless the
+  relationship is formalised by a Partnership Agreement. In most
+  jurisdictions "partner" can imply partnership-law liability (joint
+  and several obligations) or a regulated-representative relationship
+  (FCA Appointed Representative, ASIC Corporate Authorised
+  Representative, broker-dealer arrangements). Reach for "advisory
+  firm", "the firms we work with", "advisory contacts", "introducing
+  firm", or just the firm name. Internal component / file names may
+  retain "Partners" / "PartnerStrip" / etc. to avoid churn; the rule
+  applies to rendered JSX text, page titles, meta descriptions, email
+  bodies, and any other string a user actually sees.
+- **Brand assets of regulated firms are compliance-sensitive.** Use
+  the firm's official logo at the version they ship, link to their
+  regulator disclosures where the regulator requires it, and never
+  paraphrase a regulated firm's role in your own words — use the
+  firm's own description verbatim if they've published one. The
+  Partners-strip / who-we-work-with surface is the highest-stakes
+  page for this — review it alongside the project's compliance
+  review.
+
+If the host project is *not* in a regulated vertical the rule still
+holds defensively: "partner" implies a formal joint venture and using
+it loosely creates expectations the project may not be able to honour.
+
+When the project's `protocols.config.ts → ux.operatingContext` does not
+declare a regulatory regime, ask before naming any external firm with
+the word "partner" — the cost of the question is lower than the cost
+of a regulator letter.
+
 ---
 
 ## Workflow

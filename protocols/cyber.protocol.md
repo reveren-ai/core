@@ -137,6 +137,52 @@ Focused check on third-party packages:
 - [ ] API route handlers missing HTTP method validation
 - [ ] Dynamic route parameters used unsanitized in database queries
 
+### T9: Stack-aware false-positive register (MUI v7 / Next 16 / RSC)
+
+> Third-party security scanners (`react-doctor`, sonarqube React rules,
+> generic SAST tools) frequently flag patterns that look like server-side
+> data leaks but are correct under a Next 16 + React 19 + React Compiler
+> + MUI v7 + RSC stack. Reject these unless the diff actually breaks the
+> security property the scanner claims. Pair this with the project-level
+> false-positive register kept in `review.protocol.md` so cleared
+> findings stay auditable.
+
+- **`server-no-mutable-module-state` on read-only `const Set<>`,
+  `Record<>`, `as const` arrays** in `'use server'` files. These are
+  validation/label lookups, never mutated. Confirm by grepping for
+  `<name>.set`, `<name>.add`, `<name>.delete`, `<name>.clear`, and
+  `<name>[…] =` against the constant — if nothing matches, it is safe
+  across requests. Encode the read-only contract with `ReadonlySet<>` /
+  `as const satisfies …` so the type checker enforces it going forward.
+  NOT a security finding.
+- **`server-no-mutable-module-state` on actively-mutated `Map<>` rate
+  limit stores** IS a real concern under Fluid Compute (cross-instance
+  leak, cold-restart bypass). Verify whether the project's documented
+  migration trigger (audit signal / observed traffic volume / instance
+  memory pressure) has fired. If it has — escalate to HIGH and pick a
+  migration path (WAF rule / DB-backed counter / Upstash). If it
+  hasn't — confirm the finding is already tracked in the project's
+  TODO backlog and do not raise a duplicate.
+- **Server Actions without an `auth()` check** are not automatically a
+  finding. The trust model on most public-facing apps allows several
+  public-by-design actions (contact form submit, newsletter opt-in,
+  waitlist join, etc.). For each flagged action, verify the threat:
+  does an unauthenticated call (a) write to a protected table,
+  (b) escalate privilege, (c) emit a real-world side effect (Stripe
+  charge, transactional email send, SMS dispatch)? If none of those
+  apply, it is intentionally public and not a finding. When
+  public-by-design, the rate-limit + input-validation surface IS the
+  security boundary — confirm both exist before clearing.
+- **`'use server'` + module-scoped constants holding production secrets**
+  is still a HARD finding (T1 secret exposure). The false-positive
+  carveout is for non-sensitive validation data only — never extend it
+  to API keys, DB URLs, signing secrets, or model credentials.
+
+When a scan reports T9-class findings, the cyber report MUST note "T9
+false-positive carveout applied" with the canonical site reference
+(file + line) from the project-level register, so the audit trail
+records the deliberate clear rather than a missed flag.
+
 ## Severity Classification
 
 | Severity     | Criteria                                                                  | Action                                      |

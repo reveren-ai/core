@@ -44,7 +44,8 @@ export const BUNDLED_PROTOCOLS = [
   'improve',
   'audit-protocols',
   'capture-learnings',
-  'learn-from-users'
+  'learn-from-users',
+  'seo'
 ] as const
 
 // Default terminology — projects can override (e.g. "playbook", "skill", "rule").

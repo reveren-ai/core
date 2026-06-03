@@ -46,6 +46,112 @@ Look for:
 - [ ] CORS / CSP issues?
 - [ ] **Live server still boots cleanly?** See "Live smoke after review" below.
 
+## Stack-aware false-positive register (MUI v7 / Next 16 / RSC)
+
+> A bleeding-edge stack — Next.js 16 App Router + React 19 + React
+> Compiler + MUI v7 + RSC — means generic React linters, third-party
+> scanners (react-doctor, sonarqube React rules, etc.) and even some
+> LLM agents reach for patterns that look like antipatterns in a
+> Next 14 / React 18 mental model but are correct or deliberately
+> chosen here. Don't manufacture findings against these.
+
+This register lists the *pattern shapes* a reviewer should NOT flag.
+Each project that adopts the register SHOULD maintain its own
+"canonical sites" annex — concrete `file:line` anchors that prove the
+pattern is in use intentionally — so novel sites still trigger
+investigation. Without canonical anchors, the register turns into a
+blanket suppression and loses its safety.
+
+Skip flagging the following unless the diff actually breaks behaviour:
+
+### React Compiler & hooks
+
+- **`set-state-in-effect` inside a `motionValue.on('change', ...)`
+  callback** — external-state-sync pattern explicitly permitted by
+  `react-hooks/set-state-in-effect`. The effect subscribes, the
+  listener writes to state — that is not "calling setState in render".
+- **`set-state-in-effect` for reduced-motion one-shot sync** — when
+  an `useEffect` collapses to `motionValue.set(target)` +
+  `setValue(target)` under `useReducedMotion()`, that's a deliberate
+  sync of an external animation source to React state.
+- **`set-state-in-effect` for async-derived status reset** — debounced
+  network round-trips that reset status to `'idle'` on empty input
+  belong in an effect because they can't be computed in render.
+- **`purity` rule firing on `Date.now()` in a server component** —
+  RSCs render once per request and `Date.now()` is stable within a
+  single SSR render. Window-bounded gates (`now - WINDOW_MS`) are the
+  canonical use case.
+- **Manual memoization warnings** from React Compiler scanners —
+  React Compiler 19 handles memoization automatically; manual
+  `useMemo` / `useCallback` adds noise without measurable benefit on
+  Next 16 + Compiler enabled. Only flag if there's a measured
+  re-render cost.
+
+### Server actions & module state
+
+- **Module-scoped `const Set<>`, `Record<>`, `as const` arrays** are
+  read-only validation/label lookups, NOT mutable shared state. The
+  `server-no-mutable-module-state` family of rules fires on
+  declaration shape (`new Set()`, `new Map()`, `{}`, `[]`) without
+  checking mutation. If the value is genuinely never written to after
+  declaration, it is safe across requests. Encode the intent with
+  `ReadonlySet<>` / `as const satisfies …` / `readonly [X, ...X[]]`
+  so the type system enforces the read-only contract.
+- **Actively-mutated `Map<>` rate-limit stores** ARE a real concern
+  under Fluid Compute (cross-instance leak, cold-restart bypass).
+  The current posture should be documented inline at the
+  declaration site with a defined migration trigger. Don't re-raise
+  as a finding unless one of the migration triggers (audit signal /
+  observed scrape volume / instance memory pressure) has actually
+  fired — track via the project's existing "graduate in-memory
+  rate-limit" backlog item, not via duplicate review findings.
+
+### SSR hydration safety
+
+- **Animating CSS `width` instead of `transform` / `scale`** is
+  sometimes the deliberate choice when the SSR-emitted style and the
+  client's motion `initial` must agree byte-for-byte. Mismatched
+  `width: 0%` (server) vs `transform: scaleX(0)` (client) breaks
+  hydration on motion-on. The "use transform for perf" advice is
+  correct in general, wrong here.
+- **Literal-hex constants on invariant-dark plates** are required,
+  not a smell. Brand tokens flip under `.dark`; surfaces that must
+  stay dark in both schemes (hero band, terminal mock, dark CTA,
+  featured pricing card) hard-code their colours.
+
+### MUI v7 specifics
+
+- **`Stack divider={<Box />}`, function-form `sx={(theme) => …}`,
+  and ambient `Link` types** can crash hydration silently. If the
+  diff introduces any of these in a Server Component or layout,
+  flag as HIGH. If it's in a Client Component, flag as MEDIUM with
+  a request to verify against dev-log + browser hydration warnings.
+- **`createTheme()` returns the creation object, not the resolved
+  theme.** Tests asserting `theme.palette.X` against `createTheme()`
+  output are wrong on MUI v7 — they must assert against
+  `colorSchemes` config. Reject reviews that ship resolved-theme
+  assertions.
+
+### How to use this register
+
+When a scanner / linter / agent surfaces one of the above, the
+correct action is:
+
+1. **Verify** the canonical pattern matches the flagged code (file +
+   line + surrounding context against the project's canonical-sites
+   annex).
+2. **Suppress** with `// eslint-disable-next-line <rule> -- <reason>`
+   referencing the canonical pattern by name — NOT by ad-hoc
+   rationale.
+3. **Do NOT** open a finding, do NOT rewrite working code, do NOT
+   register it in the project backlog as "scanner false positive"
+   follow-up (noise — there is no follow-up).
+
+If the pattern is novel and doesn't match a canonical site listed
+here, treat it as a real finding and investigate. Add a new entry
+to this register only after a maintainer-level decision (capture via
+`capture-learnings.protocol.md`).
+
 ## MANDATORY: Live smoke after review
 
 A code review that only reads the diff misses runtime regressions.
