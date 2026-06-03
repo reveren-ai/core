@@ -29,6 +29,7 @@ The result is a class of failure that anyone working with AI agents inside a rea
 - Tests written in a pattern your codebase abandoned three months ago
 - Backwards-compat hacks introduced silently because the agent didn't know there was no backwards to be compatible with
 - Half-finished implementations the agent thought were complete because nobody told it what "complete" means here
+- No clarification loop: when the implementation uncovers a gap in the product or design decisions, the agent ploughs on instead of stopping to ask — and has no idea who on the team it would even ask
 
 Teams spend as much time correcting AI output as they would have spent writing the code themselves. The compounding cost isn't the bad code. It's the broken trust — engineers learning, slowly and without saying it out loud, that the agent is not a colleague. It's a confident intern with amnesia.
 
