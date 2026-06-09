@@ -254,6 +254,8 @@ The host project must work across three breakpoints. For each, specify layout sh
 | Tablet     | 600–900px| Tablet, small laptop   |
 | Desktop    | > 900px  | Laptop, desktop        |
 
+> **Breakpoints are inherited, never invented.** The widths above are conceptual tiers, not values to hardcode into a media query. Always express responsive behaviour through the breakpoint system already established in the project — the component library's tokens (e.g. MUI `theme.breakpoints`, Tailwind `screens`, Chakra / Mantine breakpoints), the CSS framework's conventions, or the project's documented CSS standards. Never introduce raw-pixel media queries or ad-hoc breakpoints that diverge from that system. When a design handoff or mockup gives raw pixel values, snap each to the nearest established token. Mockup / test-viewport sizes (e.g. ~375 / 768 / 1280) are validation targets, not breakpoint definitions.
+
 Specify for each breakpoint:
 
 - Layout (single column, grid, sidebar)
