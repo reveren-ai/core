@@ -30,6 +30,10 @@ reveren is the workflow system for AI-assisted development. Every AI tool (Claud
 
 > The filename suffix here is `.protocol.md` (the default). Your project may rename it via `protocols.config.ts` (`terminology.extension`) — the workflow is identical.
 
+### Working principle: resolving issues
+
+When you hit an issue, blocker, or ambiguity, reach for the relevant protocol above and apply its principles to resolve it yourself **before** escalating. Always come back with at least one concrete proposed resolution and a recommendation — never surface a bare problem. Only ask for input when the protocols genuinely cannot resolve it **and** the decision is the user's to make (destructive, public-facing, spend, or architectural).
+
 ### Agents (optional, host-side)
 
 reveren ships protocols. Specialist agents that consume them live in your repo under `.claude/agents/` (or your tool's equivalent). The canonical roster:
