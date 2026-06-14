@@ -22,12 +22,14 @@ For the avoidance of doubt:
 
 (c) "Compete with reveren.ai's paid version(s) of the Licensed Work" means
     offering, on a hosted, managed, or embedded basis, a service whose
-    primary functionality is substantially the same as the reveren.ai
-    Pro, Team, or Enterprise tiers — namely the orchestrated, multi-step
-    pipeline runner, the private Protocol registry, the cloud-orchestration
-    metering, the GitHub App integration, the audit log, or the team
-    dashboard. Self-hosting the dashboard for your own internal use is
-    permitted; offering the dashboard to third parties is not.
+    primary functionality is substantially the same as reveren's paid
+    components, namely: the Reveren-authored specialist agents ("pods")
+    that ship in or alongside the core, and the hosted Protocol Marketplace
+    and its subscription (including the private registry and the `rvr sync`
+    service against it). Using the Licensed Work to author and run your own
+    protocols and your own agents, for your own or your customers' projects,
+    is permitted. Reselling reveren's pods or operating a competing hosted
+    protocol marketplace is not.
 
 (d) Implementing the open `.protocols/` File Format Specification in your
     own software (regardless of license) is permitted and encouraged. The
@@ -38,7 +40,7 @@ For the avoidance of doubt:
 CHANGE DATE
 
 The Change Date for each Licensed Work version is four (4) years after the
-date that version is first publicly released by Reveren Pty Ltd as
+date that version is first publicly released by Cadere Pty Ltd as
 indicated in that version's git tag and CHANGELOG.md entry.
 
 CHANGE LICENSE
@@ -47,7 +49,10 @@ On the Change Date, the version of the Licensed Work in question becomes
 available under the Apache License, Version 2.0.
 
 LICENSOR
-LICENSOR
 
-Reveren Pty Ltd (ACN: [to be assigned on incorporation])
-Australia (trading as "reveren"; primary website: reveren.ai)
+Cadere Pty Ltd (ACN: [to be confirmed])
+Australia, trading as "Reveren"; primary website: reveren.ai
+
+The Licensed Work and the "Reveren" name and marks are owned by Innocent
+Muisha and licensed to Cadere Pty Ltd, which operates reveren and offers
+the Licensed Work to users under this License.

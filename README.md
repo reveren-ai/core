@@ -45,7 +45,7 @@ rvr list
 # Pull the latest protocol updates
 rvr sync
 
-# Run a multi-step pipeline (Pro+)
+# Run a multi-step pipeline (paid)
 rvr pipeline run <name>
 ```
 
@@ -67,16 +67,17 @@ reveren fixes the input side. Once `.protocols/` is in your repo, every agent â€
 
 For the long-form argument, see [MANIFESTO.md](./MANIFESTO.md).
 
-## Pricing (when v0.1.0 ships)
+## What's free and what's paid
 
-| Tier | USD | Included | Overage |
-|---|---|---|---|
-| **Free** | $0 | Full base protocol library, CLI, single repo, 200 cloud pipeline runs/mo | Hard cap |
-| **Pro** | $19/mo | + Custom protocols, multi-step pipelines, unlimited repos, CI/CD, MCP server (read), 2,000 runs/mo | $0.015/run |
-| **Team** | $39/seat/mo | + Hosted dashboard, private registry, team sync, analytics, GitHub App, SSO, MCP server (read+write), 6,000 runs/seat/mo (pooled) | $0.012/run |
-| **Enterprise** | Custom | + Self-host, dedicated infra, SOC2, custom SLAs, dedicated CSM | Custom |
+reveren is built for individuals, small teams, and vibe coders. The CLI and the base protocol library are free to use. The commercial layer is the specialist agents ("pods") and the protocol marketplace.
 
-Local CLI runs are unlimited and free on every tier. Only **cloud-orchestrated** pipeline runs (those that hit the dashboard, registry, or CI integration) are metered.
+| | What you get | Price |
+|---|---|---|
+| **Free** | The `rvr` CLI, the full base protocol library, and the open `.protocols/` format spec. Local use is unlimited; author and run your own protocols and agents on any number of repos. | $0 |
+| **Pods** | reveren's own maintained specialist agents that run inside the core (review, QA, security, planning, and more), kept current as models and practice move. | Subscription (indicative, finalising) |
+| **Marketplace** | The Protocol Marketplace: install community and reveren-published protocol packs, with the private registry and `rvr sync` against it. | Subscription (indicative, finalising) |
+
+Local CLI use is always free. Only the pods and the marketplace subscription are paid. There is no enterprise sales motion at this stage.
 
 ## Compatible agents
 
@@ -115,15 +116,15 @@ The CLI honours your choice when scaffolding files and in user-facing output; th
 
 `@reveren-ai/core` v0.0.1 (this placeholder) is `UNLICENSED`.
 
-`@reveren-ai/core` v0.1.0+ (the real CLI) will ship under **Business Source License 1.1** with a bespoke Additional Use Grant â€” source-available; permissive for any internal commercial use; restricts repackaging as a competing hosted service. The protocol library content is MIT-licensed (DCO required for contributions); the open `.protocols/` file format spec is published under W3C SDL2 (text) + MIT (schemas).
+`@reveren-ai/core` v0.1.0+ (the real CLI) will ship under **Business Source License 1.1** with a bespoke Additional Use Grant: source-available; permissive for any internal commercial use; restricts repackaging reveren's pods or marketplace as a competing hosted service. The protocol library content is MIT-licensed (DCO required for contributions); the open `.protocols/` file format spec is published under W3C SDL2 (text) + MIT (schemas).
 
-The hosted dashboard (`app.reveren.ai`) is proprietary.
+reveren's specialist agents ("pods") and the hosted Protocol Marketplace are proprietary, commercial components.
 
 ## Maintainer
 
 Built and maintained by [Innocent Muisha](https://github.com/iminnocent98).
 
-reveren is a product of **Reveren Pty Ltd** (Australia, trading as **reveren**, primary website [reveren.ai](https://reveren.ai)), under the Luanda Pty Ltd holding company group.
+reveren is operated as a trading name under **Cadere Pty Ltd** (Australia, primary website [reveren.ai](https://reveren.ai)). The reveren name, marks, and software are owned personally by Innocent Muisha and licensed to Cadere Pty Ltd.
 
 ## Links
 

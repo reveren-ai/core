@@ -3,7 +3,7 @@
 > Package-scoped engineering backlog for the reveren CLI at `packages/core/`.
 > Companion to workspace-level `DEV_TODOS.md` (cross-package eng) and `PRE_GO_LIVE_CHECKLIST.md` (launch-day gate).
 >
-> Non-engineering blockers (incorporate Reveren Pty Ltd, AU trademark, lawyer review of LICENSE files) live in `PRE_GO_LIVE_CHECKLIST.md` — not duplicated here. This file is engineering-only.
+> Non-engineering blockers (confirm the Cadere Pty Ltd / Reveren trading-name structure and personal IP ownership, AU trademark, lawyer review of LICENSE files) live in `PRE_GO_LIVE_CHECKLIST.md` — not duplicated here. This file is engineering-only.
 >
 > _Created 2026-05-09. Maintainer: Innocent Muisha._
 
@@ -27,11 +27,11 @@ You picked dual-launch (site + CLI together) per the Selected Option in `PRE_GO_
 - [x] **`commit-msg` hook** — Husky 9 + commitlint conventional-config; rejects malformed messages locally before they reach `main`. _Shipped 2026-05-10 (PR #4)._
 - [ ] **Changesets** — `@changesets/cli` + `.changeset/config.json` so `npm publish` is automated on merge to main. _Deferred to Release 2._
 
-### Canonical source repos (created PRIVATE; flip to public after Reveren Pty Ltd is incorporated)
+### Canonical source repos (created PRIVATE; flip to public after the Cadere/Reveren structure + trademark are confirmed)
 
 - [x] **`github.com/reveren-ai/protocols`** (private) — MIT-licensed canonical protocol library; seeded with the 14 protocols, LICENSE, README, CONTRIBUTING; tagged `v0.1.0`. _Created 2026-05-10._
 - [x] **`github.com/reveren-ai/spec`** (private) — SDL2-licensed canonical SPEC mirror; seeded with SPEC.md, LICENSE (W3C SDL2), LICENSE.MIT, README; tagged `spec-1.0`. _Created 2026-05-10._
-- [ ] **Flip both repos to PUBLIC** after Reveren Pty Ltd is incorporated. `gh repo edit reveren-ai/{protocols,spec} --visibility public --accept-visibility-change-consequences`.
+- [ ] **Flip both repos to PUBLIC** after the Cadere/Reveren structure + trademark are confirmed. `gh repo edit reveren-ai/{protocols,spec} --visibility public --accept-visibility-change-consequences`.
 - [ ] **Add a `published-at` link from each `@reveren-ai/core` LICENSE/SPEC reference to the canonical repo URL** once those repos are public.
 
 ### Publish mechanics
@@ -41,20 +41,22 @@ You picked dual-launch (site + CLI together) per the Selected Option in `PRE_GO_
 
 ---
 
-## Release 2 — Pro / hosted orchestrator features
+## Release 2 — paid surfaces (pods + marketplace) / hosted orchestrator features
 
-These all depend on the platform side (Phase 1 in `DEV_TODOS.md`) being live.
+These all depend on the platform side (Phase 1 in `DEV_TODOS.md`) being live. Gating
+is by **subscription to the paid surfaces (pods, Protocol Marketplace)**, not the
+retired Pro/Team/Enterprise tiers — see `docs/COMMERCIALISATION.md` §2.
 
 - [ ] **`rvr login` — device code flow** — exchange device code for `rv_live_xxx` token, store in `~/.reveren/credentials.json` with restrictive perms.
-- [ ] **`rvr sync` — real implementation** (currently stub). Pull protocol updates from registry; respects auth token; respects org context.
-- [ ] **`rvr push <protocol>` — Pro feature** — publish a custom or supplementary protocol to org-private registry (Team) or public registry (Pro+).
-- [ ] **`rvr ci` — CI/CD integration** — runs configured pipelines against current diff; output formatted for GitHub Check Runs.
-- [ ] **MCP server (read)** — Pro tier; bundled with CLI but only callable when authed.
-- [ ] **MCP server (write)** — Team tier; gated by `requireTier('team')` on the hosted orchestrator side.
+- [ ] **`rvr sync` — real implementation** (currently stub). Pull protocol-pack updates from the Marketplace registry; respects auth token. Part of the Marketplace subscription.
+- [ ] **`rvr push <protocol>`** — publish a custom or supplementary protocol to your private Marketplace registry. Part of the Marketplace subscription.
+- [ ] **`rvr ci` — CI/CD integration** — runs configured pipelines against current diff; output formatted for GitHub Check Runs. Deferred hosted feature (not part of the narrow-commercial MVP).
+- [ ] **MCP server (read)** — bundled with CLI; callable when authed against a paid subscription.
+- [ ] **MCP server (write)** — gated behind a paid subscription on the hosted orchestrator side. Deferred hosted feature.
 
 ### User-driven supplementary protocols (per `plan-product` evaluation, 2026-05-09)
 
-> A non-technical Lovable/v0/Bolt user describes what they're building; the CLI generates 1–3 supplementary protocols specific to their domain on top of the 14 core protocols. Increases relevance + creates Free → Pro upgrade story.
+> A non-technical Lovable/v0/Bolt user describes what they're building; the CLI generates 1–3 supplementary protocols specific to their domain on top of the 14 core protocols. Increases relevance + creates a Free -> paid (pods / marketplace) upgrade story.
 
 - [ ] **`init` extra prompt** — free-text "what are you building?" + optional domain chips (`fintech / healthcare / ecommerce / marketplace / dev-tools / consumer`). Skip prompt in `--non-interactive`.
 - [ ] **Signal extractor** (`src/scaffold/supplementary.ts`) — free-text + chips → list of supplementary template names (e.g. mentions of Stripe → `payments-stripe`; PHI/PII flags → `compliance-healthcare`; multitenancy → `tenant-isolation`).
@@ -62,7 +64,7 @@ These all depend on the platform side (Phase 1 in `DEV_TODOS.md`) being live.
 - [ ] **Writer drops generated protocols in `.protocols/supplementary/`** with frontmatter `generated: true`, `generatorVersion: x.y`, `domain: <signal>` so they're identifiable and regeneratable.
 - [ ] **`rvr regen --supplementary` subcommand** — re-runs the generator. Confirmation prompt if files have local edits.
 - [ ] **Cap at 3 supplementary protocols per init** — more is overload for the no-code audience.
-- [ ] **Hosted-generation Pro upgrade path** — once BYOK proves demand, offer "we'll handle the keys + use a tuned prompt" as a Pro feature. Keep the BYOK option on Free indefinitely.
+- [ ] **Hosted-generation paid upgrade path** — once BYOK proves demand, offer "we'll handle the keys + use a tuned prompt" as a paid (pods) feature. Keep the BYOK option on Free indefinitely.
 
 ---
 

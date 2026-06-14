@@ -22,7 +22,7 @@
     "url": "https://github.com/reveren-ai/core/issues"
   },
   "license": "BUSL-1.1",
-  "author": "Reveren Pty Ltd",
+  "author": "Innocent Muisha <innocent@muisha.com>",
   "type": "module",
   "engines": {
     "node": ">=18"
