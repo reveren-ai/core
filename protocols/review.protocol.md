@@ -46,6 +46,56 @@ Look for:
 - [ ] CORS / CSP issues?
 - [ ] **Live server still boots cleanly?** See "Live smoke after review" below.
 
+## Compliance & sensitive copy (triggered)
+
+> **Not a substitute for professional advice.** When a change touches a
+> regulated, legal, or trust-sensitive surface, this subsection flags
+> potential issues for human review by a qualified domain expert. Never
+> declare anything "compliant" — only "no issues found by this review".
+
+Run this subsection ONLY when the diff touches a trigger surface. Skipping
+it on unrelated changes is correct — running it on every change erodes
+signal. Each project maintaining this register should keep its own list of
+trigger surfaces (the paths and copy that carry legal, regulatory, privacy,
+or consent weight).
+
+**Trigger surfaces (examples — projects substitute their own)**
+
+- Pages carrying legal or regulatory copy (terms, privacy, disclosures).
+- Pricing, billing, refund, or auto-renewal terms.
+- Consent, sign-up, or age-gating language.
+- Copy describing external organisations or relationships.
+- Any content that could be construed as professional advice.
+- Pipeline changes that add a new third-party data processor.
+
+**What to check**
+
+- [ ] **Disclaimers present** where the domain requires them, with the
+      required text intact.
+- [ ] **No overstated claims** — no guaranteed outcomes, no "risk-free",
+      no misleading superlatives.
+- [ ] **Generated content disclosed** — AI- or machine-generated content is
+      clearly labelled as such.
+- [ ] **Consent language clear** — purpose stated when collecting data.
+- [ ] **Anonymisation claims accurate** — prefer "aggregated" unless data
+      truly cannot be re-identified.
+- [ ] **Third-party sharing disclosed** — every processor the data reaches
+      (and any cross-border transfer) is named in the relevant context.
+- [ ] **Opt-out available** for non-essential processing.
+- [ ] **"Coming soon" for unbuilt features** — never present planned
+      features as currently available.
+- [ ] **External-relationship descriptions accurate** — don't overstate.
+
+**Severity ladder**
+
+- **HIGH** — must fix before shipping. Legal/regulatory risk or misleading
+      content.
+- **MEDIUM** — should fix. Not immediately dangerous but could create
+      issues at scale or in specific jurisdictions.
+- **LOW** — best-practice improvement, no immediate risk.
+- **ESCALATE** — cannot determine risk level. Routes to a human expert,
+      never resolved by AI.
+
 ## Stack-aware false-positive register (MUI v7 / Next 16 / RSC)
 
 > A bleeding-edge stack — Next.js 16 App Router + React 19 + React

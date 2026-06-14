@@ -135,6 +135,47 @@ of a regulator letter.
 
 ---
 
+## Design System Audit (precondition — binding)
+
+Before any of the workflow steps below run, conduct a Design System Audit.
+Every UX plan must explicitly answer the five questions in this section. A
+plan that omits this audit is incomplete and must be revised before
+plan-engineering begins.
+
+1. **Existing tokens first.** Which design tokens does this surface consume?
+   List them by name from the project's token source (palette, typography
+   variants, spacing, shadow tokens, motion presets). If a token doesn't
+   exist for what you need, do NOT propose a raw value — first check whether
+   an existing token (or a composition of existing tokens) covers it.
+   Introducing a new token requires an explicit **Theme Extension** section
+   in the plan and is justified only when no existing token expresses the
+   design intent.
+
+2. **Existing components first.** Which existing components from the project's
+   component library does this surface compose? Reuse before extension;
+   extend before duplication. Cite each by file path. A genuinely new
+   component requires a **New Component** section with a one-sentence
+   justification of why no existing component fits.
+
+3. **Design-language consistency.** The project has defining patterns — recurring
+   card structures, section-header conventions, palette choices, type-role
+   assignments (display vs. UI vs. data). New surfaces inherit these patterns.
+   State explicitly which patterns the surface inherits and how.
+
+4. **Cross-surface contract.** If the new surface introduces a pattern (a tab
+   strip, a chip rail, a filter shelf, an empty-state card), name the pattern
+   and commit to using it consistently across every surface in this plan and
+   its successors where the same problem recurs. One-off patterns are tech
+   debt — each one fragments the design language.
+
+5. **Source-of-truth references.** Every UX plan cites the relevant design-system
+   docs, the token/theme source files, and the existing components it builds on.
+
+This audit is BINDING. The five answers belong in the plan output (add a
+**Design System Audit** block at the top of the Output format).
+
+---
+
 ## Workflow
 
 ### Step 1: Understand the user's task
@@ -407,6 +448,7 @@ After this protocol is used, observe these signals to determine if it performed 
 
 ## Rules
 
+- **The Design System Audit is binding.** Every plan opens with the five-point audit (tokens consumed, components reused, design-language patterns inherited, new patterns introduced + their cross-surface commitment, source-of-truth refs). New tokens or new components require explicit justification sections. A plan without the audit is rejected, not iterated.
 - Always read `docs/Theme/THEME.md` before designing — the palette, type scale, and component overrides are your design system
 - Always read `docs/overview/PROJECT.md` — understand the product context
 - Be specific. "Make it clean" is not a UI/UX decision. "Article titles use h4 (1.25rem/600), summaries use body2 with 3-line clamp, sentiment appears as a dot + caption label" is.
