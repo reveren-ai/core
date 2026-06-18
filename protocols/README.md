@@ -17,6 +17,7 @@ reveren is the workflow system for AI-assisted development. Every AI tool (Claud
 | Plan: Product          | `plan-product.protocol.md`            | Product thinking — challenge the request, find scope          |
 | Plan: Engineering      | `plan-engineering.protocol.md`        | Technical blueprint — architecture, file plan, tests          |
 | Plan: UX               | `plan-ux.protocol.md`                 | UX/IA blueprint — flows, states, accessibility                |
+| Copywriter             | `copywriter.protocol.md`              | Brand voice + Copy Grounding — no fabricated claims           |
 | Review                 | `review.protocol.md`                  | Paranoid code review — find bugs CI misses                    |
 | QA                     | `qa.protocol.md`                      | QA testing — diff-aware Playwright validation                 |
 | Cyber                  | `cyber.protocol.md`                   | Security audit — vulnerability + hardening pass               |

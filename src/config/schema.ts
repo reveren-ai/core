@@ -35,6 +35,7 @@ export const BUNDLED_PROTOCOLS = [
   'plan-product',
   'plan-engineering',
   'plan-ux',
+  'copywriter',
   'review',
   'qa',
   'ship',

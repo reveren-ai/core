@@ -84,10 +84,10 @@ describe('rvr init', () => {
     // .protocols/ directory populated with the bundled set + README + LICENSE
     const dirContents = await readdir(path.join(dir, '.protocols'))
     const protocolEntries = dirContents.filter((e) => e.endsWith('.protocol.md'))
-    expect(protocolEntries.length).toBe(14)
+    expect(protocolEntries.length).toBe(15)
     expect(dirContents).toContain('README.md')
     expect(dirContents).toContain('LICENSE')
-    expect(dirContents.length).toBe(16)
+    expect(dirContents.length).toBe(17)
 
     // package.json updated with vitest devDep + protocols script
     const pkg = JSON.parse(

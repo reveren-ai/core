@@ -30,6 +30,7 @@ describe('noCodePreset', () => {
           "plan-product",
           "plan-engineering",
           "plan-ux",
+          "copywriter",
           "review",
           "qa",
           "ship",
@@ -74,8 +75,8 @@ describe('defaultConfig', () => {
     expect(config.storybook.mode).toBe('full')
   })
 
-  it('lists all 14 bundled protocols as active', () => {
+  it('lists all 15 bundled protocols as active', () => {
     const config = defaultConfig()
-    expect(config.activeProtocols).toHaveLength(14)
+    expect(config.activeProtocols).toHaveLength(15)
   })
 })

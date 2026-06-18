@@ -79,8 +79,12 @@ describe('ProtocolsConfigSchema', () => {
 })
 
 describe('BUNDLED_PROTOCOLS', () => {
-  it('lists the canonical 14 protocols', () => {
-    expect(BUNDLED_PROTOCOLS).toHaveLength(14)
+  it('lists the canonical 15 protocols', () => {
+    expect(BUNDLED_PROTOCOLS).toHaveLength(15)
+  })
+
+  it('includes the copywriter protocol', () => {
+    expect(BUNDLED_PROTOCOLS).toContain('copywriter')
   })
 
   it('includes the learn-from-users protocol', () => {
