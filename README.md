@@ -130,15 +130,15 @@ For the long-form argument, see [MANIFESTO.md](./MANIFESTO.md).
 
 ## What's free and what's paid
 
-reveren is built for individuals, small teams, and vibe coders, and it is **bring-your-own-model** throughout — your keys, your agent, your machine. The free core is everything you need to adopt the standard; the paid layer is *maintenance and depth*, not access.
+reveren is built for individuals, small teams, and vibe coders, and it is **bring-your-own-model** throughout — your keys, your agent, your machine. The line is drawn on **artifact vs upkeep**: everything that spreads the standard is free; what you pay for is the *ongoing maintenance* that keeps the pods current — never access.
 
 | | What you get | Price |
 |---|---|---|
-| **Free core** | The `rvr` CLI, the full base protocol library, the bundled specialist agents (the roster above), the self-improvement loop, and the open `.protocols/` format spec. Unlimited local use on any number of repos. | $0 |
-| **Engineering Pod** *(first paid pod)* | The maintained, always-current engineering pod — deeper protocols and specialist agents kept sharp as models and practice move, tuned to your stack. **Agent-agnostic; bring your own model and key.** | Subscription (indicative, finalising) |
-| **Marketplace** | Install community and reveren-published pods, with the private registry and `rvr sync`. | Subscription (indicative, finalising) |
+| **Free core** | The `rvr` CLI, the vibe-coder onboarding, the full base protocol library, the open `.protocols/` spec, and a **working baseline of every specialist agent** (the roster above, including the self-improvement loop) — bundled, frozen at each release, run locally on your own model. Unlimited use on any number of repos. | $0 |
+| **Maintained pod channel** *(Engineering Pod first)* | The same agents kept **current and stack-tuned between releases**, pulled via authenticated `rvr sync`. You buy **currency, not access**. Agent-agnostic; bring your own model and key. | Subscription (indicative, finalising) |
+| **Marketplace** | Community and reveren-published pods, the private registry, and authenticated `rvr sync`. | Subscription (indicative, finalising) |
 
-You never pay for *access* to the format or the base agents — those are free so the standard can spread. You pay for someone keeping the engineering pod current, and (later) for the hosted/team layer. There is no enterprise sales motion at this stage.
+The paywall is the **sync entitlement**, never local execution — no DRM, no daemon. Not entitled? `rvr run` falls back to the free frozen baseline, so nothing degrades; you just miss the between-release updates. There is no enterprise sales motion at this stage.
 
 ## Compatible agents
 
