@@ -87,6 +87,10 @@ Without reveren, that codebase does not exist. With it, the artefact surface loo
 
 We are shipping reveren as `@reveren-ai/core` because it should be infrastructure, not a private advantage.
 
+## With thanks
+
+reveren stands on the shoulders of **[gstack](https://github.com/garrytan/gstack)** by Garry Tan — the open-source software factory that first showed what a disciplined, multi-agent Claude Code workflow could do: think, plan, build, review, test, ship, reflect. reveren takes that idea and generalises it into an agent-agnostic, versioned operating manual that travels across every agent, not just Claude Code. The debt is gladly acknowledged.
+
 ## Try it
 
 The CLI lands as `@reveren-ai/core` v0.1.0 in mid-2026. The placeholder is published; the real release is in build.

@@ -73,6 +73,7 @@ that maps to a protocol. They're agent-agnostic Markdown; run any with
 | `qa-runner` | End-to-end QA verification | `qa` |
 | `doc-writer` | Documentation as a first-class deliverable | `document` |
 | `cyber-auditor` | Security / vulnerability auditing | `cyber` |
+| `self-improve` | Scheduled improvement loop — proposes protocol updates | `capture-learnings` / `improve` |
 
 ## Vibe-coder onboarding
 
@@ -88,6 +89,26 @@ protocols that fit, and writes a `VIBE-CODER-ONBOARDING.md` brief for your agent
 plus a plain-language `USING-REVEREN.md` guide for you. Your agent then authors a
 few protocols specific to your project and walks you through approve / amend /
 reject in chat. Generation runs on **your** agent — reveren stays bring-your-own-model.
+
+## The self-improvement loop
+
+The bundled `self-improve` agent closes the feedback loop: on a cadence you
+choose (every 4/8/12h, **daily** by default, or weekly), it reviews what changed
+since its last run, distils durable learnings, and **opens a PR** proposing
+amendments to your protocols and operating manual — never auto-merged, and quiet
+when nothing material was learned. Your operating manual sharpens itself over
+time, with an auditable trail of why.
+
+reveren runs **no daemon** (see [Security](https://reveren.ai/security)) — you
+wire the cadence into your own scheduler (a Claude Code `/schedule` routine or a
+cron job) and declare intent in `protocols.config.ts`:
+
+```ts
+export default defineProtocolsConfig({
+  // ...
+  selfImprove: { enabled: true, schedule: "daily" } // 4h | 8h | 12h | daily | weekly
+})
+```
 
 After `rvr init`, your repo gets:
 
@@ -109,15 +130,15 @@ For the long-form argument, see [MANIFESTO.md](./MANIFESTO.md).
 
 ## What's free and what's paid
 
-reveren is built for individuals, small teams, and vibe coders. The CLI and the base protocol library are free to use. The commercial layer is the specialist agents ("pods") and the protocol marketplace.
+reveren is built for individuals, small teams, and vibe coders, and it is **bring-your-own-model** throughout — your keys, your agent, your machine. The free core is everything you need to adopt the standard; the paid layer is *maintenance and depth*, not access.
 
 | | What you get | Price |
 |---|---|---|
-| **Free** | The `rvr` CLI, the full base protocol library, and the open `.protocols/` format spec. Local use is unlimited; author and run your own protocols and agents on any number of repos. | $0 |
-| **Pods** | reveren's own maintained specialist agents that run inside the core (review, QA, security, planning, and more), kept current as models and practice move. | Subscription (indicative, finalising) |
-| **Marketplace** | The Protocol Marketplace: install community and reveren-published protocol packs, with the private registry and `rvr sync` against it. | Subscription (indicative, finalising) |
+| **Free core** | The `rvr` CLI, the full base protocol library, the bundled specialist agents (the roster above), the self-improvement loop, and the open `.protocols/` format spec. Unlimited local use on any number of repos. | $0 |
+| **Engineering Pod** *(first paid pod)* | The maintained, always-current engineering pod — deeper protocols and specialist agents kept sharp as models and practice move, tuned to your stack. **Agent-agnostic; bring your own model and key.** | Subscription (indicative, finalising) |
+| **Marketplace** | Install community and reveren-published pods, with the private registry and `rvr sync`. | Subscription (indicative, finalising) |
 
-Local CLI use is always free. Only the pods and the marketplace subscription are paid. There is no enterprise sales motion at this stage.
+You never pay for *access* to the format or the base agents — those are free so the standard can spread. You pay for someone keeping the engineering pod current, and (later) for the hosted/team layer. There is no enterprise sales motion at this stage.
 
 ## Compatible agents
 
@@ -161,6 +182,10 @@ The CLI honours your choice when scaffolding files and in user-facing output; th
 `@reveren-ai/core` v0.1.0+ (the real CLI) will ship under **Business Source License 1.1** with a bespoke Additional Use Grant: source-available; permissive for any internal commercial use; restricts repackaging reveren's pods or marketplace as a competing hosted service. The protocol library content is MIT-licensed (DCO required for contributions); the open `.protocols/` file format spec is published under W3C SDL2 (text) + MIT (schemas).
 
 reveren's specialist agents ("pods") and the hosted Protocol Marketplace are proprietary, commercial components.
+
+## Acknowledgements
+
+reveren was inspired by **[gstack](https://github.com/garrytan/gstack)** by Garry Tan — the open-source (MIT) "software factory" that turns Claude Code into a virtual engineering team. gstack's sprint cycle (think → plan → build → review → test → ship → reflect) and its roster of specialist agent skills shaped how reveren thinks about protocols and the agent pipeline. Where gstack is a Claude-Code-native toolkit, reveren generalises the idea into an agent-agnostic, versioned format that travels across every agent. Thank you, Garry.
 
 ## Maintainer
 
