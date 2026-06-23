@@ -69,10 +69,10 @@ describe('rvr CLI — integration (built dist/cli.js against tmp project)', () =
 
     expect(existsSync(path.join(dir, 'protocols.config.ts'))).toBe(true)
     const proto = readdirSync(path.join(dir, '.protocols'))
-    // 13 canonical protocols + README.md + LICENSE
-    expect(proto.length).toBe(15)
+    // 15 bundled protocols + README.md + LICENSE
+    expect(proto.length).toBe(17)
     const protocolEntries = proto.filter((f) => f.endsWith('.protocol.md'))
-    expect(protocolEntries.length).toBe(13)
+    expect(protocolEntries.length).toBe(15)
     expect(proto).toContain('README.md')
     expect(proto).toContain('LICENSE')
 
@@ -137,5 +137,38 @@ describe('rvr CLI — integration (built dist/cli.js against tmp project)', () =
     expect(res.stdout).toContain('plan-product')
     expect(res.stdout).toContain('review')
     expect(res.stdout).toContain('ship')
+    expect(res.stdout).toContain('coordinator')
+  })
+
+  it('run coordinator prints the bundled agent (path resolves in built dist)', () => {
+    const res = runCli(['run', 'coordinator'], dir)
+    expect(res.status).toBe(0)
+    expect(res.stdout).toContain('Dispatch Plan')
+  })
+
+  it('init --preset vibe-coder scans the repo and emits the brief + guide', () => {
+    const res = runCli(
+      ['init', '--preset=vibe-coder', '--non-interactive', '--cwd', dir],
+      dir
+    )
+    expect(res.status).toBe(0)
+
+    const statuses = parseJsonLines(res.stdout).map((e) => e.status)
+    expect(statuses).toContain('vibe-coder-brief')
+
+    const proto = readdirSync(path.join(dir, '.protocols'))
+    expect(proto).toContain('VIBE-CODER-ONBOARDING.md')
+    expect(proto).toContain('USING-REVEREN.md')
+
+    // The generic fixture (no deps) selects a subset, so the config persists it.
+    const cfg = readFileSync(path.join(dir, 'protocols.config.ts'), 'utf8')
+    expect(cfg).toContain('activeProtocols')
+
+    // The brief is addressed to the agent, not the human.
+    const brief = readFileSync(
+      path.join(dir, '.protocols', 'VIBE-CODER-ONBOARDING.md'),
+      'utf8'
+    )
+    expect(brief).toContain('audience: ai-agent')
   })
 })

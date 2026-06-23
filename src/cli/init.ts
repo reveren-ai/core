@@ -6,6 +6,7 @@ import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import {
   ProtocolsConfigSchema,
+  BUNDLED_PROTOCOLS,
   type ProtocolsConfig,
   type Stack,
   type Agent
@@ -15,6 +16,14 @@ import { requiredDeps } from '../util/required-deps.js'
 import { bundledProtocolsDir } from '../util/package-root.js'
 import { scaffoldStorybook } from '../scaffold/storybook.js'
 import { log } from '../util/log.js'
+import { scanRepo, type ScanResult } from '../scan/scan-repo.js'
+import {
+  renderGenerationBrief,
+  renderUsingGuide,
+  ONBOARDING_FILENAME,
+  GUIDE_FILENAME
+} from '../scan/vibe-coder.js'
+import { VERSION } from '../version.js'
 
 interface InitOptions {
   cwd?: string
@@ -32,7 +41,7 @@ export function registerInit(program: Command): void {
   program
     .command('init')
     .description('Scaffold protocols.config.ts and the .protocols/ directory')
-    .option('--preset <name>', 'Preset to apply (currently: "no-code")')
+    .option('--preset <name>', 'Preset to apply ("no-code" or "vibe-coder")')
     .option('--cwd <path>', 'Target directory (default: process.cwd())')
     .option(
       '--non-interactive',
@@ -65,10 +74,15 @@ export async function runInit(args: RunInitArgs): Promise<void> {
 
   // 1) Resolve config: --preset short-circuit, --non-interactive default, or interactive prompts.
   let config: ProtocolsConfig
+  let vibeScan: ScanResult | undefined
   if (preset === 'no-code') {
     config = noCodePreset()
+  } else if (preset === 'vibe-coder') {
+    // Deterministic, local repo scan — no model, nothing leaves the machine.
+    vibeScan = scanRepo(cwd)
+    config = vibeScan.config
   } else if (preset !== undefined) {
-    log.error(`Unknown preset "${preset}". Supported: "no-code".`)
+    log.error(`Unknown preset "${preset}". Supported: "no-code", "vibe-coder".`)
     process.exitCode = 1
     return
   } else if (nonInteractive) {
@@ -84,7 +98,7 @@ export async function runInit(args: RunInitArgs): Promise<void> {
   }
 
   // 2) Run side effects in order.
-  await applySideEffects({ config, cwd, nonInteractive, force })
+  await applySideEffects({ config, cwd, nonInteractive, force, vibeScan })
 }
 
 interface ApplyArgs {
@@ -92,10 +106,12 @@ interface ApplyArgs {
   cwd: string
   nonInteractive: boolean
   force: boolean
+  /** Present only for `--preset vibe-coder`: triggers the brief + guide emit. */
+  vibeScan?: ScanResult
 }
 
 async function applySideEffects(args: ApplyArgs): Promise<void> {
-  const { config, cwd, nonInteractive, force } = args
+  const { config, cwd, nonInteractive, force, vibeScan } = args
   const emit = makeEmitter(nonInteractive)
 
   // Step 1 — write protocols.config.ts
@@ -139,6 +155,24 @@ async function applySideEffects(args: ApplyArgs): Promise<void> {
     count: copied.length
   })
 
+  // Step 2b — vibe-coder mode: emit the agent-addressed generation brief and the
+  // human-facing usage guide. Both are rendered from the deterministic scan; no
+  // model is called.
+  if (vibeScan) {
+    const brief = renderGenerationBrief({ scan: vibeScan, config, version: VERSION })
+    const guide = renderUsingGuide({ scan: vibeScan, config, version: VERSION })
+    const briefPath = path.join(protoDir, ONBOARDING_FILENAME)
+    const guidePath = path.join(protoDir, GUIDE_FILENAME)
+    if (!existsSync(briefPath) || force) await writeFile(briefPath, brief, 'utf8')
+    if (!existsSync(guidePath) || force) await writeFile(guidePath, guide, 'utf8')
+    emit({
+      status: 'vibe-coder-brief',
+      files: [ONBOARDING_FILENAME, GUIDE_FILENAME],
+      selected: vibeScan.selectedProtocols,
+      domain: vibeScan.signals.domain
+    })
+  }
+
   // Step 3 — merge devDependencies into host package.json
   const pkgPath = path.join(cwd, 'package.json')
   let added: string[] = []
@@ -172,12 +206,21 @@ async function applySideEffects(args: ApplyArgs): Promise<void> {
 
   if (!nonInteractive) {
     p.outro(pc.green('reveren ready.'))
-    console.log(
-      `  ${pc.bold('Next:')} run ${pc.cyan(installCommand)} to install ${added.length} new devDependencies.`
-    )
-    console.log(
-      `  Then try ${pc.cyan(`rvr run ${config.activeProtocols[0] ?? 'plan-product'}`)} to print a protocol.`
-    )
+    if (vibeScan) {
+      console.log(
+        `  ${pc.bold('Agent:')} read ${pc.cyan(`${config.terminology.directory}/${ONBOARDING_FILENAME}`)} and follow it — author the bespoke ${config.terminology.plural}, run approve/amend/reject with the user in chat, then finalise ${pc.cyan(GUIDE_FILENAME)}. The user never needs to run a command.`
+      )
+      console.log(
+        `  ${pc.bold('Next:')} run ${pc.cyan(installCommand)} to install ${added.length} new devDependencies.`
+      )
+    } else {
+      console.log(
+        `  ${pc.bold('Next:')} run ${pc.cyan(installCommand)} to install ${added.length} new devDependencies.`
+      )
+      console.log(
+        `  Then try ${pc.cyan(`rvr run ${config.activeProtocols[0] ?? 'plan-product'}`)} to print a protocol.`
+      )
+    }
   }
 }
 
@@ -192,6 +235,12 @@ type ProgressEvent =
   | { status: 'merging-deps'; added: string[] }
   | { status: 'skipped-deps'; reason: string }
   | { status: 'scaffolding-storybook'; files: string[] }
+  | {
+      status: 'vibe-coder-brief'
+      files: string[]
+      selected: string[]
+      domain: string
+    }
   | { status: 'complete'; installCommand: string }
 
 function makeEmitter(nonInteractive: boolean): (e: ProgressEvent) => void {
@@ -221,6 +270,11 @@ function makeEmitter(nonInteractive: boolean): (e: ProgressEvent) => void {
         break
       case 'scaffolding-storybook':
         log.success(`scaffolded Storybook (${e.files.length} files)`)
+        break
+      case 'vibe-coder-brief':
+        log.success(
+          `vibe-coder: scanned repo (domain: ${e.domain}), selected ${e.selected.length} protocols, wrote ${e.files.join(' + ')}`
+        )
         break
       case 'complete':
         // Final outro is handled outside.
@@ -362,6 +416,26 @@ export function renderConfigFile(config: ProtocolsConfig): string {
       mode: config.storybook.mode,
       autoGenerateStories: config.storybook.autoGenerateStories,
       deployTarget: config.storybook.deployTarget
+    }
+  }
+  // Persist a non-default protocol selection (e.g. the vibe-coder scan picked a
+  // subset). The full default set is implied by the schema, so omit it then to
+  // keep default/no-code output stable.
+  const isFullSet =
+    config.activeProtocols.length === BUNDLED_PROTOCOLS.length &&
+    BUNDLED_PROTOCOLS.every((p) => config.activeProtocols.includes(p))
+  if (!isFullSet) {
+    out.activeProtocols = config.activeProtocols
+  }
+  // Persist an inferred compliance domain so cyber/review know the surface.
+  if (
+    config.compliance.domain !== 'generic' ||
+    config.compliance.triggerPaths.length > 0
+  ) {
+    out.compliance = {
+      domain: config.compliance.domain,
+      triggerPaths: config.compliance.triggerPaths,
+      jurisdictions: config.compliance.jurisdictions
     }
   }
   const body = JSON.stringify(out, null, 2)
