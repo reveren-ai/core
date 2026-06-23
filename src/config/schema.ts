@@ -60,8 +60,14 @@ export const BUNDLED_AGENTS = [
   'reviewer',
   'qa-runner',
   'doc-writer',
-  'cyber-auditor'
+  'cyber-auditor',
+  'self-improve'
 ] as const
+
+// Cadences the self-improve loop can be scheduled on. The CLI doesn't run a
+// daemon (see the Security posture) — this is declarative intent the user wires
+// into their own scheduler (a Claude Code /schedule routine or a cron job).
+export const SELF_IMPROVE_SCHEDULES = ['4h', '8h', '12h', 'daily', 'weekly'] as const
 
 // Default terminology — projects can override (e.g. "playbook", "skill", "rule").
 // The reference CLI uses the configured noun in user-facing output and the
@@ -127,6 +133,14 @@ export const ProtocolsConfigSchema = z.object({
     .object({
       url: z.string().url().optional(),
       token: z.string().optional()
+    })
+    .optional(),
+  // Opt-in self-improvement loop. Declarative only — the user schedules it.
+  // Optional (no default) so default/no-code configs stay byte-stable.
+  selfImprove: z
+    .object({
+      enabled: z.boolean().default(false),
+      schedule: z.enum(SELF_IMPROVE_SCHEDULES).default('daily')
     })
     .optional()
 })

@@ -25,7 +25,8 @@ export function registerList(program: Command): void {
         reviewer: 'paranoid code review (review)',
         'qa-runner': 'end-to-end QA verification (qa)',
         'doc-writer': 'documentation as a deliverable (document)',
-        'cyber-auditor': 'security auditing (cyber)'
+        'cyber-auditor': 'security auditing (cyber)',
+        'self-improve': 'scheduled improvement loop — proposes protocol updates'
       }
       for (const name of BUNDLED_AGENTS) {
         const note = AGENT_NOTES[name] ? `  — ${AGENT_NOTES[name]}` : ''

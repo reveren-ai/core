@@ -36,6 +36,26 @@ describe('ProtocolsConfigSchema', () => {
     ).toThrow()
   })
 
+  it('omits selfImprove unless set, and defaults its schedule to daily', () => {
+    expect(
+      ProtocolsConfigSchema.parse(defaultConfig()).selfImprove
+    ).toBeUndefined()
+    const parsed = ProtocolsConfigSchema.parse({
+      ...defaultConfig(),
+      selfImprove: {}
+    })
+    expect(parsed.selfImprove).toEqual({ enabled: false, schedule: 'daily' })
+  })
+
+  it('rejects an unknown self-improve schedule', () => {
+    expect(() =>
+      ProtocolsConfigSchema.parse({
+        ...defaultConfig(),
+        selfImprove: { schedule: 'hourly' }
+      })
+    ).toThrow()
+  })
+
   it('defaults storybook mode when omitted', () => {
     const parsed = ProtocolsConfigSchema.parse({
       stack: 'next',

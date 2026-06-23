@@ -105,6 +105,25 @@ describe('rvr run <protocol>', () => {
     expect(process.exitCode).toBe(0)
   })
 
+  it('falls back to the bundled self-improve agent', async () => {
+    const dir = await fixture()
+    await writeFile(
+      path.join(dir, 'package.json'),
+      JSON.stringify({ name: 'fixture' }),
+      'utf8'
+    )
+
+    const program = new Command()
+    program.exitOverride()
+    registerRun(program)
+    await program.parseAsync(['node', 'rvr', 'run', 'self-improve', '--cwd', dir])
+
+    const written = stdoutSpy.mock.calls.map((c) => String(c[0])).join('')
+    expect(written).toMatch(/self-improve/i)
+    expect(written.toLowerCase()).toContain('improvement loop')
+    expect(process.exitCode).toBe(0)
+  })
+
   it('exits 1 with a clear error when the protocol is unknown', async () => {
     const dir = await fixture()
 
