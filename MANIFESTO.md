@@ -61,7 +61,7 @@ A `.protocols/` directory at the root of your repository, containing markdown in
 
 A `protocols.config.ts` that tells the runtime which protocols are active for this repo, which agents to use them with, and which parts of your architecture documentation to inject as additional context.
 
-A pipeline orchestrator that chains protocols into multi-step workflows: design → implement → test → review → ship, with explicit gates between each step and an audit trail of what happened.
+A coordinator agent that chains protocols into multi-step workflows: design → implement → test → review → ship — dispatching each step to the right specialist, with explicit gates between stages and an audit trail of what ran. It ships inside the core; you invoke it with `rvr run coordinator`.
 
 A private registry that lets your team encode "the way we work with AI" as versioned, internal-only protocols nobody else can see — your architecture decisions, your naming conventions, your compliance requirements, your hard-won institutional memory, all in one place that travels with the codebase.
 

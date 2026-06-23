@@ -36,18 +36,58 @@ The CLI binary is `rvr` (npm-style short command). The brand is reveren; `rvr` i
 # Initialise reveren in any repo
 npx @reveren-ai/core init
 
-# Run a named protocol against the current context
+# Print a named protocol for the current agent to ingest
 rvr run <protocol>
 
-# List active and available protocols
+# Orchestrate a multi-step pipeline via the bundled coordinator agent
+rvr run coordinator
+
+# List the bundled protocols and agents
 rvr list
 
-# Pull the latest protocol updates
-rvr sync
+# Check that the required dev-dependencies are installed
+rvr check
 
-# Run a multi-step pipeline (paid)
-rvr pipeline run <name>
+# Pull protocol updates from the registry (Phase 2)
+rvr sync
 ```
+
+**Pipeline orchestration is an agent, not a separate command.** The bundled
+`coordinator` agent reads your backlog and chains protocols into
+design → implement → review → QA → document → ship, dispatching each step to the
+right specialist with explicit handoffs. It ships inside the core; invoke it
+with `rvr run coordinator`. There is no `rvr pipeline` runner — orchestration is
+the coordinator.
+
+## Bundled agents
+
+reveren ships six specialist agents in `agents/` — each a multi-step operator
+that maps to a protocol. They're agent-agnostic Markdown; run any with
+`rvr run <name>`:
+
+| Agent | Role | Protocol |
+|---|---|---|
+| `coordinator` | Pipeline orchestrator — dispatches the others | — |
+| `engineer` | Implements changes on an isolated branch | `plan-engineering` |
+| `reviewer` | Paranoid staff-engineer code review | `review` |
+| `qa-runner` | End-to-end QA verification | `qa` |
+| `doc-writer` | Documentation as a first-class deliverable | `document` |
+| `cyber-auditor` | Security / vulnerability auditing | `cyber` |
+
+## Vibe-coder onboarding
+
+```bash
+npx @reveren-ai/core init --preset vibe-coder
+```
+
+For founders shipping with v0 / Lovable / Bolt / Cursor, the **vibe-coder
+preset** means you never touch the terminal — your AI agent runs the one command
+and drives the rest. The CLI **scans your repo locally and deterministically**
+(no model, nothing leaves your machine), infers your config, selects the
+protocols that fit, and writes a `VIBE-CODER-ONBOARDING.md` brief for your agent
+plus a plain-language `USING-REVEREN.md` guide for you. Your agent then authors a
+few protocols specific to your project and walks you through approve / amend /
+reject in chat. Generation runs on **your** agent — reveren stays bring-your-own-model.
 
 After `rvr init`, your repo gets:
 
@@ -93,6 +133,8 @@ Local CLI use is always free. Only the pods and the marketplace subscription are
 | Any MCP-compatible agent | ✓ |
 
 The `.protocols/` file format is published as an open spec — any agent vendor or tool can read or write it.
+
+"Compatible" means the open `.protocols/` Markdown is loaded into the agent's context — through its rules file, an MCP server, or a direct `rvr run` paste. reveren does **not** yet compile protocols into each vendor's native format. Per-agent compilers and a Claude Skills cross-publisher are on the roadmap; until then the format is deliberately plain Markdown, so every agent ingests the same file today without one.
 
 ## Naming is configurable
 
