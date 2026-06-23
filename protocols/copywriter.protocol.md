@@ -76,7 +76,19 @@ alternative — "authoritative but approachable" rules out both stiff and chummy
   pile-ups of "moreover / furthermore". If the project ships a sanitiser for
   machine-generated copy (e.g. a `stripAiTells()` hook named in
   `protocols.config.ts → copy.sanitizer`), hand-written copy should hold the
-  same line the sanitiser enforces.
+  same line the sanitiser enforces. The sanitiser is a floor, not a licence:
+  hand-written copy clears the same bar, and generated copy clears the bar
+  hand-written copy would.
+- **Em dash policy is a per-project edition choice.** Declare which edition the
+  project runs (in `protocols.config.ts → copy.emDash` or the brand doc):
+  - **house / operator** — em dashes banned outright. Right for terse product
+    UI, operator tooling, or any voice where a stray dash reads as a machine
+    tell. The sanitiser strips all of them.
+  - **editorial** — em dashes allowed *sparingly and correctly* (a genuine
+    aside or appositive), never as an all-purpose clause joiner. Right for
+    long-form, reader-facing editorial where the dash is part of good prose.
+    The clause-joiner dash is still the tell to strip; the correct aside stays.
+  Default to **house** unless the surface is genuinely long-form editorial.
 
 ## Copy Grounding (mockup → code handoff)
 
