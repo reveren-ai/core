@@ -6,6 +6,7 @@ export {
   StorybookModeEnum,
   DeployTargetEnum,
   BUNDLED_PROTOCOLS,
+  BUNDLED_AGENTS,
   TerminologySchema,
   DEFAULT_TERMINOLOGY,
   defineProtocolsConfig

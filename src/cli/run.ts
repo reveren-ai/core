@@ -10,7 +10,7 @@ import {
 } from '../config/schema.js'
 import { defaultConfig } from '../config/defaults.js'
 import { log } from '../util/log.js'
-import { bundledProtocolsDir } from '../util/package-root.js'
+import { bundledProtocolsDir, bundledAgentsDir } from '../util/package-root.js'
 
 interface RunOptions {
   cwd?: string
@@ -79,8 +79,20 @@ export async function runProtocol(name: string, cwd: string): Promise<void> {
     return
   }
 
+  // Finally, fall back to a bundled agent (e.g. `coordinator`, the pipeline
+  // orchestrator). Agents are multi-step operators rather than single
+  // cognitive modes, but `run` ingests them the same way: print to stdout.
+  const bundledAgentPath = path.join(bundledAgentsDir(), `${name}.agent.md`)
+  if (existsSync(bundledAgentPath)) {
+    const body = await readFile(bundledAgentPath, 'utf8')
+    process.stdout.write(body)
+    if (!body.endsWith('\n')) process.stdout.write('\n')
+    process.exitCode = 0
+    return
+  }
+
   log.error(
-    `Protocol "${name}" not found in ${dir} or in the bundled library. Run \`rvr list\` to see available protocols.`
+    `"${name}" not found in ${dir}, the bundled protocol library, or the bundled agents. Run \`rvr list\` to see what's available.`
   )
   process.exitCode = 1
 }

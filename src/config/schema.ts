@@ -49,6 +49,20 @@ export const BUNDLED_PROTOCOLS = [
   'seo'
 ] as const
 
+// Bundled specialist agents shipped inside the CLI. Unlike protocols (single
+// cognitive modes loaded one at a time), an agent is a multi-step operator.
+// `coordinator` is the pipeline orchestrator — it chains the others into
+// design → implement → review → QA → document → ship. Each maps to a bundled
+// protocol. Runnable via `rvr run <name>`; files live at `agents/<name>.agent.md`.
+export const BUNDLED_AGENTS = [
+  'coordinator',
+  'engineer',
+  'reviewer',
+  'qa-runner',
+  'doc-writer',
+  'cyber-auditor'
+] as const
+
 // Default terminology — projects can override (e.g. "playbook", "skill", "rule").
 // The reference CLI uses the configured noun in user-facing output and the
 // configured directory/extension when scaffolding via `init`.

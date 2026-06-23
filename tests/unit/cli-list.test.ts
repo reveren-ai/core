@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { Command } from 'commander'
 import { registerList } from '../../src/cli/list.js'
-import { BUNDLED_PROTOCOLS } from '../../src/config/schema.js'
+import { BUNDLED_PROTOCOLS, BUNDLED_AGENTS } from '../../src/config/schema.js'
 
 describe('rvr list', () => {
   let logSpy: ReturnType<typeof vi.spyOn>
@@ -32,6 +32,20 @@ describe('rvr list', () => {
     for (const name of BUNDLED_PROTOCOLS) {
       expect(printed).toContain(name)
     }
+  })
+
+  it('prints every bundled agent, including the coordinator orchestrator', async () => {
+    const program = new Command()
+    program.exitOverride()
+    registerList(program)
+    await program.parseAsync(['node', 'rvr', 'list'])
+
+    const printed = logSpy.mock.calls.map((call) => String(call[0])).join('\n')
+    for (const name of BUNDLED_AGENTS) {
+      expect(printed).toContain(name)
+    }
+    expect(printed).toMatch(/agents/i)
+    expect(printed).toMatch(/orchestrator/i)
   })
 
   it('mentions the registry sync hint and configurable terminology', async () => {

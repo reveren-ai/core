@@ -41,3 +41,12 @@ export function packageRoot(): string {
 export function bundledProtocolsDir(): string {
   return path.join(packageRoot(), 'protocols')
 }
+
+/**
+ * Absolute path to the bundled `agents/` directory shipped inside this
+ * package. Holds multi-step operators (e.g. the coordinator orchestrator)
+ * resolved by `rvr run <name>` after the protocol lookups miss.
+ */
+export function bundledAgentsDir(): string {
+  return path.join(packageRoot(), 'agents')
+}
