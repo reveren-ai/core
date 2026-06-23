@@ -438,6 +438,11 @@ export function renderConfigFile(config: ProtocolsConfig): string {
       jurisdictions: config.compliance.jurisdictions
     }
   }
+  // Persist pod channel choices when set (e.g. an opted-in maintained pod).
+  // Omitted by default so default/no-code/vibe-coder output stays byte-stable.
+  if (config.pods && Object.keys(config.pods).length > 0) {
+    out.pods = config.pods
+  }
   const body = JSON.stringify(out, null, 2)
   // No runtime import — keeps the config loadable before `pnpm install` runs.
   // The JSDoc annotation gives the user IDE-side type checking once they

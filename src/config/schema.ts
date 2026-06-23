@@ -64,6 +64,41 @@ export const BUNDLED_AGENTS = [
   'self-improve'
 ] as const
 
+// Channels an agent can resolve from. The `baseline` of every agent ships free
+// and frozen inside the CLI — it runs forever, offline, on the user's own
+// model. The `current` channel is the *maintained* tier: kept sharp and
+// stack-tuned between CLI releases, pulled via authenticated `rvr sync` and
+// gated on `registry.token`. Selling currency, not access. See
+// `reveren_monetization_model.md` at the workspace root.
+export const PodChannelEnum = z.enum(['baseline', 'current'])
+export type PodChannel = z.infer<typeof PodChannelEnum>
+
+// Pods group bundled agents that have a paid, maintained `current` channel.
+// The Engineering Pod is the first paid pod; its baseline agents stay free.
+// Agents not in any pod (e.g. `self-improve`) are free-only — their currency
+// rides on the open protocol library, not a subscription.
+export const POD_AGENTS = {
+  engineering: [
+    'coordinator',
+    'engineer',
+    'reviewer',
+    'qa-runner',
+    'doc-writer',
+    'cyber-auditor'
+  ]
+} as const
+
+export type PodName = keyof typeof POD_AGENTS
+
+// Reverse index: agent name -> the pod it belongs to (if any).
+export const AGENT_POD: Readonly<Record<string, PodName>> = Object.freeze(
+  Object.fromEntries(
+    Object.entries(POD_AGENTS).flatMap(([pod, agents]) =>
+      agents.map((agent) => [agent, pod as PodName])
+    )
+  )
+)
+
 // Cadences the self-improve loop can be scheduled on. The CLI doesn't run a
 // daemon (see the Security posture) — this is declarative intent the user wires
 // into their own scheduler (a Claude Code /schedule routine or a cron job).
@@ -135,6 +170,15 @@ export const ProtocolsConfigSchema = z.object({
       token: z.string().optional()
     })
     .optional(),
+  // Pod channels. The baseline of every agent is free and bundled; opting a pod
+  // into the `current` channel selects the maintained tier pulled via
+  // authenticated `rvr sync` (requires `registry.token`). Optional with no
+  // default so default and no-code configs stay byte-stable.
+  pods: z
+    .record(
+      z.object({ channel: PodChannelEnum.default('baseline') })
+    )
+    .optional(),
   // Opt-in self-improvement loop. Declarative only — the user schedules it.
   // Optional (no default) so default/no-code configs stay byte-stable.
   selfImprove: z
@@ -153,4 +197,20 @@ export type DeployTarget = z.infer<typeof DeployTargetEnum>
 
 export function defineProtocolsConfig(config: ProtocolsConfig): ProtocolsConfig {
   return ProtocolsConfigSchema.parse(config)
+}
+
+// The effective channel for a pod, defaulting to the free `baseline` when the
+// pod is unset in config.
+export function podChannel(config: ProtocolsConfig, pod: PodName): PodChannel {
+  return config.pods?.[pod]?.channel ?? 'baseline'
+}
+
+// A maintained (`current`) pull is entitled only when the pod is opted in AND a
+// registry token is present. No token => baseline, which is always free. The
+// paywall lives on the registry/sync entitlement, never on local execution.
+export function isCurrentChannelEntitled(
+  config: ProtocolsConfig,
+  pod: PodName
+): boolean {
+  return podChannel(config, pod) === 'current' && !!config.registry?.token
 }

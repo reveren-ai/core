@@ -3,6 +3,7 @@ import pc from 'picocolors'
 import {
   BUNDLED_PROTOCOLS,
   BUNDLED_AGENTS,
+  AGENT_POD,
   DEFAULT_TERMINOLOGY
 } from '../config/schema.js'
 
@@ -30,13 +31,22 @@ export function registerList(program: Command): void {
       }
       for (const name of BUNDLED_AGENTS) {
         const note = AGENT_NOTES[name] ? `  — ${AGENT_NOTES[name]}` : ''
-        console.log(`  ${pc.cyan(name)}${pc.dim(note)}`)
+        const pod = AGENT_POD[name]
+        const tier = pod
+          ? pc.dim(`  [${pod} pod · baseline free, current = subscription]`)
+          : pc.dim('  [free]')
+        console.log(`  ${pc.cyan(name)}${pc.dim(note)}${tier}`)
       }
       console.log(pc.dim('  Run one with `rvr run <name>` (e.g. `rvr run coordinator`).'))
       console.log()
       console.log(
         pc.dim(
-          'Run `rvr sync` to fetch updates from the registry (Phase 2, mid-2026).'
+          'Baseline agents are free and bundled. Maintained "current" pods need a'
+        )
+      )
+      console.log(
+        pc.dim(
+          'subscription + registry token; pull them with `rvr sync` (Phase 2, mid-2026).'
         )
       )
       console.log(

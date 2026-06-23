@@ -1,14 +1,8 @@
 import { Command } from 'commander'
-import { findUp } from 'find-up'
-import { createJiti } from 'jiti'
 import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
-import {
-  ProtocolsConfigSchema,
-  type ProtocolsConfig
-} from '../config/schema.js'
-import { defaultConfig } from '../config/defaults.js'
+import { loadConfig } from '../config/load.js'
 import { log } from '../util/log.js'
 import { bundledProtocolsDir, bundledAgentsDir } from '../util/package-root.js'
 
@@ -25,34 +19,6 @@ export function registerRun(program: Command): void {
       const cwd = options.cwd ? path.resolve(options.cwd) : process.cwd()
       await runProtocol(protocol, cwd)
     })
-}
-
-interface ResolvedConfig {
-  config: ProtocolsConfig
-  /** Directory the config (or fallback) is anchored to. */
-  rootDir: string
-}
-
-async function loadConfig(cwd: string): Promise<ResolvedConfig> {
-  const found = await findUp('protocols.config.ts', { cwd })
-  if (!found) {
-    return { config: defaultConfig(), rootDir: cwd }
-  }
-  const jiti = createJiti(cwd, { interopDefault: true })
-  try {
-    const mod = (await jiti.import(found, { default: true })) as unknown
-    const parsed = ProtocolsConfigSchema.parse(mod)
-    return { config: parsed, rootDir: path.dirname(found) }
-  } catch (err) {
-    // Common case: `pnpm install` hasn't run yet so an import inside the
-    // config file resolves to nothing. Fall back to defaults so the rest
-    // of the CLI stays usable, but keep the rootDir anchored where the
-    // config was found so the local .protocols/ lookup still works.
-    const message = err instanceof Error ? err.message : String(err)
-    log.warn(`Could not load ${path.relative(cwd, found)}: ${message}`)
-    log.hint('Falling back to defaults. Run your package manager to install deps, then retry.')
-    return { config: defaultConfig(), rootDir: path.dirname(found) }
-  }
 }
 
 export async function runProtocol(name: string, cwd: string): Promise<void> {

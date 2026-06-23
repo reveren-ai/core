@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { Command } from 'commander'
-import { registerSync } from '../../src/cli/sync.js'
+import { registerSync, planSync } from '../../src/cli/sync.js'
+import { ProtocolsConfigSchema } from '../../src/config/schema.js'
+import { defaultConfig } from '../../src/config/defaults.js'
 
 describe('rvr sync', () => {
   let logSpy: ReturnType<typeof vi.spyOn>
@@ -29,5 +31,37 @@ describe('rvr sync', () => {
 
     const printed = logSpy.mock.calls.map((c) => String(c[1] ?? c[0])).join('\n')
     expect(printed).toMatch(/Phase 2/)
+  })
+})
+
+describe('planSync', () => {
+  it('returns no pods for a default config (everything baseline)', () => {
+    expect(planSync(defaultConfig())).toEqual({
+      entitledPods: [],
+      blockedPods: []
+    })
+  })
+
+  it('blocks a current-channel pod when no registry token is present', () => {
+    const config = ProtocolsConfigSchema.parse({
+      ...defaultConfig(),
+      pods: { engineering: { channel: 'current' } }
+    })
+    expect(planSync(config)).toEqual({
+      entitledPods: [],
+      blockedPods: ['engineering']
+    })
+  })
+
+  it('entitles a current-channel pod when a registry token is present', () => {
+    const config = ProtocolsConfigSchema.parse({
+      ...defaultConfig(),
+      registry: { token: 'rvr_live_xxx' },
+      pods: { engineering: { channel: 'current' } }
+    })
+    expect(planSync(config)).toEqual({
+      entitledPods: ['engineering'],
+      blockedPods: []
+    })
   })
 })

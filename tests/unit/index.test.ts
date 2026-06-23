@@ -24,4 +24,12 @@ describe('@reveren-ai/core public API', () => {
     expect(typeof api.noCodePreset).toBe('function')
     expect(api.defaultConfig().stack).toBe('next')
   })
+
+  it('re-exports the pod channel surface', () => {
+    expect(api.PodChannelEnum).toBeDefined()
+    expect(api.POD_AGENTS.engineering).toContain('reviewer')
+    expect(api.AGENT_POD.reviewer).toBe('engineering')
+    expect(typeof api.podChannel).toBe('function')
+    expect(typeof api.isCurrentChannelEntitled).toBe('function')
+  })
 })

@@ -2,6 +2,10 @@ import { describe, it, expect } from 'vitest'
 import {
   ProtocolsConfigSchema,
   BUNDLED_PROTOCOLS,
+  POD_AGENTS,
+  AGENT_POD,
+  podChannel,
+  isCurrentChannelEntitled,
   defineProtocolsConfig
 } from '../../src/config/schema.js'
 import { defaultConfig, noCodePreset } from '../../src/config/defaults.js'
@@ -117,6 +121,89 @@ describe('BUNDLED_PROTOCOLS', () => {
 
   it('includes the seo protocol', () => {
     expect(BUNDLED_PROTOCOLS).toContain('seo')
+  })
+})
+
+describe('pods (channels)', () => {
+  it('omits pods by default so default/no-code configs stay byte-stable', () => {
+    expect(ProtocolsConfigSchema.parse(defaultConfig()).pods).toBeUndefined()
+    expect(noCodePreset().pods).toBeUndefined()
+  })
+
+  it('accepts a pod opted into the current channel and defaults channel to baseline', () => {
+    const parsed = ProtocolsConfigSchema.parse({
+      ...defaultConfig(),
+      pods: { engineering: { channel: 'current' }, foo: {} }
+    })
+    expect(parsed.pods?.engineering?.channel).toBe('current')
+    expect(parsed.pods?.foo?.channel).toBe('baseline')
+  })
+
+  it('rejects an unknown channel', () => {
+    expect(() =>
+      ProtocolsConfigSchema.parse({
+        ...defaultConfig(),
+        pods: { engineering: { channel: 'beta' } }
+      })
+    ).toThrow()
+  })
+
+  it('podChannel defaults to baseline when unset', () => {
+    expect(podChannel(defaultConfig(), 'engineering')).toBe('baseline')
+  })
+
+  it('entitlement requires both current channel and a registry token', () => {
+    const base = defaultConfig()
+    // current but no token -> not entitled (falls back to free baseline)
+    expect(
+      isCurrentChannelEntitled(
+        ProtocolsConfigSchema.parse({
+          ...base,
+          pods: { engineering: { channel: 'current' } }
+        }),
+        'engineering'
+      )
+    ).toBe(false)
+    // current + token -> entitled
+    expect(
+      isCurrentChannelEntitled(
+        ProtocolsConfigSchema.parse({
+          ...base,
+          registry: { token: 'rvr_live_xxx' },
+          pods: { engineering: { channel: 'current' } }
+        }),
+        'engineering'
+      )
+    ).toBe(true)
+    // token but baseline channel -> not entitled (nothing to pull)
+    expect(
+      isCurrentChannelEntitled(
+        ProtocolsConfigSchema.parse({
+          ...base,
+          registry: { token: 'rvr_live_xxx' }
+        }),
+        'engineering'
+      )
+    ).toBe(false)
+  })
+})
+
+describe('POD_AGENTS', () => {
+  it('defines the engineering pod over the build/review/qa/ship specialists', () => {
+    expect(POD_AGENTS.engineering).toEqual([
+      'coordinator',
+      'engineer',
+      'reviewer',
+      'qa-runner',
+      'doc-writer',
+      'cyber-auditor'
+    ])
+  })
+
+  it('maps each pod agent back to its pod, and leaves self-improve free-only', () => {
+    expect(AGENT_POD.reviewer).toBe('engineering')
+    expect(AGENT_POD.coordinator).toBe('engineering')
+    expect(AGENT_POD['self-improve']).toBeUndefined()
   })
 })
 
