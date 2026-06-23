@@ -35,13 +35,17 @@ No changeset is needed for changes that never reach a user (CI config, tests,
 this doc). If in doubt, add one — an empty release is cheaper than a missing
 note.
 
-## Cutting a release (automated)
+## Cutting a release
 
-You never run `version` or `publish` by hand on a normal release.
+The **Release** workflow is **manual** (`workflow_dispatch`) while we're
+pre-publish — it does not fire on push. Run it from the Actions tab when you
+intend to cut a release.
 
 1. PRs merge to `main`, each carrying its changeset(s).
-2. The **Release** workflow opens (or refreshes) a **"Version Packages"** PR.
-   That PR consumes the pending changesets, bumps `package.json`, and rewrites
+2. Trigger **Release** from the Actions tab. It opens (or refreshes) a
+   **"Version Packages"** PR that consumes the pending changesets, bumps
+   `package.json`, runs `scripts/sync-version.mjs` so `src/version.ts` tracks the
+   new version (otherwise the `version.test.ts` parity check fails), and rewrites
    `CHANGELOG.md`.
 3. Review the version PR. When it looks right, **merge it**.
 4. Merging triggers the Release workflow again — this time with no pending
@@ -68,7 +72,12 @@ serves the `0.0.1` reserved-scope placeholder.
    the intended `0.1.0` **before** the first `Version Packages` PR is merged, so
    the inaugural publish lands as a clean `0.1.0` rather than a computed
    prerelease bump. Every release after this is fully automated.
-3. **Provenance (optional, recommended).** The Release workflow requests
+3. **Let Actions open the version PR.** Enable repo → Settings → Actions →
+   General → "Allow GitHub Actions to create and approve pull requests".
+   Without it, the changesets action's git/PR step fails. Optionally restore the
+   `push: branches: [main]` trigger in `release.yml` to make releases automatic
+   again.
+4. **Provenance (optional, recommended).** The Release workflow requests
    `id-token: write`; add `--provenance` to the publish step once the npm
    account is on a plan that supports it, to match the supply-chain posture
    promised on the site's Security page.

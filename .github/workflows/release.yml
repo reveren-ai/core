@@ -1,14 +1,17 @@
 name: Release
 
-# Changesets-driven release. On every push to main:
-#   - if there are pending changesets, open/refresh a "Version Packages" PR
-#   - if the version PR was just merged (no pending changesets), publish to npm
+# Changesets-driven release. MANUAL while the launch is pre-publish — run it
+# from the Actions tab when you intend to cut a release:
+#   - pending changesets        → opens/refreshes a "Version Packages" PR
+#   - version PR merged (none)   → publishes to npm
 # Publishing is gated twice: the version PR must be merged AND the NPM_TOKEN
-# secret must be present on the repo. See RELEASING.md.
+# secret must be present. To go live, also enable "Allow GitHub Actions to
+# create and approve pull requests" (repo → Settings → Actions → General) and,
+# if you want it automatic, restore the `push: branches: [main]` trigger.
+# See RELEASING.md.
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,6 +19,11 @@ permissions:
   id-token: write
 
 concurrency: release-${{ github.ref }}
+
+# Husky installs git hooks on `pnpm install`; they must not fire on the bot's
+# release commit (the usual cause of "/usr/bin/git failed with exit code 1").
+env:
+  HUSKY: 0
 
 jobs:
   release:
