@@ -1,0 +1,57 @@
+name: CI
+
+# Parity gate for @reveren-ai/core. This is the workflow the local
+# `.husky/pre-push` hook promises ("the same checks GitHub Actions runs").
+# Runs on every push to main and every PR targeting main.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: typecheck · test · build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Honour the package.json `engines.node: ">=18"` floor and current LTS.
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # No committed lockfile: the standalone reveren-ai/core repo resolves
+      # against the monorepo lockfile in development and installs fresh in CI.
+      - name: Install
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test:run
+
+      - name: Build
+        run: pnpm build
+
+      - name: Integration tests (CLI smoke)
+        run: pnpm test:integration
