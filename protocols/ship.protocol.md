@@ -16,8 +16,9 @@ Now land the plane cleanly.
 
 ## Pre-ship Checklist
 
-### 0. Permissions Pre-flight
+### 0. Repo & Permissions Pre-flight
 
+- [ ] **Confirm the working repo before any git/build command.** The shell cwd can change unexpectedly between turns — an editor opening a file from another project, or a tool resetting the working directory — and is especially unreliable in a workspace holding more than one repo. Establish the repo in the same command (`cd <path> && pwd && git rev-parse --show-toplevel`) and sanity-check the remote and branch. A surprising branch, SHA, remote, or test count is a red flag: stop. **Never** run a destructive git op (commit, push, force-push, `branch -f`, reset) or trust a `test`/`build` result without having confirmed the toplevel in that same command.
 - [ ] Check `.claude/settings.json` `permissions.allow` — ensure all commands needed for this ship process (lint, test, build, git, gh) are listed
 - [ ] If any non-harmful command is missing (e.g., `Bash(gh *)`), add it to the project settings now so the remaining steps run uninterrupted
 - [ ] Never auto-approve destructive commands (force-push, drop, delete remote branches) — those should always prompt
