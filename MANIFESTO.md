@@ -81,7 +81,7 @@ This is infrastructure work. It is unglamorous. It is exactly the kind of layer 
 
 reveren is what we built to solve this for ourselves.
 
-Specifically: it is the system [mrktable.com](https://mrktable.com) — a financial-media and analysis platform — was built with. Thirteen protocols. Six specialist agents. Automated pipeline orchestration. Three lifecycle hooks. An auditable evolution log of every amendment since March 2026. Six hundred and ten unit tests, fifteen end-to-end tests, twenty-five database models, regulated-product compliance surface, full CI/CD — all maintained by one founder.
+Specifically: it is the system [mrktable.com](https://mrktable.com) — a financial-media and analysis platform — was built with. Thirteen protocols. Six specialist agents. Automated pipeline orchestration. Three lifecycle hooks. An auditable evolution log of every amendment since March 2026. Two thousand eight hundred and twenty tests at ninety-five percent-plus code coverage, thirty-four database models, regulated-product compliance surface, full CI/CD — all maintained by one founder.
 
 Without reveren, that codebase does not exist. With it, the artefact surface looks like the output of a small engineering team.
 

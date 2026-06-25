@@ -41,21 +41,26 @@ source-available core. The CLI runs fully locally without it.
 
 ## Licensing and what's paid
 
-Reveren is built for individuals, small teams, and vibe coders. The CLI and the
-base protocol library are free to use; the commercial layer is the specialist
-agents ("pods") and the protocol marketplace.
+Reveren is built for individuals, small teams, and vibe coders, and it is
+bring-your-own-model throughout. The free/paid line is drawn on **artifact vs
+upkeep**: everything that spreads the standard is free — including a **working
+baseline of every specialist agent**, frozen at each release and run locally on
+your own model. What you pay for is the *ongoing maintenance* that keeps those
+agents current between releases, plus the marketplace — never access.
 
 | What | Terms |
 |---|---|
 | Core / CLI | Business Source License 1.1 (source-available, free to use; converts to Apache-2.0 on its Change Date) |
 | Protocol library | MIT |
 | Format spec | Open (W3C SDL2 text + MIT examples) |
-| Pods (reveren's in-core specialist agents) | Commercial (subscription) |
-| Protocol Marketplace | Commercial (subscription) |
+| Baseline specialist agents | Free — bundled, frozen at each release, run locally on your own model |
+| Maintained pod channel ("current"), Engineering Pod first | Commercial (subscription, pricing finalising) — the same agents kept current and stack-tuned between releases via authenticated `rvr sync` |
+| Protocol Marketplace | Commercial (subscription, pricing finalising) |
 
 The Reveren name and marks are owned and are not granted by the code licence.
-Local CLI use is always free; only the pods and the marketplace subscription are
-paid.
+Local execution is always free with no licence check; the paywall is the **sync
+entitlement**, never local run. Not entitled? `rvr run` falls back to the free
+frozen baseline — you buy **currency, not access**.
 
 ## Roadmap
 
@@ -65,7 +70,7 @@ Direction, not promises. Dates are targets.
   library, the open format spec, test coverage, and a clean release workflow.
 - **Next:** a low-friction onboarding flow for vibe coders (connect a repo, get a
   tailored protocol set and a short guide, no CLI required), plus the first
-  reveren pods.
+  maintained pod (the Engineering Pod).
 - **Then:** the Protocol Marketplace and private registry with `rvr sync`; a
   GitHub App and CI integration that runs protocols against a pull request and
   posts results as checks.
