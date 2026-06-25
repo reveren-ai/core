@@ -42,6 +42,24 @@ Stop ideating. Start engineering.
 
 Every engineering plan must include, in its acceptance criteria, a live-server smoke step: boot `pnpm dev`, hit every route touched by this feature **plus every public route that could have been affected by shared components or layouts**, verify each returns `200` (or expected redirect), and confirm the dev log has zero `⨯|Error` lines. Plans that stop at "`pnpm build` succeeds" have shipped known-broken pages before. Use **Playwright** (already in devDeps) for any browser-level automation — not Puppeteer. Canonical commands live in `.protocols/ship.protocol.md` → "Live Server & Route Verification".
 
+> **A 200 is not proof of a healthy render.** A server-render throw caught by an error boundary still returns HTTP 200 while showing a fallback ("Something went wrong"). Status checks alone miss it — assert the error-boundary copy is ABSENT and watch for `pageerror` / `console.error`.
+
+### Acceptance: the `'use server'` boundary — only async functions may be exported
+
+In a Next.js App Router project, a module-level `'use server'` file (server actions) may **only export async functions**. React's server-actions transform strips every non-function export (a `const` array, an object, an enum) across the server/client boundary — a Client Component that imports it receives `undefined` at render time and crashes (`X.map is not a function`). **`tsc`, unit tests, and `next build` all pass**; it only throws when the page renders.
+
+Rules:
+1. Put shared constants/types in a plain module and import them where needed. Server actions live in the `'use server'` file and import the constants for their own use — they just may not *export* them.
+2. Enforce it with lint so it can't recur: an ESLint rule that forbids non-async-function exports from a module-level `'use server'` file (runs in `pnpm lint` → pre-push). `export type` / `export interface` are fine (erased at compile time).
+
+### Acceptance: render-check authenticated pages, not just public ones
+
+Public-only smokes have a blind spot: gated pages (admin areas, account pages) redirect logged-out visitors, so nothing ever renders them in test. Any plan touching an authenticated surface MUST render-check it logged in:
+
+1. A render-smoke that loads every public + gated route with a session and asserts: status < 400, no error-boundary fallback, zero `pageerror`/`console.error`.
+2. Auth should be minted **test-side** (e.g. encode a session JWT with the run's secret) — never a sign-in bypass in app code. Gate the mint to non-production (CI or an explicit opt-in flag), use a short-lived cookie, and disable trace/screenshot on the authenticated project so the session cookie + page PII never land in an uploaded artifact.
+3. Browser smokes belong in **CI** (seeded DB + throwaway secret), not the blocking pre-push hook. The deterministic guard (the lint rule above) is what runs pre-push.
+
 ### Acceptance: dark mode + mobile breakpoints are non-negotiable
 
 Any plan that touches a UI surface MUST include, in its acceptance criteria, a colour-scheme + breakpoint validation pass before declaring the work done:
