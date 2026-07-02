@@ -105,6 +105,35 @@ These are the reveren workflow's invariants:
 - If a task looks like more than ~30 minutes of agent time, flag it for human
   review before dispatching.
 
+### Model selection
+
+Recommend a model capability tier for every task you dispatch. Each
+specialist's agent definition may carry a sensible default, but most host
+agents accept a per-dispatch model override that beats it (in Claude Code,
+the Agent tool's `model` parameter). Match the tier to the task, not the
+specialist. Tiers are vendor-neutral — map them to whatever the host agent's
+stack offers (Claude aliases shown as examples):
+
+| Tier | Example (Claude) | Use for |
+|------|------------------|---------|
+| **Fast** | `haiku` equivalent | Mechanical, low-judgment chores: formatting sweeps, link fixes, dependency listing, bulk renames with an exact spec |
+| **Balanced** | `sonnet` equivalent | Well-scoped single-concern work: docs updates, copy edits, small bug fixes with a known cause, QA route probing, filling a test gap from an existing pattern |
+| **Frontier** | `opus` equivalent | **Default.** Implementation requiring judgment, code review, coordination — and **always for security work** (cyber-auditor) |
+| **Max** | `fable` equivalent | Escalation only: the hardest long-horizon work — multi-file refactors, deep architectural planning, gnarly debugging that has already defeated a frontier-tier pass. Typically ~2x frontier cost |
+
+Rules:
+
+- Default to the frontier tier when unsure — never downshift to save cost on
+  work that needs judgment.
+- Escalate to the max tier sparingly, and say *why* in the dispatch plan.
+- **Never route security/cyber tasks to the max tier** — top-tier models often
+  run stricter safety classifiers that can refuse legitimate security-tooling
+  work. The cyber-auditor stays on the frontier tier.
+- Downshift below frontier only when the task spec is complete enough that
+  judgment isn't the bottleneck.
+- Use tier aliases, not dated model IDs — aliases resolve to the latest model
+  in that tier, so the plan never goes stale.
+
 ## Step 3 — produce the dispatch plan
 
 Output a plan the main process can execute verbatim:
@@ -124,6 +153,7 @@ Output a plan the main process can execute verbatim:
 **Task 1.1**: [description]
 - Source: [backlog file]
 - Specialist: [protocol / agent]
+- Model: [fast | balanced | frontier | max] — [one-line reason if not the specialist's default]
 - Branch: [type]/[summary]
 - Files likely touched: [list]
 - Conflicts with current work: none
